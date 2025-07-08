@@ -5,37 +5,37 @@ food = Blueprint('food', __name__)
 
 @food.route('/')
 def allListing():
-    return "Here is all listings"
+    return render_template("listing.html")
 
 #New route
 @food.route("/new")
 def renderNewForm():
-    return "Render new form"
+    return render_template("new.html")
 
 #Create route
 @food.route("/", methods=["POST"])
 def createListing():
-    return "Listing created"
+    return redirect("/")
 
 #Show route
 @food.route("/id")
 def showListing():
-    return "This is show page"
+    return render_template("show.html")
 
 #Edit route
-@food.route("/id/edit")
+@food.route("/<id>/edit")
 def renderEditForm():
-    return "You are editing a food item"
+    return render_template("edit.html")
 
 #Update route
-@food.route("/id", methods=["POST"])
-def updateListing():
-    return "Listing updated"
+@food.route("/<id>", methods=["POST"])
+def updateListing(id):
+    return redirect(f"/{id}")
 
 #Delete route
-@food.route("/id/delete", methods=["POST"])
+@food.route("/<id>/delete", methods=["POST"])
 def destroyListing():
-    return "Listing deleted"
+    return redirect("/")
 
 
 #Claims routes
@@ -48,15 +48,15 @@ def renderClaimPage(id):
 #Process claim
 @food.route("/claim-now/<id>", methods=["POST"])
 def processClaim(id):
-    return f"Processing claim for item {id}"
+    return f"Processing claim for item {id} and flash a success message"
 
 #Render claimed/success page 
-@food.route("/claimed/<id>")
-def renderClaimedPage(id):
-    return f"Item {id} successfully claimed!"
+# @food.route("/claimed/<id>")
+# def renderClaimedPage(id):
+#     return f"Item {id} successfully claimed!"
 
 #Cancel claim route
 @food.route("/claim-cancel/<id>")
 def cancelClaim(id):
-    return f"Claim cancelled for item {id}"
+    return f"Claim cancelled for item {id} and render to food page"
 

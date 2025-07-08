@@ -9,14 +9,20 @@ def create_app():
     app = Flask(__name__)
     # Configuration
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  
-    app.config['SECRET_KEY'] = 'some key'  
+    app.config['SECRET_KEY'] = "teamTejaskaSupersecretkey-andehproductionKeLiyeNahiHai"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # Session configuration
+    app.config['SESSION_PERMANENT'] = False
+    app.config['SESSION_TYPE'] = 'filesystem'
     
     # Initialize extensions
     db.init_app(app)
     
     # Import models (important for migrations)
-    from .models import User, Listing, Claim
+    from .models.users import User
+    from .models.foodlisting import Listing
+    from .models.claims import Claim
     
     from .routes.home import home
     from .routes.food import food
@@ -26,6 +32,6 @@ def create_app():
     app.register_blueprint(food, url_prefix='/foods')
     app.register_blueprint(auth, url_prefix='/auth')
    
-    
     migrate = Migrate(app, db)
+    
     return app
