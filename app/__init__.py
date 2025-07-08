@@ -20,9 +20,8 @@ def create_app():
     db.init_app(app)
     
     # Import models (important for migrations)
-    from .models.users import User
-    from .models.foodlisting import Listing
-    from .models.claims import Claim
+    from app.models import User, Listing, Claim
+
     
     from .routes.home import home
     from .routes.food import food
