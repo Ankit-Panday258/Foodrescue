@@ -5,6 +5,11 @@ from app import db
 
 user = Blueprint('user', __name__)
 
+@user.route("/profile")
+@login_required
+def renderProfile():
+    return renderProfile("profile.html")
+
 @user.route("/my-listings")
 @login_required
 def myListings():
