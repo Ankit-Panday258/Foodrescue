@@ -1,0 +1,18 @@
+
+.navbar{
+    padding-left: 0px;
+}
+.navbar-brand{
+    
+    background-color: beige;
+}
+
+.form-control{
+    width: 240px;
+}
+.logo{
+    width: 100px;
+    height: 40px;
+    border: 1px solid black;
+    border-radius: 50% 50% ;
+}
