@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, redirect, url_for, request, flash, session
 from app.routes.auth import login_required, get_current_user
-from models import Listing, Claim, User
+from app.models import Listing, Claim, User
 from app import db
 from datetime import datetime
 
