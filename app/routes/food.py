@@ -36,3 +36,27 @@ def updateListing():
 @food.route("/id/delete", methods=["POST"])
 def destroyListing():
     return "Listing deleted"
+
+
+#Claims routes
+
+#Render claim page
+@food.route("/claim-now/<id>")
+def renderClaimPage(id):
+    return f"Claim page rendered for item {id}"
+
+#Process claim
+@food.route("/claim-now/<id>", methods=["POST"])
+def processClaim(id):
+    return f"Processing claim for item {id}"
+
+#Render claimed/success page 
+@food.route("/claimed/<id>")
+def renderClaimedPage(id):
+    return f"Item {id} successfully claimed!"
+
+#Cancel claim route
+@food.route("/claim-cancel/<id>")
+def cancelClaim(id):
+    return f"Claim cancelled for item {id}"
+
