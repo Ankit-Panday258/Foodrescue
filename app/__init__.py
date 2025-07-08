@@ -14,6 +14,10 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
     
+    
+    from .routes.home import home
+    
+    app.register_blueprint(home, url_prefix='/')
 
    
    
