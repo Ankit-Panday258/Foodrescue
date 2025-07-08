@@ -5,4 +5,4 @@ home = Blueprint('home', __name__)
 
 @home.route('/')
 def index():
-    return "I am root"
+    return render_template('index.html')
