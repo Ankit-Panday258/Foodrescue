@@ -16,8 +16,10 @@ def create_app():
     
     
     from .routes.home import home
+    from .routes.food import food
     
     app.register_blueprint(home, url_prefix='/')
+    app.register_blueprint(food, url_prefix='/foods')
 
    
    
