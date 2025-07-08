@@ -27,10 +27,12 @@ def create_app():
     from .routes.home import home
     from .routes.food import food
     from .routes.auth import auth
+    from .routes.user import user
     
     app.register_blueprint(home, url_prefix='/')
     app.register_blueprint(food, url_prefix='/foods')
     app.register_blueprint(auth, url_prefix='/auth')
+    app.register_blueprint(user, url_prefix='/user')
    
     migrate = Migrate(app, db)
     
