@@ -10,10 +10,13 @@ def create_app():
     # Configuration
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  
     app.config['SECRET_KEY'] = 'some key'  
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable warning
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
     # Initialize extensions
     db.init_app(app)
     
+    # Import models (important for migrations)
+    from .models import User, Listing, Claim
     
     from .routes.home import home
     from .routes.food import food
