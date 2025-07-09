@@ -79,8 +79,15 @@ def register():
             db.session.add(new_user)
             db.session.commit()
 
-            flash("Registration successful! Please log in.", 'success')
-            return redirect(url_for('auth.login'))
+            # Auto-login the user after successful registration
+            session['user_id'] = new_user.user_id
+            session['username'] = new_user.username
+            session['email'] = new_user.email
+            session['user_type'] = new_user.type
+            session['phone'] = new_user.phone
+
+            flash(f"Welcome to Food Rescue, {new_user.username}! Your account has been created successfully.", 'success')
+            return redirect(url_for('home.index'))
 
         except Exception as e:
             db.session.rollback()
@@ -110,6 +117,7 @@ def login():
             session['username'] = user.username
             session['email'] = user.email
             session['user_type'] = user.type
+            session['phone'] = user.phone
 
             flash(f"Welcome back, {user.username}!", 'success')
 
@@ -139,6 +147,7 @@ def check_auth():
                 'id': session['user_id'],
                 'username': session['username'],
                 'email': session['email'],
+                'phone': session.get('phone', ''),
                 'type': session['user_type']
             }
         })

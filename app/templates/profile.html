@@ -38,32 +38,46 @@ endblock %} {% block stylesheets %}
         <div class="card-body text-center">
           <!-- Profile Avatar -->
           <div class="profile-avatar mx-auto mb-3">
-            {{ session.username[0].upper() if session.username else 'U' }}
+            {{ (user.username[0].upper() if user and user.username else
+            session.username[0].upper() if session.username else 'U') }}
           </div>
 
           <!-- Profile Info -->
-          <h4 class="profile-name">{{ session.username or 'User' }}</h4>
-          <span class="user-type-badge {{ session.user_type or 'both' }}">
+          <h4 class="profile-name">
+            {{ user.username if user else session.username or 'User' }}
+          </h4>
+          <span
+            class="user-type-badge {{ (user.type if user else session.user_type) or 'both' }}">
             <i
-              class="fas fa-{{ 'hand-holding-heart' if session.user_type == 'donor' else 'search' if session.user_type == 'recipient' else 'exchange-alt' }}"></i>
-            {{ (session.user_type or 'member').title() }}
+              class="fas fa-{{ 'hand-holding-heart' if (user.type if user else session.user_type) == 'donor' else 'search' if (user.type if user else session.user_type) == 'recipient' else 'exchange-alt' }}"></i>
+            {{ ((user.type if user else session.user_type) or 'member').title()
+            }}
           </span>
 
           <!-- Member Since -->
           <div class="member-since mt-3">
             <i class="fas fa-calendar text-primary"></i>
-            <span class="text-muted">Member since January 2024</span>
+            <span class="text-muted"
+              >Member since {{ user.created_at.strftime('%B %Y') if user else
+              'January 2024' }}</span
+            >
           </div>
 
           <!-- Contact Info -->
           <div class="contact-info mt-3">
             <div class="contact-item">
               <i class="fas fa-envelope"></i>
-              <span>{{ session.email or 'email@example.com' }}</span>
+              <span
+                >{{ user.email if user else session.email or 'email@example.com'
+                }}</span
+              >
             </div>
             <div class="contact-item">
               <i class="fas fa-phone"></i>
-              <span>+1 (555) 123-4567</span>
+              <span
+                >{{ user.phone if user else session.phone or 'No phone number'
+                }}</span
+              >
             </div>
           </div>
 
