@@ -1,852 +1,571 @@
-{% extends "components/base.html" %}
-{% block title %}My Listings - Food Rescue{% endblock %}
-{% block content %}
+{% extends "components/base.html" %} {% block title %}My Listings - Food
+Rescue{% endblock %}{% block stylesheets %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/my_listings.css') }}" />
+{% endblock %} {% block content %}
 
 <!-- Page Header -->
 <div class="page-header bg-light py-4">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="h3 mb-0">
-                    <i class="fas fa-list text-primary"></i>
-                    My Food Listings
-                </h1>
-                <p class="text-muted mb-0">
-                    Manage your shared food items and track their status
-                </p>
-            </div>
-            <div class="col-md-4 text-md-end">
-                <a href="{{ url_for('food.renderNewForm') }}" class="btn btn-primary">
-                    <i class="fas fa-plus-circle"></i>
-                    Add New Listing
-                </a>
-            </div>
-        </div>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h1 class="h3 mb-0">
+          <i class="fas fa-list text-primary"></i>
+          My Food Listings
+        </h1>
+        <p class="text-muted mb-0">
+          Manage your shared food items and track their status
+        </p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <a href="{{ url_for('food.renderNewForm') }}" class="btn btn-primary">
+          <i class="fas fa-plus-circle"></i>
+          Add New Listing
+        </a>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Statistics Section -->
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-md-3 col-sm-6 mb-3">
-            <div class="stat-card bg-success">
-                <div class="stat-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-number">{{ listings|selectattr('status', 'equalto', 'available')|list|length }}</div>
-                    <div class="stat-label">Available</div>
-                </div>
-            </div>
+  <div class="row">
+    <div class="col-md-3 col-sm-6 mb-3">
+      <div class="stat-card bg-success">
+        <div class="stat-icon">
+          <i class="fas fa-check-circle"></i>
         </div>
-        <div class="col-md-3 col-sm-6 mb-3">
-            <div class="stat-card bg-warning">
-                <div class="stat-icon">
-                    <i class="fas fa-hand-holding"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-number">{{ listings|selectattr('status', 'equalto', 'claimed')|list|length }}</div>
-                    <div class="stat-label">Claimed</div>
-                </div>
-            </div>
+        <div class="stat-content">
+          <div class="stat-number">
+            {{ listings|selectattr('status', 'equalto', 'available')|list|length
+            }}
+          </div>
+          <div class="stat-label">Available</div>
         </div>
-        <div class="col-md-3 col-sm-6 mb-3">
-            <div class="stat-card bg-info">
-                <div class="stat-icon">
-                    <i class="fas fa-check-double"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-number">{{ listings|selectattr('status', 'equalto', 'completed')|list|length }}</div>
-                    <div class="stat-label">Completed</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 mb-3">
-            <div class="stat-card bg-secondary">
-                <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-number">{{ listings|length }}</div>
-                    <div class="stat-label">Total</div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+      <div class="stat-card bg-warning">
+        <div class="stat-icon">
+          <i class="fas fa-hand-holding"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number">
+            {{ listings|selectattr('status', 'equalto', 'claimed')|list|length
+            }}
+          </div>
+          <div class="stat-label">Claimed</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+      <div class="stat-card bg-info">
+        <div class="stat-icon">
+          <i class="fas fa-check-double"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number">
+            {{ listings|selectattr('status', 'equalto', 'completed')|list|length
+            }}
+          </div>
+          <div class="stat-label">Completed</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+      <div class="stat-card bg-secondary">
+        <div class="stat-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number">{{ listings|length }}</div>
+          <div class="stat-label">Total</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Filter Section -->
 <div class="container mt-4">
-    <div class="filter-section">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <div class="search-container">
-                    <input
-                        type="text"
-                        class="form-control"
-                        id="searchListings"
-                        placeholder="Search your listings..."
-                    >
-                    <i class="fas fa-search search-icon"></i>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <select class="form-select" id="statusFilter">
-                    <option value="">All Statuses</option>
-                    <option value="available">Available</option>
-                    <option value="claimed">Claimed</option>
-                    <option value="completed">Completed</option>
-                    <option value="expired">Expired</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <select class="form-select" id="categoryFilter">
-                    <option value="">All Categories</option>
-                    <option value="veg">Vegetarian</option>
-                    <option value="nonveg">Non-Vegetarian</option>
-                </select>
-            </div>
+  <div class="filter-section">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="search-container">
+          <input
+            type="text"
+            class="form-control"
+            id="searchListings"
+            placeholder="Search your listings..." />
+          <i class="fas fa-search search-icon"></i>
         </div>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" id="statusFilter">
+          <option value="">All Statuses</option>
+          <option value="available">Available</option>
+          <option value="claimed">Claimed</option>
+          <option value="completed">Completed</option>
+          <option value="expired">Expired</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" id="categoryFilter">
+          <option value="">All Categories</option>
+          <option value="veg">Vegetarian</option>
+          <option value="nonveg">Non-Vegetarian</option>
+        </select>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Listings Content -->
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="results-info">
-            <span class="results-count">
-                {% if listings %}
-                    {{ listings|length }} listings found
-                {% else %}
-                    No listings found
-                {% endif %}
-            </span>
-        </div>
-
-        <!-- View Toggle -->
-        <div class="view-toggle">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-outline-primary active" data-view="grid">
-                    <i class="fas fa-th"></i>
-                </button>
-                <button type="button" class="btn btn-outline-primary" data-view="list">
-                    <i class="fas fa-list"></i>
-                </button>
-            </div>
-        </div>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="results-info">
+      <span class="results-count">
+        {% if listings %} {{ listings|length }} listings found {% else %} No
+        listings found {% endif %}
+      </span>
     </div>
 
-    {% if listings %}
-    <!-- Listings Grid -->
-    <div class="listings-grid" id="listingsGrid">
-        {% for listing in listings %}
-        <div class="card listing-card"
-             data-status="{{ listing.status }}"
-             data-category="{{ listing.category }}"
-             data-name="{{ listing.foodname.lower() }}">
-
-            <!-- Listing Image -->
-            <div class="listing-image">
-                <img
-                    src="{{ listing.image_url or url_for('static', filename='image/placeholder.jpg') }}"
-                    alt="{{ listing.foodname }}"
-                    class="card-img-top"
-                >
-
-                <!-- Status Badge -->
-                <div class="status-overlay">
-                    <span class="status-badge {{ listing.status }}">
-                        {% if listing.status == 'available' %}
-                            <i class="fas fa-check-circle"></i>
-                        {% elif listing.status == 'claimed' %}
-                            <i class="fas fa-hand-holding"></i>
-                        {% elif listing.status == 'completed' %}
-                            <i class="fas fa-check-double"></i>
-                        {% elif listing.status == 'expired' %}
-                            <i class="fas fa-exclamation-triangle"></i>
-                        {% endif %}
-                        {{ listing.status.title() }}
-                    </span>
-                </div>
-
-                <!-- Category Badge -->
-                <div class="category-overlay">
-                    <span class="category-badge {{ listing.category }}">
-                        {% if listing.category == 'veg' %}
-                            <i class="fas fa-leaf"></i>
-                        {% else %}
-                            <i class="fas fa-drumstick-bite"></i>
-                        {% endif %}
-                        {{ listing.category.title() }}
-                    </span>
-                </div>
-            </div>
-
-            <!-- Listing Content -->
-            <div class="card-body">
-                <h5 class="card-title">{{ listing.foodname }}</h5>
-
-                <p class="card-text">
-                    {{ listing.description[:100] + '...' if listing.description and listing.description|length > 100 else listing.description or 'No description provided' }}
-                </p>
-
-                <!-- Listing Meta -->
-                <div class="listing-meta">
-                    <div class="meta-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Posted {{ listing.created_at.strftime('%b %d, %Y') }}</span>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-clock"></i>
-                        <span>Expires {{ listing.expiry_date.strftime('%b %d, %Y') }}</span>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>{{ listing.pickup_location }}</span>
-                    </div>
-                </div>
-
-                <!-- Claims Info -->
-                {% if listing.claims %}
-                <div class="claims-info">
-                    <i class="fas fa-users text-primary"></i>
-                    <span>{{ listing.claims|length }} claim{{ 's' if listing.claims|length != 1 else '' }}</span>
-                </div>
-                {% endif %}
-            </div>
-
-            <!-- Listing Actions -->
-            <div class="card-footer">
-                <div class="listing-actions">
-                    <a href="{{ url_for('food.showListing', id=listing.listing_id) }}"
-                       class="btn btn-outline-primary btn-sm">
-                        <i class="fas fa-eye"></i>
-                        View
-                    </a>
-
-                    {% if listing.status in ['available', 'claimed'] %}
-                    <a href="{{ url_for('food.renderEditForm', id=listing.listing_id) }}"
-                       class="btn btn-warning btn-sm">
-                        <i class="fas fa-edit"></i>
-                        Edit
-                    </a>
-                    {% endif %}
-
-                    {% if listing.status == 'claimed' %}
-                    <button class="btn btn-success btn-sm mark-complete"
-                            data-listing-id="{{ listing.listing_id }}">
-                        <i class="fas fa-check"></i>
-                        Mark Complete
-                    </button>
-                    {% endif %}
-
-                    <div class="dropdown">
-                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                                type="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href="#"></li>
-                                    <i class="fas fa-share"></i>
-                                    Share
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-copy"></i>
-                                    Duplicate
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form method="POST"
-                                      action="{{ url_for('food.destroyListing', id=listing.listing_id) }}"
-                                      onsubmit="return confirm('Are you sure you want to delete this listing?');"
-                                      class="d-inline">
-                                    <button type="submit" class="dropdown-item text-danger">
-                                        <i class="fas fa-trash"></i>
-                                        Delete
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+    <!-- View Toggle -->
+    <div class="view-toggle">
+      <div class="btn-group" role="group">
+        <button
+          type="button"
+          class="btn btn-outline-primary active"
+          data-view="grid">
+          <i class="fas fa-th"></i>
+        </button>
+        <button type="button" class="btn btn-outline-primary" data-view="list">
+          <i class="fas fa-list"></i>
+        </button>
+      </div>
     </div>
+  </div>
 
-    {% else %}
-    <!-- Empty State -->
-    <div class="empty-state">
-        <div class="empty-state-icon">
-            <i class="fas fa-plus-circle"></i>
+  {% if listings %}
+  <!-- Listings Grid -->
+  <div class="listings-grid" id="listingsGrid">
+    {% for listing in listings %}
+    <div
+      class="card listing-card"
+      data-status="{{ listing.status }}"
+      data-category="{{ listing.category }}"
+      data-name="{{ listing.foodname.lower() }}">
+      <!-- Listing Image -->
+      <div class="listing-image">
+        <img
+          src="{{ listing.image_url or url_for('static', filename='image/placeholder.jpg') }}"
+          alt="{{ listing.foodname }}"
+          class="card-img-top" />
+
+        <!-- Status Badge -->
+        <div class="status-overlay">
+          <span class="status-badge {{ listing.status }}">
+            {% if listing.status == 'available' %}
+            <i class="fas fa-check-circle"></i>
+            {% elif listing.status == 'claimed' %}
+            <i class="fas fa-hand-holding"></i>
+            {% elif listing.status == 'completed' %}
+            <i class="fas fa-check-double"></i>
+            {% elif listing.status == 'expired' %}
+            <i class="fas fa-exclamation-triangle"></i>
+            {% endif %} {{ listing.status.title() }}
+          </span>
         </div>
-        <h3 class="empty-state-title">No Food Listings Yet</h3>
-        <p class="empty-state-description">
-            Start sharing food with your community by creating your first listing.
+
+        <!-- Category Badge -->
+        <div class="category-overlay">
+          <span class="category-badge {{ listing.category }}">
+            {% if listing.category == 'veg' %}
+            <i class="fas fa-leaf"></i>
+            {% else %}
+            <i class="fas fa-drumstick-bite"></i>
+            {% endif %} {{ listing.category.title() }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Listing Content -->
+      <div class="card-body">
+        <h5 class="card-title">{{ listing.foodname }}</h5>
+
+        <p class="card-text">
+          {{ listing.description[:100] + '...' if listing.description and
+          listing.description|length > 100 else listing.description or 'No
+          description provided' }}
         </p>
-        <div class="empty-state-action">
-            <a href="{{ url_for('food.renderNewForm') }}" class="btn btn-primary btn-lg">
-                <i class="fas fa-plus-circle"></i>
-                Create Your First Listing
-            </a>
+
+        <!-- Listing Meta -->
+        <div class="listing-meta">
+          <div class="meta-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Posted {{ listing.created_at.strftime('%b %d, %Y') }}</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-clock"></i>
+            <span>Expires {{ listing.expiry_date.strftime('%b %d, %Y') }}</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>{{ listing.pickup_location }}</span>
+          </div>
         </div>
+
+        <!-- Claims Info -->
+        {% if listing.claims %}
+        <div class="claims-info">
+          <i class="fas fa-users text-primary"></i>
+          <span
+            >{{ listing.claims|length }} claim{{ 's' if listing.claims|length !=
+            1 else '' }}</span
+          >
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Listing Actions -->
+      <div class="card-footer">
+        <div class="listing-actions">
+          <a
+            href="{{ url_for('food.showListing', id=listing.listing_id) }}"
+            class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-eye"></i>
+            View
+          </a>
+
+          {% if listing.status in ['available', 'claimed'] %}
+          <a
+            href="{{ url_for('food.renderEditForm', id=listing.listing_id) }}"
+            class="btn btn-warning btn-sm">
+            <i class="fas fa-edit"></i>
+            Edit
+          </a>
+          {% endif %} {% if listing.status == 'claimed' %}
+          <button
+            class="btn btn-success btn-sm mark-complete"
+            data-listing-id="{{ listing.listing_id }}">
+            <i class="fas fa-check"></i>
+            Mark Complete
+          </button>
+          {% endif %}
+
+          <div class="dropdown">
+            <button
+              class="btn btn-outline-secondary btn-sm dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown">
+              <i class="fas fa-ellipsis-v"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-share"></i>
+                  Share
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-copy"></i>
+                  Duplicate
+                </a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <form
+                  method="POST"
+                  action="{{ url_for('food.destroyListing', id=listing.listing_id) }}"
+                  onsubmit="return confirm('Are you sure you want to delete this listing?');"
+                  class="d-inline">
+                  <button type="submit" class="dropdown-item text-danger">
+                    <i class="fas fa-trash"></i>
+                    Delete
+                  </button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-    {% endif %}
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <!-- Empty State -->
+  <div class="empty-state">
+    <div class="empty-state-icon">
+      <i class="fas fa-plus-circle"></i>
+    </div>
+    <h3 class="empty-state-title">No Food Listings Yet</h3>
+    <p class="empty-state-description">
+      Start sharing food with your community by creating your first listing.
+    </p>
+    <div class="empty-state-action">
+      <a
+        href="{{ url_for('food.renderNewForm') }}"
+        class="btn btn-primary btn-lg">
+        <i class="fas fa-plus-circle"></i>
+        Create Your First Listing
+      </a>
+    </div>
+  </div>
+  {% endif %}
 </div>
 
-{% endblock %}
-
-{% block styles %}
-<style>
-/* Stat Cards */
-.stat-card {
-    padding: 1.5rem;
-    border-radius: var(--border-radius-lg);
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-}
-
-.stat-icon {
-    font-size: 2rem;
-    opacity: 0.8;
-}
-
-.stat-content {
-    flex: 1;
-}
-
-.stat-number {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-}
-
-.stat-label {
-    font-size: 0.875rem;
-    opacity: 0.9;
-}
-
-/* Filter Section */
-.filter-section {
-    background: var(--white);
-    padding: 1.5rem;
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 2rem;
-}
-
-.search-container {
-    position: relative;
-}
-
-.search-icon {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--gray-500);
-}
-
-/* Listings Grid */
-.listings-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.listing-card {
-    border: none;
-    border-radius: var(--border-radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.3s ease;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.listing-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow);
-}
-
-.listing-image {
-    position: relative;
-    height: 200px;
-    overflow: hidden;
-}
-
-.listing-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.listing-card:hover .listing-image img {
-    transform: scale(1.05);
-}
-
-.status-overlay {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 1;
-}
-
-.category-overlay {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 1;
-}
-
-.card-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--gray-900);
-    margin-bottom: 0.75rem;
-}
-
-.card-text {
-    color: var(--gray-700);
-    margin-bottom: 1rem;
-    flex: 1;
-}
-
-.listing-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    font-size: 0.875rem;
-}
-
-.meta-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--gray-600);
-}
-
-.meta-item i {
-    width: 14px;
-    color: var(--primary-color);
-}
-
-.claims-info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    background-color: var(--primary-light);
-    border-radius: var(--border-radius);
-    margin-bottom: 1rem;
-    font-size: 0.875rem;
-    color: var(--primary-dark);
-}
-
-.card-footer {
-    background-color: var(--gray-100);
-    border-top: 1px solid var(--gray-200);
-    padding: 1rem;
-}
-
-.listing-actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.listing-actions .btn {
-    font-size: 0.875rem;
-    padding: 0.5rem 0.75rem;
-}
-
-.listing-actions .dropdown {
-    margin-left: auto;
-}
-
-/* List View */
-.listings-grid.list-view {
-    grid-template-columns: 1fr;
-}
-
-.list-view .listing-card {
-    flex-direction: row;
-    height: auto;
-}
-
-.list-view .listing-image {
-    width: 200px;
-    height: 150px;
-    flex-shrink: 0;
-}
-
-.list-view .card-body {
-    flex: 1;
-}
-
-.list-view .listing-meta {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.list-view .listing-actions {
-    justify-content: flex-end;
-}
-
-/* View Toggle */
-.view-toggle .btn {
-    padding: 0.5rem 0.75rem;
-}
-
-.view-toggle .btn.active {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: var(--white);
-}
-
-/* Results Info */
-.results-info {
-    font-size: 0.875rem;
-    color: var(--gray-600);
-}
-
-.results-count {
-    font-weight: 500;
-}
-
-/* Empty State */
-.empty-state {
-    text-align: center;
-    padding: 4rem 2rem;
-    color: var(--gray-600);
-}
-
-.empty-state-icon {
-    font-size: 4rem;
-    color: var(--gray-400);
-    margin-bottom: 1rem;
-}
-
-.empty-state-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--gray-700);
-    margin-bottom: 0.5rem;
-}
-
-.empty-state-description {
-    font-size: 1rem;
-    margin-bottom: 2rem;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .listings-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    .filter-section .row > div {
-        margin-bottom: 1rem;
-    }
-
-    .stat-card {
-        margin-bottom: 1rem;
-    }
-
-    .list-view .listing-card {
-        flex-direction: column;
-    }
-
-    .list-view .listing-image {
-        width: 100%;
-        height: 200px;
-    }
-
-    .listing-actions {
-        justify-content: center;
-    }
-
-    .page-header .row {
-        text-align: center;
-    }
-
-    .page-header .col-md-4 {
-        margin-top: 1rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .empty-state {
-        padding: 2rem 1rem;
-    }
-
-    .empty-state-icon {
-        font-size: 3rem;
-    }
-
-    .empty-state-title {
-        font-size: 1.25rem;
-    }
-
-    .stat-number {
-        font-size: 1.5rem;
-    }
-
-    .listing-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .listing-actions .dropdown {
-        margin-left: 0;
-        margin-top: 0.5rem;
-    }
-}
-
-/* Animations */
-.listing-card {
-    animation: slideInUp 0.6s ease-out;
-}
-
-.stat-card {
-    animation: slideInUp 0.6s ease-out;
-}
-
-@keyframes slideInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Filtering animations */
-.listing-card.filtered-out {
-    display: none;
-}
-
-.listing-card.fade-in {
-    animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-</style>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchListings');
-    const statusFilter = document.getElementById('statusFilter');
-    const categoryFilter = document.getElementById('categoryFilter');
-    const viewToggle = document.querySelector('.view-toggle');
-    const listingsGrid = document.getElementById('listingsGrid');
-    const resultsCount = document.querySelector('.results-count');
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initialize animations
+    initializeAnimations();
 
-    // View Toggle Functionality
+    // Initialize view toggle
+    initializeViewToggle();
+
+    // Initialize filters
+    initializeFilters();
+
+    // Initialize listing actions
+    initializeListingActions();
+
+    // Initialize tooltips
+    initializeTooltips();
+  });
+
+  function initializeAnimations() {
+    // Animate stat cards
+    const statCards = document.querySelectorAll(".stat-card");
+    statCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add("fade-in");
+      }, index * 100);
+    });
+
+    // Animate listing cards
+    const listingCards = document.querySelectorAll(".listing-card");
+    listingCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add("fade-in");
+      }, index * 100 + 300);
+    });
+  }
+
+  function initializeViewToggle() {
+    const viewToggle = document.querySelector(".view-toggle");
+    const listingsGrid = document.getElementById("listingsGrid");
+
     if (viewToggle && listingsGrid) {
-        viewToggle.addEventListener('click', function(e) {
-            if (e.target.closest('[data-view]')) {
-                const viewType = e.target.closest('[data-view]').dataset.view;
-                const buttons = viewToggle.querySelectorAll('.btn');
+      viewToggle.addEventListener("click", function (e) {
+        if (e.target.closest("[data-view]")) {
+          const viewType = e.target.closest("[data-view]").dataset.view;
+          const buttons = viewToggle.querySelectorAll(".btn");
 
-                // Update button states
-                buttons.forEach(btn => btn.classList.remove('active'));
-                e.target.closest('[data-view]').classList.add('active');
+          // Update button states
+          buttons.forEach((btn) => btn.classList.remove("active"));
+          e.target.closest("[data-view]").classList.add("active");
 
-                // Update grid view
-                listingsGrid.classList.toggle('list-view', viewType === 'list');
+          // Update grid view
+          listingsGrid.classList.toggle("list-view", viewType === "list");
 
-                // Save preference
-                localStorage.setItem('listingsView', viewType);
-            }
-        });
-
-        // Load saved preference
-        const savedView = localStorage.getItem('listingsView');
-        if (savedView === 'list') {
-            listingsGrid.classList.add('list-view');
-            viewToggle.querySelector('[data-view="list"]').classList.add('active');
-            viewToggle.querySelector('[data-view="grid"]').classList.remove('active');
+          // Save preference
+          localStorage.setItem("listingsView", viewType);
         }
+      });
+
+      // Load saved preference
+      const savedView = localStorage.getItem("listingsView");
+      if (savedView === "list") {
+        listingsGrid.classList.add("list-view");
+        viewToggle.querySelector('[data-view="list"]').classList.add("active");
+        viewToggle
+          .querySelector('[data-view="grid"]')
+          .classList.remove("active");
+      }
     }
+  }
 
-    // Filter Functionality
+  function initializeFilters() {
+    const searchInput = document.getElementById("searchListings");
+    const statusFilter = document.getElementById("statusFilter");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const resultsCount = document.querySelector(".results-count");
+
     function filterListings() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const selectedStatus = statusFilter.value;
-        const selectedCategory = categoryFilter.value;
-        const listings = document.querySelectorAll('.listing-card');
-        let visibleCount = 0;
+      const searchTerm = searchInput.value.toLowerCase();
+      const selectedStatus = statusFilter.value;
+      const selectedCategory = categoryFilter.value;
+      const listings = document.querySelectorAll(".listing-card");
+      let visibleCount = 0;
 
-        listings.forEach(listing => {
-            const name = listing.dataset.name;
-            const status = listing.dataset.status;
-            const category = listing.dataset.category;
+      listings.forEach((listing) => {
+        const name = listing.dataset.name;
+        const status = listing.dataset.status;
+        const category = listing.dataset.category;
 
-            const matchesSearch = !searchTerm || name.includes(searchTerm);
-            const matchesStatus = !selectedStatus || status === selectedStatus;
-            const matchesCategory = !selectedCategory || category === selectedCategory;
+        const matchesSearch = !searchTerm || name.includes(searchTerm);
+        const matchesStatus = !selectedStatus || status === selectedStatus;
+        const matchesCategory =
+          !selectedCategory || category === selectedCategory;
 
-            if (matchesSearch && matchesStatus && matchesCategory) {
-                listing.classList.remove('filtered-out');
-                listing.classList.add('fade-in');
-                visibleCount++;
-            } else {
-                listing.classList.add('filtered-out');
-                listing.classList.remove('fade-in');
-            }
-        });
-
-        // Update results count
-        if (resultsCount) {
-            resultsCount.textContent = `${visibleCount} listing${visibleCount !== 1 ? 's' : ''} found`;
+        if (matchesSearch && matchesStatus && matchesCategory) {
+          listing.classList.remove("filtered-out");
+          listing.style.display = "";
+          visibleCount++;
+        } else {
+          listing.classList.add("filtered-out");
+          listing.style.display = "none";
         }
+      });
+
+      // Update results count
+      if (resultsCount) {
+        resultsCount.textContent = `${visibleCount} listing${
+          visibleCount !== 1 ? "s" : ""
+        } found`;
+      }
     }
 
     // Add event listeners for filters
     if (searchInput) {
-        searchInput.addEventListener('input', filterListings);
+      searchInput.addEventListener("input", filterListings);
     }
     if (statusFilter) {
-        statusFilter.addEventListener('change', filterListings);
+      statusFilter.addEventListener("change", filterListings);
     }
     if (categoryFilter) {
-        categoryFilter.addEventListener('change', filterListings);
+      categoryFilter.addEventListener("change", filterListings);
     }
+  }
 
+  function initializeListingActions() {
     // Mark as Complete functionality
-    const markCompleteButtons = document.querySelectorAll('.mark-complete');
-    markCompleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const listingId = this.dataset.listingId;
+    const markCompleteButtons = document.querySelectorAll(".mark-complete");
+    markCompleteButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const listingId = this.dataset.listingId;
 
-            if (confirm('Mark this listing as completed?')) {
-                // Here you would typically make an API call
-                // For now, we'll just update the UI
+        if (confirm("Mark this listing as completed?")) {
+          const card = this.closest(".listing-card");
+          const statusBadge = card.querySelector(".status-badge");
 
-                const card = this.closest('.listing-card');
-                const statusBadge = card.querySelector('.status-badge');
+          // Update status badge
+          statusBadge.innerHTML =
+            '<i class="fas fa-check-double"></i> Completed';
+          statusBadge.className = "status-badge completed";
 
-                // Update status badge
-                statusBadge.innerHTML = '<i class="fas fa-check-double"></i> Completed';
-                statusBadge.className = 'status-badge completed';
+          // Update card dataset
+          card.dataset.status = "completed";
 
-                // Update card dataset
-                card.dataset.status = 'completed';
+          // Remove mark complete button
+          this.remove();
 
-                // Remove mark complete button
-                this.remove();
+          // Show success message
+          showToast("Listing marked as completed!", "success");
 
-                // Show success message
-                showToast('Listing marked as completed!', 'success');
-
-                // Update stats (simplified)
-                updateStats();
-            }
-        });
+          // Update stats
+          updateStats();
+        }
+      });
     });
 
-    // Update statistics
-    function updateStats() {
-        const statCards = document.querySelectorAll('.stat-card');
-        const listings = document.querySelectorAll('.listing-card');
+    // Delete listing confirmation
+    const deleteButtons = document.querySelectorAll(
+      'form[action*="destroyListing"] button'
+    );
+    deleteButtons.forEach((button) => {
+      button.addEventListener("click", function (e) {
+        if (
+          !confirm(
+            "Are you sure you want to delete this listing? This action cannot be undone."
+          )
+        ) {
+          e.preventDefault();
+        }
+      });
+    });
+  }
 
-        const counts = {
-            available: 0,
-            claimed: 0,
-            completed: 0,
-            total: listings.length
-        };
-
-        listings.forEach(listing => {
-            const status = listing.dataset.status;
-            if (counts.hasOwnProperty(status)) {
-                counts[status]++;
-            }
-        });
-
-        // Update stat numbers
-        statCards.forEach((card, index) => {
-            const number = card.querySelector('.stat-number');
-            const statType = ['available', 'claimed', 'completed', 'total'][index];
-            if (number && counts[statType] !== undefined) {
-                number.textContent = counts[statType];
-            }
-        });
-    }
-
-    // Initialize tooltips
+  function initializeTooltips() {
     const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    tooltips.forEach(tooltip => {
-        new bootstrap.Tooltip(tooltip);
+    tooltips.forEach((tooltip) => {
+      new bootstrap.Tooltip(tooltip);
     });
-});
+  }
 
-// Toast notification function
-function showToast(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `alert alert-${type} alert-dismissible fade show`;
-    toast.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1050;
-        min-width: 300px;
-    `;
+  function updateStats() {
+    const statCards = document.querySelectorAll(".stat-card");
+    const listings = document.querySelectorAll(".listing-card");
+
+    const counts = {
+      available: 0,
+      claimed: 0,
+      completed: 0,
+      total: listings.length,
+    };
+
+    listings.forEach((listing) => {
+      const status = listing.dataset.status;
+      if (counts.hasOwnProperty(status)) {
+        counts[status]++;
+      }
+    });
+
+    // Update stat numbers
+    statCards.forEach((card, index) => {
+      const number = card.querySelector(".stat-number");
+      const statType = ["available", "claimed", "completed", "total"][index];
+      if (number && counts[statType] !== undefined) {
+        number.textContent = counts[statType];
+      }
+    });
+  }
+
+  function showToast(message, type = "info") {
+    const toast = document.createElement("div");
+    toast.className = `alert alert-${type} alert-dismissible fade show toast-notification`;
     toast.innerHTML = `
-        ${message}
+        <div class="d-flex align-items-center">
+            <i class="fas fa-${
+              type === "success" ? "check-circle" : "info-circle"
+            } me-2"></i>
+            <span>${message}</span>
+        </div>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
 
     document.body.appendChild(toast);
 
     setTimeout(() => {
-        if (toast.parentElement) {
-            toast.remove();
-        }
+      if (toast.parentElement) {
+        toast.remove();
+      }
     }, 5000);
-}
+  }
+
+  // Keyboard navigation
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      // Close any open dropdowns
+      const openDropdowns = document.querySelectorAll(".dropdown-menu.show");
+      openDropdowns.forEach((dropdown) => {
+        dropdown.classList.remove("show");
+      });
+    }
+  });
+
+  // Search shortcut
+  document.addEventListener("keydown", function (e) {
+    if (e.ctrlKey && e.key === "/") {
+      e.preventDefault();
+      const searchInput = document.getElementById("searchListings");
+      if (searchInput) {
+        searchInput.focus();
+      }
+    }
+  });
 </script>
 {% endblock %}

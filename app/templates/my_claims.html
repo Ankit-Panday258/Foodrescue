@@ -1,5 +1,9 @@
 {% extends "components/base.html" %} {% block title %}My Claims - Food Rescue{%
-endblock %} {% block content %}
+endblock %} {% block stylesheets %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/my_claims.css') }}" />
+{% endblock %} {% block content %}
 
 <!-- Page Header -->
 <div class="page-header bg-light py-4">
@@ -29,6 +33,42 @@ endblock %} {% block content %}
 <!-- Main Content -->
 <div class="container mt-4">
   {% if claims %}
+
+  <!-- Filter Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="filter-section">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <div class="search-container">
+              <input
+                type="text"
+                class="form-control"
+                id="searchClaims"
+                placeholder="Search your claims..." />
+              <i class="fas fa-search search-icon"></i>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <select class="form-select" id="statusFilter">
+              <option value="">All Statuses</option>
+              <option value="claimed">Active</option>
+              <option value="completed">Completed</option>
+              <option value="expired">Expired</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select class="form-select" id="categoryFilter">
+              <option value="">All Categories</option>
+              <option value="veg">Vegetarian</option>
+              <option value="nonveg">Non-Vegetarian</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-12">
       <div class="claims-stats mb-4">
@@ -88,7 +128,11 @@ endblock %} {% block content %}
   <div class="row">
     {% for claim in claims %}
     <div class="col-md-6 col-lg-4 mb-4">
-      <div class="claim-card">
+      <div
+        class="claim-card"
+        data-status="{{ claim.listing.status }}"
+        data-category="{{ claim.listing.category }}"
+        data-name="{{ claim.listing.foodname.lower() }}">
         <div class="claim-header">
           <div
             class="claim-status-badge {% if claim.listing.status == 'claimed' %}status-active{% elif claim.listing.status == 'completed' %}status-completed{% else %}status-expired{% endif %}">
@@ -99,8 +143,8 @@ endblock %} {% block content %}
           </div>
           <div class="claim-date">
             <i class="fas fa-calendar-alt"></i>
-            {{ claim.created_at.strftime('%b %d, %Y') if claim.created_at else
-            'N/A' }}
+            {{ claim.claim_datetime.strftime('%b %d, %Y') if
+            claim.claim_datetime else 'N/A' }}
           </div>
         </div>
 
@@ -109,7 +153,7 @@ endblock %} {% block content %}
             {% if claim.listing.image_url %}
             <img
               src="{{ claim.listing.image_url }}"
-              alt="{{ claim.listing.food_name }}"
+              alt="{{ claim.listing.foodname }}"
               onerror="this.src='{{ url_for('static', filename='image/default-food.jpg') }}'" />
             {% else %}
             <div class="default-image">
@@ -119,10 +163,10 @@ endblock %} {% block content %}
           </div>
 
           <div class="food-info">
-            <h5 class="food-name">{{ claim.listing.food_name }}</h5>
+            <h5 class="food-name">{{ claim.listing.foodname }}</h5>
             <p class="food-type">
               <i class="fas fa-tag"></i>
-              {{ claim.listing.food_type.title() }}
+              {{ claim.listing.category.title() }}
             </p>
             <p class="food-description">
               {{ claim.listing.description[:100] }}{% if
@@ -131,7 +175,7 @@ endblock %} {% block content %}
 
             <div class="location-info">
               <i class="fas fa-map-marker-alt"></i>
-              <span>{{ claim.listing.location }}</span>
+              <span>{{ claim.listing.pickup_location }}</span>
             </div>
 
             <div class="expiry-info">
@@ -190,245 +234,216 @@ endblock %} {% block content %}
   {% endif %}
 </div>
 
-<style>
-  .page-header {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    border-bottom: 1px solid #dee2e6;
-  }
-
-  .claims-stats {
-    margin-bottom: 2rem;
-  }
-
-  .stat-card {
-    background: white;
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    height: 100%;
-    transition: transform 0.3s ease;
-  }
-
-  .stat-card:hover {
-    transform: translateY(-2px);
-  }
-
-  .stat-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #28a745, #20c997);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.2rem;
-  }
-
-  .stat-info h4 {
-    margin: 0;
-    color: #333;
-    font-weight: 600;
-  }
-
-  .stat-info p {
-    margin: 0;
-    color: #6c757d;
-    font-size: 0.9rem;
-  }
-
-  .claim-card {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 100%;
-  }
-
-  .claim-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
-  }
-
-  .claim-header {
-    padding: 1rem;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    border-bottom: 1px solid #dee2e6;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .claim-status-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: white;
-  }
-
-  .status-active {
-    background: linear-gradient(135deg, #28a745, #20c997);
-  }
-
-  .status-completed {
-    background: linear-gradient(135deg, #17a2b8, #007bff);
-  }
-
-  .status-expired {
-    background: linear-gradient(135deg, #dc3545, #c82333);
-  }
-
-  .claim-date {
-    color: #6c757d;
-    font-size: 0.85rem;
-  }
-
-  .claim-body {
-    padding: 1rem;
-  }
-
-  .food-image {
-    width: 100%;
-    height: 150px;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 1rem;
-  }
-
-  .food-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .default-image {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6c757d;
-    font-size: 2rem;
-  }
-
-  .food-name {
-    margin: 0 0 0.5rem 0;
-    color: #333;
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-
-  .food-type {
-    margin: 0 0 0.5rem 0;
-    color: #28a745;
-    font-size: 0.9rem;
-    font-weight: 500;
-  }
-
-  .food-description {
-    margin: 0 0 1rem 0;
-    color: #6c757d;
-    font-size: 0.9rem;
-    line-height: 1.4;
-  }
-
-  .location-info,
-  .expiry-info,
-  .donor-info {
-    margin: 0.5rem 0;
-    color: #6c757d;
-    font-size: 0.85rem;
-  }
-
-  .location-info i,
-  .expiry-info i,
-  .donor-info i {
-    color: #28a745;
-    width: 16px;
-    margin-right: 0.5rem;
-  }
-
-  .claim-footer {
-    padding: 1rem;
-    border-top: 1px solid #f8f9fa;
-    background: #fafafa;
-  }
-
-  .claim-actions {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: space-between;
-  }
-
-  .claim-actions .btn {
-    flex: 1;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    padding: 0.5rem 1rem;
-  }
-
-  .empty-state {
-    max-width: 500px;
-    margin: 0 auto;
-  }
-
-  .empty-icon {
-    font-size: 4rem;
-    color: #dee2e6;
-    margin-bottom: 1rem;
-  }
-
-  .empty-state h3 {
-    color: #333;
-    margin-bottom: 1rem;
-  }
-
-  .empty-state p {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-  }
-
-  @media (max-width: 768px) {
-    .stat-card {
-      margin-bottom: 1rem;
-    }
-
-    .claim-actions {
-      flex-direction: column;
-    }
-
-    .claim-actions .btn {
-      margin-bottom: 0.5rem;
-    }
-  }
-</style>
-
+{% endblock %} {% block scripts %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    // Add animation to stat cards
+    // Initialize animations
+    initializeAnimations();
+
+    // Initialize filters
+    initializeFilters();
+
+    // Initialize interactions
+    initializeInteractions();
+
+    // Initialize accessibility features
+    initializeAccessibility();
+  });
+
+  function initializeAnimations() {
+    // Animate stat cards
     const statCards = document.querySelectorAll(".stat-card");
     statCards.forEach((card, index) => {
       setTimeout(() => {
-        card.style.opacity = "1";
-        card.style.transform = "translateY(0)";
+        card.classList.add("fade-in");
       }, index * 100);
     });
 
-    // Add animation to claim cards
+    // Animate claim cards
     const claimCards = document.querySelectorAll(".claim-card");
     claimCards.forEach((card, index) => {
       setTimeout(() => {
-        card.style.opacity = "1";
-        card.style.transform = "translateY(0)";
+        card.classList.add("fade-in");
       }, index * 100 + 300);
     });
-  });
-</script>
+  }
 
+  function initializeFilters() {
+    const searchInput = document.getElementById("searchClaims");
+    const statusFilter = document.getElementById("statusFilter");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    function filterClaims() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const selectedStatus = statusFilter.value;
+      const selectedCategory = categoryFilter.value;
+      const claims = document.querySelectorAll(".claim-card");
+      let visibleCount = 0;
+
+      claims.forEach((claim) => {
+        const name = claim.dataset.name;
+        const status = claim.dataset.status;
+        const category = claim.dataset.category;
+
+        const matchesSearch = !searchTerm || name.includes(searchTerm);
+        const matchesStatus = !selectedStatus || status === selectedStatus;
+        const matchesCategory =
+          !selectedCategory || category === selectedCategory;
+
+        if (matchesSearch && matchesStatus && matchesCategory) {
+          claim.closest(".col-md-6").style.display = "";
+          visibleCount++;
+        } else {
+          claim.closest(".col-md-6").style.display = "none";
+        }
+      });
+
+      // Show empty message if no results
+      showEmptyResults(visibleCount === 0);
+    }
+
+    // Add event listeners for filters
+    if (searchInput) {
+      searchInput.addEventListener("input", filterClaims);
+    }
+    if (statusFilter) {
+      statusFilter.addEventListener("change", filterClaims);
+    }
+    if (categoryFilter) {
+      categoryFilter.addEventListener("change", filterClaims);
+    }
+  }
+
+  function showEmptyResults(isEmpty) {
+    let emptyMessage = document.getElementById("emptyFilterMessage");
+
+    if (isEmpty) {
+      if (!emptyMessage) {
+        emptyMessage = document.createElement("div");
+        emptyMessage.id = "emptyFilterMessage";
+        emptyMessage.className = "col-12 text-center py-5";
+        emptyMessage.innerHTML = `
+                <div class="text-muted">
+                    <i class="fas fa-search fa-3x mb-3"></i>
+                    <h4>No claims found</h4>
+                    <p>Try adjusting your search criteria</p>
+                </div>
+            `;
+        document
+          .querySelector(".claim-card")
+          .closest(".row")
+          .appendChild(emptyMessage);
+      }
+      emptyMessage.style.display = "block";
+    } else if (emptyMessage) {
+      emptyMessage.style.display = "none";
+    }
+  }
+
+  function initializeInteractions() {
+    // Add click handlers for phone links
+    const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+    phoneLinks.forEach((link) => {
+      link.addEventListener("click", function (e) {
+        showToast("Opening phone dialer...", "info");
+      });
+    });
+
+    // Add hover effects for claim cards
+    const claimCards = document.querySelectorAll(".claim-card");
+    claimCards.forEach((card) => {
+      card.addEventListener("mouseenter", function () {
+        if (!this.style.display || this.style.display !== "none") {
+          this.style.transform = "translateY(-5px)";
+        }
+      });
+
+      card.addEventListener("mouseleave", function () {
+        this.style.transform = "translateY(0)";
+      });
+    });
+  }
+
+  function initializeAccessibility() {
+    // Add keyboard navigation
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        // Close any open modals or dropdowns
+        document.activeElement.blur();
+      }
+
+      // Search shortcut
+      if (e.ctrlKey && e.key === "/") {
+        e.preventDefault();
+        const searchInput = document.getElementById("searchClaims");
+        if (searchInput) {
+          searchInput.focus();
+        }
+      }
+    });
+
+    // Add focus indicators
+    const interactiveElements = document.querySelectorAll(
+      "a, button, input, select"
+    );
+    interactiveElements.forEach((element) => {
+      element.addEventListener("focus", function () {
+        this.style.outline = "2px solid #007bff";
+        this.style.outlineOffset = "2px";
+      });
+
+      element.addEventListener("blur", function () {
+        this.style.outline = "none";
+      });
+    });
+  }
+
+  function showToast(message, type = "info") {
+    const toast = document.createElement("div");
+    toast.className = `alert alert-${type} alert-dismissible fade show`;
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+        min-width: 300px;
+        border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        animation: slideInRight 0.3s ease-out;
+    `;
+    toast.innerHTML = `
+        <div class="d-flex align-items-center">
+            <i class="fas fa-${
+              type === "success" ? "check-circle" : "info-circle"
+            } me-2"></i>
+            <span>${message}</span>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      if (toast.parentElement) {
+        toast.remove();
+      }
+    }, 5000);
+  }
+
+  // Add CSS for toast animation
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+`;
+  document.head.appendChild(style);
+</script>
 {% endblock %}
