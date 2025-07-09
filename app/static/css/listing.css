@@ -1,0 +1,537 @@
+/* Food Rescue Listing Page Styles */
+
+/* Page Header */
+.section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  color: #2d5a27 !important;
+  font-weight: 700 !important;
+  font-size: 2.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.page-subtitle {
+  color: #6b7280 !important;
+  font-size: 1.1rem !important;
+  margin: 0 !important;
+}
+
+/* Stats Container */
+.stats-container {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 2rem !important;
+  flex-wrap: wrap !important;
+  background: #f8fafc !important;
+  padding: 1.5rem !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(45, 90, 39, 0.1) !important;
+}
+
+.stat-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  padding: 0.5rem 1rem !important;
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.stat-icon {
+  font-size: 1.5rem !important;
+  color: #2d5a27 !important;
+}
+
+.stat-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+.stat-number {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: #2d5a27 !important;
+  line-height: 1 !important;
+}
+
+.stat-label {
+  font-size: 0.875rem !important;
+  color: #6b7280 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Button Styles */
+.btn-outline-primary-food {
+  background: transparent !important;
+  color: #2d5a27 !important;
+  border: 2px solid #2d5a27 !important;
+  border-radius: 25px !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+.btn-outline-primary-food:hover {
+  background: #2d5a27 !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(45, 90, 39, 0.3) !important;
+}
+
+/* Food Grid */
+.food-grid {
+  display: grid !important;
+  grid-template-columns: repeat(1, 1fr) !important;
+  gap: 1.5rem !important;
+  margin-top: 2rem !important;
+}
+
+@media (min-width: 576px) {
+  .food-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .food-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .food-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* Food Cards */
+.food-card {
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: 1px solid rgba(45, 90, 39, 0.1) !important;
+  position: relative !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.food-card:hover {
+  box-shadow: 0 12px 30px rgba(45, 90, 39, 0.15) !important;
+  border-color: rgba(45, 90, 39, 0.3) !important;
+  transform: translateY(-4px) !important;
+}
+
+/* Image Container */
+.food-card-img-container {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 16/9 !important;
+  overflow: hidden !important;
+  background: #f8f9fa !important;
+}
+
+.food-card-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.food-card:hover .food-card-img {
+  transform: scale(1.05) !important;
+}
+
+/* Food Badges */
+.food-badges {
+  position: absolute !important;
+  top: 0.75rem !important;
+  left: 0.75rem !important;
+  z-index: 10 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+}
+
+.badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0.25rem 0.75rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.badge-veg {
+  background: #10b981 !important;
+  color: white !important;
+}
+
+.badge-nonveg {
+  background: #ef4444 !important;
+  color: white !important;
+}
+
+.badge-urgent {
+  background: #dc2626 !important;
+  color: white !important;
+  animation: pulse 2s infinite !important;
+}
+
+.badge-soon {
+  background: #f59e0b !important;
+  color: white !important;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Card Body */
+.food-card-body {
+  padding: 1rem !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+}
+
+.food-card-title {
+  color: #1f2937 !important;
+  font-weight: 600 !important;
+  font-size: 1.25rem !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+.food-description {
+  color: #6b7280 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+/* Food Info */
+.food-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  margin-top: 0.5rem !important;
+}
+
+.info-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  font-size: 0.875rem !important;
+  color: #6b7280 !important;
+}
+
+.info-item i {
+  color: #2d5a27 !important;
+  width: 12px !important;
+  text-align: center !important;
+}
+
+/* Card Footer */
+.card-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-top: auto !important;
+  padding-top: 1rem !important;
+  border-top: 1px solid rgba(45, 90, 39, 0.1) !important;
+}
+
+.quantity-section {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+}
+
+.quantity-label {
+  font-size: 0.75rem !important;
+  color: #6b7280 !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.quantity-value {
+  color: #1f2937 !important;
+  font-weight: 700 !important;
+  font-size: 1.125rem !important;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex !important;
+  gap: 0.5rem !important;
+}
+
+.claim-btn {
+  background: linear-gradient(135deg, #2d5a27, #34d399) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  text-decoration: none !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.claim-btn:hover {
+  background: linear-gradient(135deg, #1f4522, #10b981) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(45, 90, 39, 0.3) !important;
+  color: white !important;
+}
+
+.claimed-badge {
+  background: #6b7280 !important;
+  color: white !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+/* Food Link Reset */
+.food-link {
+  text-decoration: none !important;
+  color: inherit !important;
+  display: block !important;
+}
+
+.food-link:hover {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* Filter Section */
+.filter-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(45, 90, 39, 0.1) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+  overflow: hidden !important;
+}
+
+.filter-header {
+  background: #f8fafc !important;
+  border-bottom: 1px solid rgba(45, 90, 39, 0.1) !important;
+  padding: 1rem 1.25rem !important;
+}
+
+.filter-header h5 {
+  color: #2d5a27 !important;
+  font-weight: 600 !important;
+}
+
+.filter-collapse {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  overflow: hidden !important;
+}
+
+.filter-body {
+  background: #ffffff !important;
+  padding: 1.5rem 1.25rem !important;
+}
+
+/* Form Controls */
+.filter-body .form-label {
+  color: #374151 !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.filter-body .form-control,
+.filter-body .form-select {
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  padding: 0.625rem 0.875rem !important;
+  font-size: 0.9rem !important;
+  transition: all 0.2s ease !important;
+  background: #ffffff !important;
+}
+
+.filter-body .form-control:focus,
+.filter-body .form-select:focus {
+  border-color: #2d5a27 !important;
+  box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1) !important;
+  outline: none !important;
+}
+
+.filter-body .btn-primary {
+  background: #2d5a27 !important;
+  border-color: #2d5a27 !important;
+  border-radius: 8px !important;
+  padding: 0.625rem 1rem !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.filter-body .btn-primary:hover {
+  background: #1f4522 !important;
+  border-color: #1f4522 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Empty State */
+.empty-state {
+  max-width: 500px !important;
+  margin: 3rem auto !important;
+  padding: 2rem !important;
+  background: #f8fafc !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(45, 90, 39, 0.1) !important;
+}
+
+.empty-state h3 {
+  color: #374151 !important;
+  font-weight: 600 !important;
+}
+
+.empty-state p {
+  color: #6b7280 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Results Info */
+.results-info {
+  background: #f0f9ff !important;
+  border: 1px solid #e0f2fe !important;
+  border-radius: 8px !important;
+  padding: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.results-info p {
+  color: #0369a1 !important;
+  font-weight: 500 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .stats-container {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  .stat-item {
+    justify-content: center !important;
+  }
+
+  .page-title {
+    font-size: 2rem !important;
+  }
+
+  .filter-body {
+    padding: 1rem !important;
+  }
+
+  .food-card-body {
+    padding: 0.75rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .card-footer {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    align-items: stretch !important;
+  }
+
+  .claim-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* Accessibility Enhancements */
+.food-card:focus-within {
+  outline: 3px solid #2d5a27 !important;
+  outline-offset: 2px !important;
+}
+
+.food-link:focus {
+  outline: none !important;
+}
+
+.claim-btn:focus {
+  outline: 3px solid #2d5a27 !important;
+  outline-offset: 2px !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .food-card {
+    border: 2px solid #000 !important;
+  }
+
+  .food-card-title {
+    color: #000 !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .food-card,
+  .food-card-img,
+  .claim-btn {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .food-card:hover {
+    transform: none !important;
+  }
+
+  .badge-urgent {
+    animation: none !important;
+  }
+}

@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, redirect, url_for, request, flash, session
+from flask import render_template, Blueprint, redirect, url_for, request, flash, session, jsonify, jsonify
 from app.routes.auth import login_required, get_current_user
 from app.models import Listing, Claim, User
 from app import db
@@ -10,8 +10,37 @@ food = Blueprint('food', __name__)
 @food.route('/')
 def allListing():
     """Public route - no authentication required"""
-    listings = Listing.query.filter_by(status='available').all()
-    return render_template("listing.html", listings=listings, now=datetime.now())
+    # Base query for available listings
+    query = Listing.query.filter_by(status='available')
+    
+    # Get filter parameters
+    category_filter = request.args.get('category')
+    location_filter = request.args.get('location')
+    expiry_date_filter = request.args.get('expiry_date')
+    
+    # Apply filters
+    if category_filter:
+        query = query.filter(Listing.category == category_filter)
+    
+    if location_filter:
+        query = query.filter(Listing.pickup_location.ilike(f'%{location_filter}%'))
+    
+    if expiry_date_filter:
+        try:
+            expiry_date = datetime.strptime(expiry_date_filter, '%Y-%m-%d')
+            query = query.filter(Listing.expiry_date <= expiry_date)
+        except ValueError:
+            flash("Invalid date format", 'error')
+    
+    # Order by creation date (newest first)
+    listings = query.order_by(Listing.created_at.desc()).all()
+    
+    return render_template("listing.html", 
+                         listings=listings, 
+                         now=datetime.now(),
+                         category_filter=category_filter,
+                         location_filter=location_filter,
+                         expiry_date_filter=expiry_date_filter)
 
 #New route
 @food.route("/new")
@@ -232,11 +261,25 @@ def processClaim(id):
         flash("You cannot claim your own listing", 'error')
         return redirect(url_for('food.showListing', id=id))
 
+    # Validate required form fields
+    if not request.form.get('agree_terms'):
+        flash("You must agree to the terms and conditions to proceed", 'error')
+        return redirect(url_for('food.renderClaimPage', id=id))
+
+    if not request.form.get('contact_donor'):
+        flash("You must agree to contact the donor within 24 hours to proceed", 'error')
+        return redirect(url_for('food.renderClaimPage', id=id))
+        
+    if not request.form.get('food_safety'):
+        flash("You must acknowledge food safety responsibility to proceed", 'error')
+        return redirect(url_for('food.renderClaimPage', id=id))
+
     try:
-        # Create new claim using dictionary approach
+        # Create new claim with additional data
         claim_data = {
             'listing_id': id,
-            'recipient_id': current_user.user_id
+            'recipient_id': current_user.user_id,
+            'status': 'pending'
         }
 
         new_claim = Claim(**claim_data)
@@ -247,10 +290,66 @@ def processClaim(id):
         db.session.add(new_claim)
         db.session.commit()
 
-        flash("Food item claimed successfully! Contact the donor for pickup details.", 'success')
+        flash("Food item claimed successfully! Please contact the donor for pickup details.", 'success')
         return redirect(url_for('food.showListing', id=id))
 
     except Exception as e:
         db.session.rollback()
         flash("Error processing claim. Please try again.", 'error')
         return redirect(url_for('food.renderClaimPage', id=id))
+
+# Cancel claim route
+@food.route("/cancel-claim/<id>", methods=["POST"])
+@login_required
+def cancelClaim(id):
+    listing = Listing.query.get_or_404(id)
+    current_user = get_current_user()
+
+    # Find the user's claim
+    user_claim = Claim.query.filter_by(
+        listing_id=id,
+        recipient_id=current_user.user_id
+    ).first()
+
+    if not user_claim:
+        flash("You have not claimed this item", 'error')
+        return redirect(url_for('food.showListing', id=id))
+
+    try:
+        # Delete the claim
+        db.session.delete(user_claim)
+        
+        # Update listing status back to available
+        listing.status = 'available'
+        
+        db.session.commit()
+        
+        flash("Your claim has been cancelled successfully", 'success')
+        return redirect(url_for('food.showListing', id=id))
+        
+    except Exception as e:
+        db.session.rollback()
+        flash("Error cancelling claim. Please try again.", 'error')
+        return redirect(url_for('food.showListing', id=id))
+
+# Add a route to get claim status via AJAX
+@food.route("/api/claim-status/<id>")
+@login_required
+def getClaimStatus(id):
+    listing = Listing.query.get_or_404(id)
+    current_user = get_current_user()
+    
+    # Check if user has already claimed this item
+    user_claim = Claim.query.filter_by(
+        listing_id=id,
+        recipient_id=current_user.user_id
+    ).first()
+    
+    return jsonify({
+        'has_claimed': user_claim is not None,
+        'listing_status': listing.status,
+        'can_claim': (listing.status == 'available' and 
+                      user_claim is None and 
+                      listing.donor_id != current_user.user_id and
+                      current_user.type in ['recipient', 'both'])
+    })

@@ -1,0 +1,578 @@
+/* ============================================
+   FOOD RESCUE - CLAIM PAGE STYLES
+   Beautifully designed claim page with modern UI
+   ============================================ */
+
+/* CSS Variables for Theme Consistency */
+:root {
+  --primary-green: #2d5a27;
+  --secondary-green: #34d399;
+  --accent-orange: #f59e0b;
+  --danger-red: #dc2626;
+  --warning-yellow: #fbbf24;
+  --success-green: #10b981;
+  --text-gray: #374151;
+  --light-gray: #6b7280;
+  --border-gray: #d1d5db;
+  --bg-light: #f8fafc;
+  --white: #ffffff;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+/* Page Header Styling */
+.page-header {
+  background: linear-gradient(
+    135deg,
+    var(--primary-green),
+    var(--secondary-green)
+  );
+  color: white;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>')
+    repeat;
+  opacity: 0.1;
+}
+
+.page-header .container {
+  position: relative;
+  z-index: 1;
+}
+
+.page-header h1 {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-size: 2.25rem;
+}
+
+.page-header p {
+  opacity: 0.9;
+  font-size: 1.1rem;
+}
+
+.page-header .btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.page-header .btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Card Styling */
+.card {
+  border: none;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: var(--white);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  background: linear-gradient(
+    135deg,
+    var(--primary-green),
+    var(--secondary-green)
+  );
+  color: white;
+  padding: 1.5rem;
+  border-bottom: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.card-header h5,
+.card-header h6 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.card-header i {
+  margin-right: 0.5rem;
+  opacity: 0.9;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Claim Card Specific Styling */
+.claim-card {
+  background: linear-gradient(135deg, var(--white), var(--bg-light));
+}
+
+.claim-card .card-header {
+  background: linear-gradient(
+    135deg,
+    var(--success-green),
+    var(--secondary-green)
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.claim-card .card-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Food Image Styling */
+.food-image {
+  width: 100%;
+  height: 250px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+.food-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.food-image:hover img {
+  transform: scale(1.05);
+}
+
+.default-image {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--bg-light), #e2e8f0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--light-gray);
+  font-size: 3rem;
+}
+
+/* Food Details Styling */
+.food-details {
+  padding-left: 1rem;
+}
+
+.food-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-gray);
+  margin-bottom: 0.5rem;
+}
+
+.food-type {
+  color: var(--primary-green);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(52, 211, 153, 0.1);
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+.food-description {
+  color: var(--text-gray);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.food-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  color: var(--light-gray);
+  font-size: 0.95rem;
+}
+
+.meta-item i {
+  margin-right: 0.5rem;
+  width: 1.25rem;
+  color: var(--primary-green);
+}
+
+/* Donor Information Styling */
+.donor-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    var(--primary-green),
+    var(--secondary-green)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.donor-info h6 {
+  font-weight: 600;
+  color: var(--text-gray);
+  margin-bottom: 0.5rem;
+}
+
+.donor-info p {
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.donor-info i {
+  margin-right: 0.5rem;
+  width: 1rem;
+  color: var(--primary-green);
+}
+
+/* Form Styling */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-check {
+  padding: 1rem;
+  background: var(--bg-light);
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.form-check:hover {
+  background: #f1f5f9;
+  border-color: var(--secondary-green);
+}
+
+.form-check-input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.75rem;
+  border: 2px solid var(--border-gray);
+  border-radius: var(--radius-sm);
+}
+
+.form-check-input:checked {
+  background-color: var(--success-green);
+  border-color: var(--success-green);
+}
+
+.form-check-label {
+  font-weight: 500;
+  color: var(--text-gray);
+  cursor: pointer;
+}
+
+/* Alert Styling */
+.alert {
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.alert-info {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #1e40af;
+  border-left: 4px solid #3b82f6;
+}
+
+.alert-info i {
+  margin-right: 0.5rem;
+}
+
+.alert-info ul {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.alert-info li {
+  margin-bottom: 0.25rem;
+}
+
+/* Button Styling */
+.btn {
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-success {
+  background: linear-gradient(
+    135deg,
+    var(--success-green),
+    var(--secondary-green)
+  );
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #059669, #10b981);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--light-gray), #9ca3af);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #4b5563, var(--light-gray));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-outline-primary {
+  border: 2px solid var(--primary-green);
+  color: var(--primary-green);
+  background: transparent;
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary-green);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+/* Sidebar Styling */
+.guidelines-card .card-header,
+.safety-card .card-header {
+  background: linear-gradient(135deg, var(--accent-orange), #f97316);
+}
+
+.guidelines-list,
+.safety-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.guidelines-list li,
+.safety-list li {
+  position: relative;
+  padding: 0.75rem 0;
+  padding-left: 2rem;
+  border-bottom: 1px solid var(--border-gray);
+  color: var(--text-gray);
+  transition: all 0.3s ease;
+}
+
+.guidelines-list li:last-child,
+.safety-list li:last-child {
+  border-bottom: none;
+}
+
+.guidelines-list li::before,
+.safety-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0.75rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--success-green);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.guidelines-list li:hover,
+.safety-list li:hover {
+  background: var(--bg-light);
+  padding-left: 2.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .food-image {
+    height: 200px;
+    margin-bottom: 1rem;
+  }
+
+  .food-details {
+    padding-left: 0;
+    margin-top: 1rem;
+  }
+
+  .food-name {
+    font-size: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .page-header {
+    padding: 1.5rem 0;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .food-meta {
+    gap: 0.5rem;
+  }
+
+  .meta-item {
+    font-size: 0.875rem;
+  }
+}
+
+/* Loading Animation */
+.loading {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Accessibility Improvements */
+.btn:focus,
+.form-check-input:focus {
+  outline: 2px solid var(--primary-green);
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .page-header,
+  .form-actions,
+  .btn {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid var(--border-gray) !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :root {
+    --primary-green: #000000;
+    --secondary-green: #ffffff;
+    --text-gray: #000000;
+    --light-gray: #333333;
+    --border-gray: #000000;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,659 +1,302 @@
-{% extends "base.html" %} {% block title %}Login - Food Rescue{% endblock %} {%
-block content %}
+{% extends "components/base.html" %} {% block title %}Login - Food Rescue{%
+endblock %} {% block stylesheets %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/auth.css') }}" />
+{% endblock %} {% block content %}
 
-<!-- Page Header -->
-<div class="page-header bg-light py-4">
+<div class="auth-page">
+  <!-- Page Header -->
+  <div class="page-header bg-light py-4">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="h3 mb-0">
-                    <i class="fas fa-sign-in-alt text-primary"></i>
-                    Welcome Back
-                </h1>
-                <p class="text-muted mb-0">
-                    Sign in to your Food Rescue account
-                </p>
-            </div>
-            <div class="col-md-4 text-md-end">
-                <a
-                    href="{{ url_for('home.index') }}"
-                    class="btn btn-outline-primary"
-                >
-                    <i class="fas fa-home"></i>
-                    Back to Home
-                </a>
-            </div>
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h1 class="h3 mb-0">
+            <i class="fas fa-sign-in-alt text-primary"></i>
+            Welcome Back
+          </h1>
+          <p class="text-muted mb-0">Sign in to your Food Rescue account</p>
         </div>
+        <div class="col-md-4 text-md-end">
+          <a href="{{ url_for('home.index') }}" class="btn btn-outline-primary">
+            <i class="fas fa-home"></i>
+            Back to Home
+          </a>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- Main Content -->
-<div class="container mt-5">
+  <!-- Main Content -->
+  <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-lg-5 col-md-7">
-            <!-- Login Card -->
-            <div class="card login-card">
-                <div class="card-header text-center">
-                    <h4 class="mb-0">
-                        <i class="fas fa-leaf text-success"></i>
-                        Food Rescue
-                    </h4>
-                    <p class="text-muted small mt-2">Sign in to continue</p>
+      <div class="col-lg-5 col-md-7">
+        <!-- Login Card -->
+        <div class="card login-card">
+          <div class="card-header text-center">
+            <h4 class="mb-0">
+              <i class="fas fa-leaf text-success"></i>
+              Food Rescue
+            </h4>
+            <p class="text-muted small mt-2">Sign in to continue</p>
+          </div>
+          <div class="card-body">
+            <!-- Login Form -->
+            <form
+              method="POST"
+              action="{{ url_for('auth.login') }}"
+              class="needs-validation"
+              novalidate>
+              <!-- Email Field -->
+              <div class="form-group">
+                <label for="email" class="form-label">
+                  <i class="fas fa-envelope"></i>
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  required
+                  placeholder="Enter your email"
+                  value="{{ request.form.get('email', '') }}"
+                  autocomplete="email" />
+                <div class="invalid-feedback">
+                  Please provide a valid email address.
                 </div>
-                <div class="card-body">
-                    <!-- Login Form -->
-                    <form
-                        method="POST"
-                        action="{{ url_for('auth.login') }}"
-                        class="needs-validation"
-                        novalidate
-                    >
-                        <!-- Email Field -->
-                        <div class="form-group">
-                            <label for="email" class="form-label">
-                                <i class="fas fa-envelope"></i>
-                                Email Address
-                            </label>
-                            <input
-                                type="email"
-                                class="form-control"
-                                id="email"
-                                name="email"
-                                required
-                                placeholder="Enter your email"
-                                value="{{ request.form.get('email', '') }}"
-                                autocomplete="email"
-                            />
-                            <div class="invalid-feedback">
-                                Please provide a valid email address.
-                            </div>
-                        </div>
+              </div>
 
-                        <!-- Password Field -->
-                        <div class="form-group">
-                            <label for="password" class="form-label">
-                                <i class="fas fa-lock"></i>
-                                Password
-                            </label>
-                            <div class="password-input-group">
-                                <input
-                                    type="password"
-                                    class="form-control"
-                                    id="password"
-                                    name="password"
-                                    required
-                                    placeholder="Enter your password"
-                                    autocomplete="current-password"
-                                />
-                                <button
-                                    type="button"
-                                    class="password-toggle"
-                                    id="togglePassword"
-                                >
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                            <div class="invalid-feedback">
-                                Please provide your password.
-                            </div>
-                        </div>
-
-                        <!-- Remember Me and Forgot Password -->
-                        <div class="form-group">
-                            <div
-                                class="d-flex justify-content-between align-items-center"
-                            >
-                                <div class="form-check">
-                                    <input
-                                        class="form-check-input"
-                                        type="checkbox"
-                                        id="remember"
-                                        name="remember"
-                                    />
-                                    <label
-                                        class="form-check-label"
-                                        for="remember"
-                                    >
-                                        Remember me
-                                    </label>
-                                </div>
-                                <a href="#" class="forgot-password text-muted">
-                                    Forgot password?
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="form-group">
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-lg w-100"
-                            >
-                                <i class="fas fa-sign-in-alt"></i>
-                                Sign In
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- Divider -->
-                    <div class="divider">
-                        <span>or</span>
-                    </div>
-
-                    <!-- Social Login Placeholder -->
-                    <div class="social-login">
-                        <button
-                            class="btn btn-outline-secondary w-100 mb-2"
-                            disabled
-                        >
-                            <i class="fab fa-google"></i>
-                            Continue with Google (Coming Soon)
-                        </button>
-                        <button
-                            class="btn btn-outline-secondary w-100"
-                            disabled
-                        >
-                            <i class="fab fa-facebook"></i>
-                            Continue with Facebook (Coming Soon)
-                        </button>
-                    </div>
+              <!-- Password Field -->
+              <div class="form-group">
+                <label for="password" class="form-label">
+                  <i class="fas fa-lock"></i>
+                  Password
+                </label>
+                <div class="password-input-group">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    required
+                    placeholder="Enter your password"
+                    autocomplete="current-password" />
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    id="togglePassword">
+                    <i class="fas fa-eye"></i>
+                  </button>
                 </div>
-                <div class="card-footer text-center">
-                    <p class="mb-0">
-                        Don't have an account?
-                        <a
-                            href="{{ url_for('auth.register') }}"
-                            class="text-primary fw-bold"
-                        >
-                            Sign up here
-                        </a>
-                    </p>
+                <div class="invalid-feedback">
+                  Please provide your password.
                 </div>
+              </div>
+
+              <!-- Remember Me and Forgot Password -->
+              <div class="form-group">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="remember"
+                      name="remember" />
+                    <label class="form-check-label" for="remember">
+                      Remember me
+                    </label>
+                  </div>
+                  <a href="#" class="forgot-password text-muted">
+                    Forgot password?
+                  </a>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                  <i class="fas fa-sign-in-alt"></i>
+                  Sign In
+                </button>
+              </div>
+            </form>
+
+            <!-- Divider -->
+            <div class="divider">
+              <span>or</span>
             </div>
 
-            <!-- Additional Info -->
-            <div class="login-info mt-4">
-                <div class="row text-center">
-                    <div class="col-md-4">
-                        <div class="info-item">
-                            <i class="fas fa-shield-alt text-success"></i>
-                            <h6>Secure</h6>
-                            <small class="text-muted"
-                                >Your data is protected</small
-                            >
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-item">
-                            <i class="fas fa-users text-primary"></i>
-                            <h6>Community</h6>
-                            <small class="text-muted">Join food heroes</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-item">
-                            <i class="fas fa-leaf text-success"></i>
-                            <h6>Impact</h6>
-                            <small class="text-muted">Reduce food waste</small>
-                        </div>
-                    </div>
-                </div>
+            <!-- Social Login Placeholder -->
+            <div class="social-login">
+              <button class="btn btn-outline-secondary w-100 mb-2" disabled>
+                <i class="fab fa-google"></i>
+                Continue with Google (Coming Soon)
+              </button>
+              <button class="btn btn-outline-secondary w-100" disabled>
+                <i class="fab fa-facebook"></i>
+                Continue with Facebook (Coming Soon)
+              </button>
             </div>
+          </div>
+          <div class="card-footer text-center">
+            <p class="mb-0">
+              Don't have an account?
+              <a
+                href="{{ url_for('auth.register') }}"
+                class="text-primary fw-bold">
+                Sign up here
+              </a>
+            </p>
+          </div>
         </div>
-    </div>
-</div>
 
-<!-- Quick Stats -->
-<div class="container mt-5">
+        <!-- Additional Info -->
+        <div class="login-info mt-4">
+          <div class="row text-center">
+            <div class="col-md-4">
+              <div class="info-item">
+                <i class="fas fa-shield-alt text-success"></i>
+                <h6>Secure</h6>
+                <small class="text-muted">Your data is protected</small>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="info-item">
+                <i class="fas fa-users text-primary"></i>
+                <h6>Community</h6>
+                <small class="text-muted">Join food heroes</small>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="info-item">
+                <i class="fas fa-leaf text-success"></i>
+                <h6>Impact</h6>
+                <small class="text-muted">Reduce food waste</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="container mt-5">
     <div class="row">
-        <div class="col-12">
-            <div class="quick-stats bg-light py-4 rounded">
-                <div class="row text-center">
-                    <div class="col-md-3 col-6">
-                        <div class="stat-item">
-                            <div class="stat-number text-primary">1,247</div>
-                            <div class="stat-label">Food Items Rescued</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6">
-                        <div class="stat-item">
-                            <div class="stat-number text-success">892</div>
-                            <div class="stat-label">Active Members</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6">
-                        <div class="stat-item">
-                            <div class="stat-number text-info">456</div>
-                            <div class="stat-label">Successful Claims</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6">
-                        <div class="stat-item">
-                            <div class="stat-number text-warning">2.3k</div>
-                            <div class="stat-label">Kg Food Saved</div>
-                        </div>
-                    </div>
-                </div>
+      <div class="col-12">
+        <div class="quick-stats bg-light py-4 rounded">
+          <div class="row text-center">
+            <div class="col-md-3 col-6">
+              <div class="stat-item">
+                <div class="stat-number text-primary">1,247</div>
+                <div class="stat-label">Food Items Rescued</div>
+              </div>
             </div>
+            <div class="col-md-3 col-6">
+              <div class="stat-item">
+                <div class="stat-number text-success">892</div>
+                <div class="stat-label">Active Members</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="stat-item">
+                <div class="stat-number text-info">456</div>
+                <div class="stat-label">Successful Claims</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="stat-item">
+                <div class="stat-number text-warning">2.3k</div>
+                <div class="stat-label">Kg Food Saved</div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
-{% endblock %} {% block styles %}
-<style>
-    /* Login Card */
-    .login-card {
-        border: none;
-        border-radius: var(--border-radius-xl);
-        box-shadow: var(--shadow-lg);
-        overflow: hidden;
-        margin-bottom: 2rem;
-    }
-
-    .login-card .card-header {
-        background: linear-gradient(
-            135deg,
-            var(--primary-color),
-            var(--primary-dark)
-        );
-        color: var(--white);
-        padding: 2rem;
-        border-bottom: none;
-    }
-
-    .login-card .card-body {
-        padding: 2rem;
-    }
-
-    .login-card .card-footer {
-        background-color: var(--gray-100);
-        border-top: 1px solid var(--gray-200);
-        padding: 1.5rem;
-    }
-
-    /* Form Styling */
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-label {
-        font-weight: 500;
-        color: var(--gray-800);
-        margin-bottom: 0.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .form-label i {
-        color: var(--primary-color);
-        width: 16px;
-    }
-
-    .form-control {
-        border: 2px solid var(--gray-300);
-        border-radius: var(--border-radius);
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-    }
-
-    .form-control:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-    }
-
-    .form-control.is-invalid {
-        border-color: var(--error-color);
-    }
-
-    .form-control.is-valid {
-        border-color: var(--success-color);
-    }
-
-    /* Password Input Group */
-    .password-input-group {
-        position: relative;
-    }
-
-    .password-toggle {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        color: var(--gray-500);
-        cursor: pointer;
-        padding: 0.5rem;
-        border-radius: var(--border-radius-sm);
-        transition: all 0.3s ease;
-    }
-
-    .password-toggle:hover {
-        color: var(--primary-color);
-        background-color: var(--gray-100);
-    }
-
-    /* Form Check */
-    .form-check-input {
-        border-radius: var(--border-radius-sm);
-    }
-
-    .form-check-input:checked {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
-    }
-
-    .form-check-label {
-        font-size: 0.875rem;
-        color: var(--gray-700);
-    }
-
-    /* Forgot Password Link */
-    .forgot-password {
-        font-size: 0.875rem;
-        text-decoration: none;
-        transition: all 0.3s ease;
-    }
-
-    .forgot-password:hover {
-        color: var(--primary-color) !important;
-        text-decoration: underline;
-    }
-
-    /* Submit Button */
-    .btn-primary {
-        background: linear-gradient(
-            135deg,
-            var(--primary-color),
-            var(--primary-dark)
-        );
-        border: none;
-        padding: 0.75rem 1.5rem;
-        font-size: 1.125rem;
-        font-weight: 500;
-        border-radius: var(--border-radius);
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        background: linear-gradient(135deg, var(--primary-dark), #155724);
-        transform: translateY(-2px);
-        box-shadow: var(--shadow);
-    }
-
-    /* Divider */
-    .divider {
-        text-align: center;
-        margin: 1.5rem 0;
-        position: relative;
-    }
-
-    .divider::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background-color: var(--gray-300);
-    }
-
-    .divider span {
-        background-color: var(--white);
-        padding: 0 1rem;
-        color: var(--gray-500);
-        font-size: 0.875rem;
-        position: relative;
-        z-index: 1;
-    }
-
-    /* Social Login */
-    .social-login .btn {
-        margin-bottom: 0.5rem;
-        font-size: 0.875rem;
-        padding: 0.75rem 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-    }
-
-    .social-login .btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-
-    /* Login Info */
-    .login-info {
-        background-color: var(--white);
-        border-radius: var(--border-radius-lg);
-        padding: 2rem;
-        box-shadow: var(--shadow-sm);
-    }
-
-    .info-item {
-        padding: 1rem;
-    }
-
-    .info-item i {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .info-item h6 {
-        color: var(--gray-900);
-        font-weight: 600;
-        margin-bottom: 0.25rem;
-    }
-
-    /* Quick Stats */
-    .quick-stats {
-        margin-bottom: 2rem;
-    }
-
-    .stat-item {
-        padding: 1rem;
-    }
-
-    .stat-number {
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 0.25rem;
-    }
-
-    .stat-label {
-        font-size: 0.875rem;
-        color: var(--gray-600);
-        font-weight: 500;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .login-card .card-header {
-            padding: 1.5rem;
-        }
-
-        .login-card .card-body {
-            padding: 1.5rem;
-        }
-
-        .login-card .card-footer {
-            padding: 1rem;
-        }
-
-        .page-header .row {
-            text-align: center;
-        }
-
-        .page-header .col-md-4 {
-            margin-top: 1rem;
-        }
-
-        .login-info {
-            padding: 1.5rem;
-        }
-
-        .stat-number {
-            font-size: 1.5rem;
-        }
-
-        .info-item i {
-            font-size: 1.5rem;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .container {
-            padding: 0 1rem;
-        }
-
-        .form-group .d-flex {
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .form-check {
-            text-align: center;
-        }
-    }
-
-    /* Animations */
-    .login-card {
-        animation: slideInUp 0.6s ease-out;
-    }
-
-    .login-info {
-        animation: slideInUp 0.6s ease-out 0.2s both;
-    }
-
-    .quick-stats {
-        animation: slideInUp 0.6s ease-out 0.4s both;
-    }
-
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Loading State */
-    .btn.loading {
-        position: relative;
-        color: transparent;
-    }
-
-    .btn.loading::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 20px;
-        height: 20px;
-        border: 2px solid transparent;
-        border-top: 2px solid currentColor;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        transform: translate(-50%, -50%);
-    }
-
-    @keyframes spin {
-        0% {
-            transform: translate(-50%, -50%) rotate(0deg);
-        }
-        100% {
-            transform: translate(-50%, -50%) rotate(360deg);
-        }
-    }
-</style>
 {% endblock %} {% block scripts %}
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector(".needs-validation");
-        const passwordInput = document.getElementById("password");
-        const togglePassword = document.getElementById("togglePassword");
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector(".needs-validation");
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
 
-        // Password visibility toggle
-        if (togglePassword && passwordInput) {
-            togglePassword.addEventListener("click", function () {
-                const type =
-                    passwordInput.getAttribute("type") === "password"
-                        ? "text"
-                        : "password";
-                passwordInput.setAttribute("type", type);
+    // Password visibility toggle
+    if (togglePassword && passwordInput) {
+      togglePassword.addEventListener("click", function () {
+        const type =
+          passwordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
 
-                const icon = this.querySelector("i");
-                if (type === "password") {
-                    icon.classList.remove("fa-eye-slash");
-                    icon.classList.add("fa-eye");
-                } else {
-                    icon.classList.remove("fa-eye");
-                    icon.classList.add("fa-eye-slash");
-                }
-            });
+        const icon = this.querySelector("i");
+        if (type === "password") {
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        } else {
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
         }
+      });
+    }
 
-        // Form validation
-        form.addEventListener("submit", function (e) {
-            if (!form.checkValidity()) {
-                e.preventDefault();
-                e.stopPropagation();
-            } else {
-                // Show loading state
-                const submitBtn = form.querySelector('button[type="submit"]');
-                submitBtn.disabled = true;
-                submitBtn.classList.add("loading");
-                submitBtn.innerHTML =
-                    '<i class="fas fa-spinner fa-spin"></i> Signing In...';
-            }
+    // Form validation
+    form.addEventListener("submit", function (e) {
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();
+      } else {
+        // Show loading state
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.classList.add("loading");
+        submitBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+      }
 
-            form.classList.add("was-validated");
-        });
-
-        // Real-time validation
-        const inputs = form.querySelectorAll("input");
-        inputs.forEach((input) => {
-            input.addEventListener("blur", function () {
-                if (this.checkValidity()) {
-                    this.classList.remove("is-invalid");
-                    this.classList.add("is-valid");
-                } else {
-                    this.classList.remove("is-valid");
-                    this.classList.add("is-invalid");
-                }
-            });
-
-            input.addEventListener("input", function () {
-                if (
-                    this.classList.contains("is-invalid") &&
-                    this.checkValidity()
-                ) {
-                    this.classList.remove("is-invalid");
-                    this.classList.add("is-valid");
-                }
-            });
-        });
-
-        // Auto-focus on first input
-        const firstInput = form.querySelector("input");
-        if (firstInput) {
-            firstInput.focus();
-        }
-
-        // Handle Enter key on password field
-        if (passwordInput) {
-            passwordInput.addEventListener("keypress", function (e) {
-                if (e.key === "Enter") {
-                    form.dispatchEvent(new Event("submit"));
-                }
-            });
-        }
+      form.classList.add("was-validated");
     });
+
+    // Real-time validation
+    const inputs = form.querySelectorAll("input");
+    inputs.forEach((input) => {
+      input.addEventListener("blur", function () {
+        if (this.checkValidity()) {
+          this.classList.remove("is-invalid");
+          this.classList.add("is-valid");
+        } else {
+          this.classList.remove("is-valid");
+          this.classList.add("is-invalid");
+        }
+      });
+
+      input.addEventListener("input", function () {
+        if (this.classList.contains("is-invalid") && this.checkValidity()) {
+          this.classList.remove("is-invalid");
+          this.classList.add("is-valid");
+        }
+      });
+    });
+
+    // Auto-focus on first input
+    const firstInput = form.querySelector("input");
+    if (firstInput) {
+      firstInput.focus();
+    }
+
+    // Handle Enter key on password field
+    if (passwordInput) {
+      passwordInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          form.dispatchEvent(new Event("submit"));
+        }
+      });
+    }
+  });
 </script>
 {% endblock %}

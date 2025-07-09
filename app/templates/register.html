@@ -1,975 +1,557 @@
-{% extends "base.html" %} {% block title %}Join Food Rescue - Create Account{% endblock %} {% block content %}
+{% extends "components/base.html" %} {% block title %}Join Food Rescue - Create
+Account{% endblock %} {% block stylesheets %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/auth.css') }}" />
+{% endblock %} {% block content %}
 
-<!-- Page Header -->
-<div class="page-header bg-light py-4">
+<div class="auth-page">
+  <!-- Page Header -->
+  <div class="page-header bg-light py-4">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="h3 mb-0">
-                    <i class="fas fa-user-plus text-primary"></i>
-                    Join Food Rescue
-                </h1>
-                <p class="text-muted mb-0">
-                    Create your account and start making a difference
-                </p>
-            </div>
-            <div class="col-md-4 text-md-end">
-                <a href="{{ url_for('home.index') }}" class="btn btn-outline-primary">
-                    <i class="fas fa-home"></i>
-                    Back to Home
-                </a>
-            </div>
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h1 class="h3 mb-0">
+            <i class="fas fa-user-plus text-primary"></i>
+            Join Food Rescue
+          </h1>
+          <p class="text-muted mb-0">
+            Create your account and start making a difference
+          </p>
         </div>
+        <div class="col-md-4 text-md-end">
+          <a href="{{ url_for('home.index') }}" class="btn btn-outline-primary">
+            <i class="fas fa-home"></i>
+            Back to Home
+          </a>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- Main Content -->
-<div class="container mt-5">
+  <!-- Main Content -->
+  <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8">
-            <!-- Registration Card -->
-            <div class="card register-card">
-                <div class="card-header text-center">
-                    <h4 class="mb-0">
-                        <i class="fas fa-leaf text-success"></i>
-                        Create Your Account
-                    </h4>
-                    <p class="text-muted small mt-2">Join our community of food heroes</p>
+      <div class="col-lg-6 col-md-8">
+        <!-- Registration Card -->
+        <div class="card register-card">
+          <div class="card-header text-center">
+            <h4 class="mb-0">
+              <i class="fas fa-leaf text-success"></i>
+              Create Your Account
+            </h4>
+            <p class="text-muted small mt-2">
+              Join our community of food heroes
+            </p>
+          </div>
+          <div class="card-body">
+            <!-- Registration Form -->
+            <form
+              method="POST"
+              action="{{ url_for('auth.register') }}"
+              class="needs-validation"
+              novalidate>
+              <!-- Username Field -->
+              <div class="form-group">
+                <label for="username" class="form-label required">
+                  <i class="fas fa-user"></i>
+                  Username
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  name="username"
+                  required
+                  minlength="2"
+                  maxlength="50"
+                  placeholder="Choose a username"
+                  value="{{ request.form.get('username', '') }}"
+                  autocomplete="username" />
+                <div class="form-text">
+                  At least 2 characters, letters and numbers only
                 </div>
-                <div class="card-body">
-                    <!-- Registration Form -->
-                    <form
-                        method="POST"
-                        action="{{ url_for('auth.register') }}"
-                        class="needs-validation"
-                        novalidate
-                    >
-                        <!-- Username Field -->
-                        <div class="form-group">
-                            <label for="username" class="form-label required">
-                                <i class="fas fa-user"></i>
-                                Username
-                            </label>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="username"
-                                name="username"
-                                required
-                                minlength="2"
-                                maxlength="50"
-                                placeholder="Choose a username"
-                                value="{{ request.form.get('username', '') }}"
-                                autocomplete="username"
-                            />
-                            <div class="form-text">
-                                At least 2 characters, letters and numbers only
-                            </div>
-                            <div class="invalid-feedback">
-                                Username must be at least 2 characters long.
-                            </div>
-                        </div>
+                <div class="invalid-feedback">
+                  Username must be at least 2 characters long.
+                </div>
+              </div>
 
-                        <!-- Email Field -->
-                        <div class="form-group">
-                            <label for="email" class="form-label required">
-                                <i class="fas fa-envelope"></i>
-                                Email Address
-                            </label>
-                            <input
-                                type="email"
-                                class="form-control"
-                                id="email"
-                                name="email"
-                                required
-                                placeholder="Enter your email address"
-                                value="{{ request.form.get('email', '') }}"
-                                autocomplete="email"
-                            />
-                            <div class="form-text">
-                                We'll use this to send you notifications about claims
-                            </div>
-                            <div class="invalid-feedback">
-                                Please provide a valid email address.
-                            </div>
-                        </div>
+              <!-- Email Field -->
+              <div class="form-group">
+                <label for="email" class="form-label required">
+                  <i class="fas fa-envelope"></i>
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  required
+                  placeholder="Enter your email address"
+                  value="{{ request.form.get('email', '') }}"
+                  autocomplete="email" />
+                <div class="form-text">
+                  We'll use this to send you notifications about claims
+                </div>
+                <div class="invalid-feedback">
+                  Please provide a valid email address.
+                </div>
+              </div>
 
-                        <!-- Phone Field -->
-                        <div class="form-group">
-                            <label for="phone" class="form-label required">
-                                <i class="fas fa-phone"></i>
-                                Phone Number
-                            </label>
-                            <input
-                                type="tel"
-                                class="form-control"
-                                id="phone"
-                                name="phone"
-                                required
-                                placeholder="Enter your phone number"
-                                value="{{ request.form.get('phone', '') }}"
-                                autocomplete="tel"
-                            />
-                            <div class="form-text">
-                                For coordination between donors and recipients
-                            </div>
-                            <div class="invalid-feedback">
-                                Please provide a valid phone number.
-                            </div>
-                        </div>
+              <!-- Phone Field -->
+              <div class="form-group">
+                <label for="phone" class="form-label required">
+                  <i class="fas fa-phone"></i>
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="phone"
+                  name="phone"
+                  required
+                  placeholder="Enter your phone number"
+                  value="{{ request.form.get('phone', '') }}"
+                  autocomplete="tel" />
+                <div class="form-text">
+                  For coordination between donors and recipients
+                </div>
+                <div class="invalid-feedback">
+                  Please provide a valid phone number.
+                </div>
+              </div>
 
-                        <!-- User Type Field -->
-                        <div class="form-group">
-                            <label class="form-label required">
-                                <i class="fas fa-users"></i>
-                                I want to...
-                            </label>
-                            <div class="user-type-options">
-                                <div class="form-check user-type-option">
-                                    <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        name="type"
-                                        id="donor"
-                                        value="donor"
-                                        required
-                                        {{ 'checked' if request.form.get('type') == 'donor' }}
-                                    />
-                                    <label class="form-check-label" for="donor">
-                                        <div class="option-content">
-                                            <div class="option-icon">
-                                                <i class="fas fa-hand-holding-heart"></i>
-                                            </div>
-                                            <div class="option-text">
-                                                <h6>Share Food (Donor)</h6>
-                                                <small>Share surplus food with others</small>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class="form-check user-type-option">
-                                    <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        name="type"
-                                        id="recipient"
-                                        value="recipient"
-                                        required
-                                        {{ 'checked' if request.form.get('type') == 'recipient' }}
-                                    />
-                                    <label class="form-check-label" for="recipient">
-                                        <div class="option-content">
-                                            <div class="option-icon">
-                                                <i class="fas fa-search"></i>
-                                            </div>
-                                            <div class="option-text">
-                                                <h6>Find Food (Recipient)</h6>
-                                                <small>Find and claim shared food</small>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class="form-check user-type-option">
-                                    <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        name="type"
-                                        id="both"
-                                        value="both"
-                                        required
-                                        {{ 'checked' if request.form.get('type') == 'both' }}
-                                    />
-                                    <label class="form-check-label" for="both">
-                                        <div class="option-content">
-                                            <div class="option-icon">
-                                                <i class="fas fa-exchange-alt"></i>
-                                            </div>
-                                            <div class="option-text">
-                                                <h6>Both (Recommended)</h6>
-                                                <small>Share and find food as needed</small>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="invalid-feedback">
-                                Please select how you want to participate.
-                            </div>
+              <!-- User Type Field -->
+              <div class="form-group">
+                <label class="form-label required">
+                  <i class="fas fa-users"></i>
+                  I want to...
+                </label>
+                <div class="user-type-options">
+                  <div class="form-check user-type-option">
+                    <input class="form-check-input" type="radio" name="type"
+                    id="donor" value="donor" required {{ 'checked' if
+                    request.form.get('type') == 'donor' }} />
+                    <label class="form-check-label" for="donor">
+                      <div class="option-content">
+                        <div class="option-icon">
+                          <i class="fas fa-hand-holding-heart"></i>
                         </div>
-
-                        <!-- Password Fields -->
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="password" class="form-label required">
-                                        <i class="fas fa-lock"></i>
-                                        Password
-                                    </label>
-                                    <div class="password-input-group">
-                                        <input
-                                            type="password"
-                                            class="form-control"
-                                            id="password"
-                                            name="password"
-                                            required
-                                            minlength="6"
-                                            placeholder="Enter password"
-                                            autocomplete="new-password"
-                                        />
-                                        <button
-                                            type="button"
-                                            class="password-toggle"
-                                            id="togglePassword"
-                                        >
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                    <div class="form-text">
-                                        At least 6 characters
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Password must be at least 6 characters long.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="confirm_password" class="form-label required">
-                                        <i class="fas fa-lock"></i>
-                                        Confirm Password
-                                    </label>
-                                    <div class="password-input-group">
-                                        <input
-                                            type="password"
-                                            class="form-control"
-                                            id="confirm_password"
-                                            name="confirm_password"
-                                            required
-                                            placeholder="Confirm password"
-                                            autocomplete="new-password"
-                                        />
-                                        <button
-                                            type="button"
-                                            class="password-toggle"
-                                            id="toggleConfirmPassword"
-                                        >
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                    <div class="form-text">
-                                        Must match password
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Passwords do not match.
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="option-text">
+                          <h6>Share Food (Donor)</h6>
+                          <small>Share surplus food with others</small>
                         </div>
-
-                        <!-- Password Strength Indicator -->
-                        <div class="password-strength" id="passwordStrength" style="display: none;">
-                            <div class="strength-label">Password Strength:</div>
-                            <div class="strength-bar">
-                                <div class="strength-fill"></div>
-                            </div>
-                            <div class="strength-text"></div>
+                      </div>
+                    </label>
+                  </div>
+                  <div class="form-check user-type-option">
+                    <input class="form-check-input" type="radio" name="type"
+                    id="recipient" value="recipient" required {{ 'checked' if
+                    request.form.get('type') == 'recipient' }} />
+                    <label class="form-check-label" for="recipient">
+                      <div class="option-content">
+                        <div class="option-icon">
+                          <i class="fas fa-search"></i>
                         </div>
-
-                        <!-- Terms and Privacy -->
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    id="terms"
-                                    name="terms"
-                                    required
-                                />
-                                <label class="form-check-label" for="terms">
-                                    I agree to the
-                                    <a href="#" class="text-primary">Terms of Service</a>
-                                    and
-                                    <a href="#" class="text-primary">Privacy Policy</a>
-                                </label>
-                                <div class="invalid-feedback">
-                                    You must agree to the terms and conditions.
-                                </div>
-                            </div>
+                        <div class="option-text">
+                          <h6>Find Food (Recipient)</h6>
+                          <small>Find and claim shared food</small>
                         </div>
-
-                        <!-- Submit Button -->
-                        <div class="form-group">
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-lg w-100"
-                            >
-                                <i class="fas fa-user-plus"></i>
-                                Create Account
-                            </button>
+                      </div>
+                    </label>
+                  </div>
+                  <div class="form-check user-type-option">
+                    <input class="form-check-input" type="radio" name="type"
+                    id="both" value="both" required {{ 'checked' if
+                    request.form.get('type') == 'both' }} />
+                    <label class="form-check-label" for="both">
+                      <div class="option-content">
+                        <div class="option-icon">
+                          <i class="fas fa-exchange-alt"></i>
                         </div>
-                    </form>
+                        <div class="option-text">
+                          <h6>Both (Recommended)</h6>
+                          <small>Share and find food as needed</small>
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+                <div class="invalid-feedback">
+                  Please select how you want to participate.
+                </div>
+              </div>
 
-                    <!-- Divider -->
-                    <div class="divider">
-                        <span>or</span>
+              <!-- Password Fields -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="password" class="form-label required">
+                      <i class="fas fa-lock"></i>
+                      Password
+                    </label>
+                    <div class="password-input-group">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                        required
+                        minlength="6"
+                        placeholder="Enter password"
+                        autocomplete="new-password" />
+                      <button
+                        type="button"
+                        class="password-toggle"
+                        id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                      </button>
                     </div>
-
-                    <!-- Social Registration Placeholder -->
-                    <div class="social-register">
-                        <button class="btn btn-outline-secondary w-100 mb-2" disabled>
-                            <i class="fab fa-google"></i>
-                            Sign up with Google (Coming Soon)
-                        </button>
-                        <button class="btn btn-outline-secondary w-100" disabled>
-                            <i class="fab fa-facebook"></i>
-                            Sign up with Facebook (Coming Soon)
-                        </button>
+                    <div class="form-text">At least 6 characters</div>
+                    <div class="invalid-feedback">
+                      Password must be at least 6 characters long.
                     </div>
+                  </div>
                 </div>
-                <div class="card-footer text-center">
-                    <p class="mb-0">
-                        Already have an account?
-                        <a href="{{ url_for('auth.login') }}" class="text-primary fw-bold">
-                            Sign in here
-                        </a>
-                    </p>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="confirm_password" class="form-label required">
+                      <i class="fas fa-lock"></i>
+                      Confirm Password
+                    </label>
+                    <div class="password-input-group">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="confirm_password"
+                        name="confirm_password"
+                        required
+                        placeholder="Confirm password"
+                        autocomplete="new-password" />
+                      <button
+                        type="button"
+                        class="password-toggle"
+                        id="toggleConfirmPassword">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                    </div>
+                    <div class="form-text">Must match password</div>
+                    <div class="invalid-feedback">Passwords do not match.</div>
+                  </div>
                 </div>
+              </div>
+
+              <!-- Password Strength Indicator -->
+              <div
+                class="password-strength"
+                id="passwordStrength"
+                style="display: none">
+                <div class="strength-label">Password Strength:</div>
+                <div class="strength-bar">
+                  <div class="strength-fill"></div>
+                </div>
+                <div class="strength-text"></div>
+              </div>
+
+              <!-- Terms and Privacy -->
+              <div class="form-group">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="terms"
+                    name="terms"
+                    required />
+                  <label class="form-check-label" for="terms">
+                    I agree to the
+                    <a href="#" class="text-primary">Terms of Service</a>
+                    and
+                    <a href="#" class="text-primary">Privacy Policy</a>
+                  </label>
+                  <div class="invalid-feedback">
+                    You must agree to the terms and conditions.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                  <i class="fas fa-user-plus"></i>
+                  Create Account & Sign In
+                </button>
+                <div class="form-text text-center mt-2">
+                  <small class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    You'll be automatically signed in after account creation
+                  </small>
+                </div>
+              </div>
+            </form>
+
+            <!-- Divider -->
+            <div class="divider">
+              <span>or</span>
             </div>
-        </div>
 
-        <!-- Benefits Sidebar -->
-        <div class="col-lg-4 col-md-12">
-            <div class="benefits-section">
-                <!-- Why Join Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="mb-0">
-                            <i class="fas fa-star text-warning"></i>
-                            Why Join Food Rescue?
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <ul class="benefits-list">
-                            <li>
-                                <i class="fas fa-heart text-danger"></i>
-                                Help reduce food waste in your community
-                            </li>
-                            <li>
-                                <i class="fas fa-users text-primary"></i>
-                                Connect with like-minded neighbors
-                            </li>
-                            <li>
-                                <i class="fas fa-leaf text-success"></i>
-                                Make a positive environmental impact
-                            </li>
-                            <li>
-                                <i class="fas fa-shield-alt text-info"></i>
-                                Safe and secure platform
-                            </li>
-                            <li>
-                                <i class="fas fa-mobile-alt text-secondary"></i>
-                                Easy to use on any device
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- How It Works Card -->
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h6 class="mb-0">
-                            <i class="fas fa-info-circle text-info"></i>
-                            How It Works
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="how-it-works">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h6>Create Account</h6>
-                                    <small>Sign up and choose your role</small>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h6>Share or Find</h6>
-                                    <small>List food or browse available items</small>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h6>Connect</h6>
-                                    <small>Coordinate pickup with other members</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Community Stats -->
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h6 class="mb-0">
-                            <i class="fas fa-chart-line text-success"></i>
-                            Community Impact
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="mini-stats">
-                            <div class="mini-stat">
-                                <div class="stat-number">1,247</div>
-                                <div class="stat-label">Items Rescued</div>
-                            </div>
-                            <div class="mini-stat">
-                                <div class="stat-number">892</div>
-                                <div class="stat-label">Active Members</div>
-                            </div>
-                            <div class="mini-stat">
-                                <div class="stat-number">2.3k</div>
-                                <div class="stat-label">Kg Food Saved</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Social Registration Placeholder -->
+            <div class="social-register">
+              <button class="btn btn-outline-secondary w-100 mb-2" disabled>
+                <i class="fab fa-google"></i>
+                Sign up with Google (Coming Soon)
+              </button>
+              <button class="btn btn-outline-secondary w-100" disabled>
+                <i class="fab fa-facebook"></i>
+                Sign up with Facebook (Coming Soon)
+              </button>
             </div>
+          </div>
+          <div class="card-footer text-center">
+            <p class="mb-0">
+              Already have an account?
+              <a
+                href="{{ url_for('auth.login') }}"
+                class="text-primary fw-bold">
+                Sign in here
+              </a>
+            </p>
+          </div>
         </div>
+      </div>
+
+      <!-- Benefits Sidebar -->
+      <div class="col-lg-4 col-md-12">
+        <div class="benefits-section">
+          <!-- Why Join Card -->
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">
+                <i class="fas fa-star text-warning"></i>
+                Why Join Food Rescue?
+              </h6>
+            </div>
+            <div class="card-body">
+              <ul class="benefits-list">
+                <li>
+                  <i class="fas fa-heart text-danger"></i>
+                  Help reduce food waste in your community
+                </li>
+                <li>
+                  <i class="fas fa-users text-primary"></i>
+                  Connect with like-minded neighbors
+                </li>
+                <li>
+                  <i class="fas fa-leaf text-success"></i>
+                  Make a positive environmental impact
+                </li>
+                <li>
+                  <i class="fas fa-shield-alt text-info"></i>
+                  Safe and secure platform
+                </li>
+                <li>
+                  <i class="fas fa-mobile-alt text-secondary"></i>
+                  Easy to use on any device
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- How It Works Card -->
+          <div class="card mt-4">
+            <div class="card-header">
+              <h6 class="mb-0">
+                <i class="fas fa-info-circle text-info"></i>
+                How It Works
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="how-it-works">
+                <div class="step">
+                  <div class="step-number">1</div>
+                  <div class="step-content">
+                    <h6>Create Account</h6>
+                    <small>Sign up and get automatically signed in</small>
+                  </div>
+                </div>
+                <div class="step">
+                  <div class="step-number">2</div>
+                  <div class="step-content">
+                    <h6>Share or Find</h6>
+                    <small>List food or browse available items</small>
+                  </div>
+                </div>
+                <div class="step">
+                  <div class="step-number">3</div>
+                  <div class="step-content">
+                    <h6>Connect</h6>
+                    <small>Coordinate pickup with other members</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Community Stats -->
+          <div class="card mt-4">
+            <div class="card-header">
+              <h6 class="mb-0">
+                <i class="fas fa-chart-line text-success"></i>
+                Community Impact
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="mini-stats">
+                <div class="mini-stat">
+                  <div class="stat-number">1,247</div>
+                  <div class="stat-label">Items Rescued</div>
+                </div>
+                <div class="mini-stat">
+                  <div class="stat-number">892</div>
+                  <div class="stat-label">Active Members</div>
+                </div>
+                <div class="mini-stat">
+                  <div class="stat-number">2.3k</div>
+                  <div class="stat-label">Kg Food Saved</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
-{% endblock %} {% block styles %}
-<style>
-    /* Register Card */
-    .register-card {
-        border: none;
-        border-radius: var(--border-radius-xl);
-        box-shadow: var(--shadow-lg);
-        overflow: hidden;
-        margin-bottom: 2rem;
-    }
-
-    .register-card .card-header {
-        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-        color: var(--white);
-        padding: 2rem;
-        border-bottom: none;
-    }
-
-    .register-card .card-body {
-        padding: 2rem;
-    }
-
-    .register-card .card-footer {
-        background-color: var(--gray-100);
-        border-top: 1px solid var(--gray-200);
-        padding: 1.5rem;
-    }
-
-    /* Form Styling */
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-label {
-        font-weight: 500;
-        color: var(--gray-800);
-        margin-bottom: 0.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .form-label.required::after {
-        content: "*";
-        color: var(--error-color);
-        margin-left: 0.25rem;
-    }
-
-    .form-label i {
-        color: var(--primary-color);
-        width: 16px;
-    }
-
-    .form-control {
-        border: 2px solid var(--gray-300);
-        border-radius: var(--border-radius);
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-    }
-
-    .form-control:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-    }
-
-    .form-control.is-invalid {
-        border-color: var(--error-color);
-    }
-
-    .form-control.is-valid {
-        border-color: var(--success-color);
-    }
-
-    /* Password Input Group */
-    .password-input-group {
-        position: relative;
-    }
-
-    .password-toggle {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        color: var(--gray-500);
-        cursor: pointer;
-        padding: 0.5rem;
-        border-radius: var(--border-radius-sm);
-        transition: all 0.3s ease;
-    }
-
-    .password-toggle:hover {
-        color: var(--primary-color);
-        background-color: var(--gray-100);
-    }
-
-    /* User Type Options */
-    .user-type-options {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .user-type-option {
-        margin: 0;
-        padding: 0;
-    }
-
-    .user-type-option .form-check-input {
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .user-type-option .form-check-label {
-        width: 100%;
-        margin: 0;
-        cursor: pointer;
-        border: 2px solid var(--gray-300);
-        border-radius: var(--border-radius);
-        padding: 1rem;
-        transition: all 0.3s ease;
-        display: block;
-    }
-
-    .user-type-option .form-check-label:hover {
-        border-color: var(--primary-color);
-        background-color: var(--primary-light);
-    }
-
-    .user-type-option input:checked + .form-check-label {
-        border-color: var(--primary-color);
-        background-color: var(--primary-light);
-        color: var(--primary-dark);
-    }
-
-    .option-content {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .option-icon {
-        flex-shrink: 0;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: var(--primary-color);
-        color: var(--white);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-    }
-
-    .user-type-option input:checked + .form-check-label .option-icon {
-        background-color: var(--primary-dark);
-        transform: scale(1.1);
-    }
-
-    .option-text h6 {
-        margin: 0;
-        font-weight: 600;
-        color: var(--gray-900);
-    }
-
-    .option-text small {
-        color: var(--gray-600);
-    }
-
-    /* Password Strength */
-    .password-strength {
-        margin-bottom: 1rem;
-    }
-
-    .strength-label {
-        font-size: 0.875rem;
-        color: var(--gray-700);
-        margin-bottom: 0.5rem;
-    }
-
-    .strength-bar {
-        height: 4px;
-        background-color: var(--gray-200);
-        border-radius: 2px;
-        overflow: hidden;
-        margin-bottom: 0.25rem;
-    }
-
-    .strength-fill {
-        height: 100%;
-        width: 0%;
-        transition: all 0.3s ease;
-        border-radius: 2px;
-    }
-
-    .strength-text {
-        font-size: 0.75rem;
-        font-weight: 500;
-    }
-
-    .strength-weak .strength-fill { width: 25%; background-color: var(--error-color); }
-    .strength-fair .strength-fill { width: 50%; background-color: var(--warning-color); }
-    .strength-good .strength-fill { width: 75%; background-color: var(--info-color); }
-    .strength-strong .strength-fill { width: 100%; background-color: var(--success-color); }
-
-    .strength-weak .strength-text { color: var(--error-color); }
-    .strength-fair .strength-text { color: var(--warning-color); }
-    .strength-good .strength-text { color: var(--info-color); }
-    .strength-strong .strength-text { color: var(--success-color); }
-
-    /* Divider */
-    .divider {
-        text-align: center;
-        margin: 1.5rem 0;
-        position: relative;
-    }
-
-    .divider::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background-color: var(--gray-300);
-    }
-
-    .divider span {
-        background-color: var(--white);
-        padding: 0 1rem;
-        color: var(--gray-500);
-        font-size: 0.875rem;
-        position: relative;
-        z-index: 1;
-    }
-
-    /* Benefits Section */
-    .benefits-section {
-        position: sticky;
-        top: 100px;
-    }
-
-    .benefits-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .benefits-list li {
-        padding: 0.75rem 0;
-        border-bottom: 1px solid var(--gray-200);
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-size: 0.875rem;
-    }
-
-    .benefits-list li:last-child {
-        border-bottom: none;
-    }
-
-    .benefits-list i {
-        width: 20px;
-        font-size: 1rem;
-    }
-
-    /* How It Works */
-    .how-it-works {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .step {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .step-number {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background-color: var(--primary-color);
-        color: var(--white);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-size: 0.875rem;
-        flex-shrink: 0;
-    }
-
-    .step-content h6 {
-        margin: 0 0 0.25rem 0;
-        font-size: 0.875rem;
-        font-weight: 600;
-    }
-
-    .step-content small {
-        color: var(--gray-600);
-        font-size: 0.75rem;
-    }
-
-    /* Mini Stats */
-    .mini-stats {
-        display: flex;
-        justify-content: space-between;
-        text-align: center;
-    }
-
-    .mini-stat {
-        flex: 1;
-    }
-
-    .mini-stat .stat-number {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--primary-color);
-        margin-bottom: 0.25rem;
-    }
-
-    .mini-stat .stat-label {
-        font-size: 0.75rem;
-        color: var(--gray-600);
-    }
-
-    /* Responsive Design */
-    @media (max-width: 991.98px) {
-        .benefits-section {
-            position: static;
-            margin-top: 2rem;
-        }
-
-        .user-type-options {
-            gap: 0.75rem;
-        }
-
-        .option-content {
-            gap: 0.75rem;
-        }
-
-        .option-icon {
-            width: 35px;
-            height: 35px;
-            font-size: 1rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .register-card .card-header {
-            padding: 1.5rem;
-        }
-
-        .register-card .card-body {
-            padding: 1.5rem;
-        }
-
-        .page-header .row {
-            text-align: center;
-        }
-
-        .page-header .col-md-4 {
-            margin-top: 1rem;
-        }
-
-        .benefits-section {
-            margin-top: 1rem;
-        }
-
-        .mini-stats {
-            flex-direction: column;
-            gap: 1rem;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .option-content {
-            flex-direction: column;
-            text-align: center;
-            gap: 0.5rem;
-        }
-
-        .step {
-            flex-direction: column;
-            text-align: center;
-            gap: 0.5rem;
-        }
-    }
-
-    /* Animations */
-    .register-card {
-        animation: slideInUp 0.6s ease-out;
-    }
-
-    .benefits-section {
-        animation: slideInUp 0.6s ease-out 0.2s both;
-    }
-
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-</style>
 {% endblock %} {% block scripts %}
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector(".needs-validation");
-        const passwordInput = document.getElementById("password");
-        const confirmPasswordInput = document.getElementById("confirm_password");
-        const togglePassword = document.getElementById("togglePassword");
-        const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
-        const passwordStrength = document.getElementById("passwordStrength");
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector(".needs-validation");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirm_password");
+    const togglePassword = document.getElementById("togglePassword");
+    const toggleConfirmPassword = document.getElementById(
+      "toggleConfirmPassword"
+    );
+    const passwordStrength = document.getElementById("passwordStrength");
 
-        // Password visibility toggles
-        [
-            { toggle: togglePassword, input: passwordInput },
-            { toggle: toggleConfirmPassword, input: confirmPasswordInput }
-        ].forEach(({ toggle, input }) => {
-            if (toggle && input) {
-                toggle.addEventListener("click", function () {
-                    const type = input.getAttribute("type") === "password" ? "text" : "password";
-                    input.setAttribute("type", type);
+    // Password visibility toggles
+    [
+      { toggle: togglePassword, input: passwordInput },
+      { toggle: toggleConfirmPassword, input: confirmPasswordInput },
+    ].forEach(({ toggle, input }) => {
+      if (toggle && input) {
+        toggle.addEventListener("click", function () {
+          const type =
+            input.getAttribute("type") === "password" ? "text" : "password";
+          input.setAttribute("type", type);
 
-                    const icon = this.querySelector("i");
-                    if (type === "password") {
-                        icon.classList.remove("fa-eye-slash");
-                        icon.classList.add("fa-eye");
-                    } else {
-                        icon.classList.remove("fa-eye");
-                        icon.classList.add("fa-eye-slash");
-                    }
-                });
-            }
+          const icon = this.querySelector("i");
+          if (type === "password") {
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+          } else {
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+          }
         });
-
-        // Password strength checker
-        if (passwordInput && passwordStrength) {
-            passwordInput.addEventListener("input", function () {
-                const password = this.value;
-                const strength = calculatePasswordStrength(password);
-
-                if (password.length > 0) {
-                    passwordStrength.style.display = "block";
-                    passwordStrength.className = `password-strength strength-${strength.level}`;
-                    passwordStrength.querySelector(".strength-text").textContent = strength.text;
-                } else {
-                    passwordStrength.style.display = "none";
-                }
-            });
-        }
-
-        // Password confirmation validation
-        function validatePasswordConfirmation() {
-            if (confirmPasswordInput.value && passwordInput.value !== confirmPasswordInput.value) {
-                confirmPasswordInput.setCustomValidity("Passwords do not match");
-                confirmPasswordInput.classList.add("is-invalid");
-                confirmPasswordInput.classList.remove("is-valid");
-            } else {
-                confirmPasswordInput.setCustomValidity("");
-                if (confirmPasswordInput.value) {
-                    confirmPasswordInput.classList.remove("is-invalid");
-                    confirmPasswordInput.classList.add("is-valid");
-                }
-            }
-        }
-
-        if (confirmPasswordInput) {
-            confirmPasswordInput.addEventListener("input", validatePasswordConfirmation);
-            passwordInput.addEventListener("input", validatePasswordConfirmation);
-        }
-
-        // Form validation
-        form.addEventListener("submit", function (e) {
-            validatePasswordConfirmation();
-
-            if (!form.checkValidity()) {
-                e.preventDefault();
-                e.stopPropagation();
-            } else {
-                // Show loading state
-                const submitBtn = form.querySelector('button[type="submit"]');
-                submitBtn.disabled = true;
-                submitBtn.classList.add("loading");
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
-            }
-
-            form.classList.add("was-validated");
-        });
-
-        // Real-time validation
-        const inputs = form.querySelectorAll("input");
-        inputs.forEach((input) => {
-            input.addEventListener("blur", function () {
-                if (this.checkValidity()) {
-                    this.classList.remove("is-invalid");
-                    this.classList.add("is-valid");
-                } else {
-                    this.classList.remove("is-valid");
-                    this.classList.add("is-invalid");
-                }
-            });
-        });
-
-        // Password strength calculator
-        function calculatePasswordStrength(password) {
-            let score = 0;
-            const checks = [
-                /.{8,}/.test(password), // At least 8 characters
-                /[a-z]/.test(password), // Lowercase
-                /[A-Z]/.test(password), // Uppercase
-                /[0-9]/.test(password), // Numbers
-                /[^A-Za-z0-9]/.test(password) // Special characters
-            ];
-
-            score = checks.filter(Boolean).length;
-
-            if (score < 2) return { level: "weak", text: "Weak" };
-            if (score < 3) return { level: "fair", text: "Fair" };
-            if (score < 4) return { level: "good", text: "Good" };
-            return { level: "strong", text: "Strong" };
-        }
+      }
     });
+
+    // Password strength checker
+    if (passwordInput && passwordStrength) {
+      passwordInput.addEventListener("input", function () {
+        const password = this.value;
+        const strength = calculatePasswordStrength(password);
+
+        if (password.length > 0) {
+          passwordStrength.style.display = "block";
+          passwordStrength.className = `password-strength strength-${strength.level}`;
+          passwordStrength.querySelector(".strength-text").textContent =
+            strength.text;
+        } else {
+          passwordStrength.style.display = "none";
+        }
+      });
+    }
+
+    // Password confirmation validation
+    function validatePasswordConfirmation() {
+      if (
+        confirmPasswordInput.value &&
+        passwordInput.value !== confirmPasswordInput.value
+      ) {
+        confirmPasswordInput.setCustomValidity("Passwords do not match");
+        confirmPasswordInput.classList.add("is-invalid");
+        confirmPasswordInput.classList.remove("is-valid");
+      } else {
+        confirmPasswordInput.setCustomValidity("");
+        if (confirmPasswordInput.value) {
+          confirmPasswordInput.classList.remove("is-invalid");
+          confirmPasswordInput.classList.add("is-valid");
+        }
+      }
+    }
+
+    if (confirmPasswordInput) {
+      confirmPasswordInput.addEventListener(
+        "input",
+        validatePasswordConfirmation
+      );
+      passwordInput.addEventListener("input", validatePasswordConfirmation);
+    }
+
+    // Form validation
+    form.addEventListener("submit", function (e) {
+      validatePasswordConfirmation();
+
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();
+      } else {
+        // Show loading state
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.classList.add("loading");
+        submitBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin"></i> Creating Account & Signing In...';
+      }
+
+      form.classList.add("was-validated");
+    });
+
+    // Real-time validation
+    const inputs = form.querySelectorAll("input");
+    inputs.forEach((input) => {
+      input.addEventListener("blur", function () {
+        if (this.checkValidity()) {
+          this.classList.remove("is-invalid");
+          this.classList.add("is-valid");
+        } else {
+          this.classList.remove("is-valid");
+          this.classList.add("is-invalid");
+        }
+      });
+    });
+
+    // Password strength calculator
+    function calculatePasswordStrength(password) {
+      let score = 0;
+      const checks = [
+        /.{8,}/.test(password), // At least 8 characters
+        /[a-z]/.test(password), // Lowercase
+        /[A-Z]/.test(password), // Uppercase
+        /[0-9]/.test(password), // Numbers
+        /[^A-Za-z0-9]/.test(password), // Special characters
+      ];
+
+      score = checks.filter(Boolean).length;
+
+      if (score < 2) return { level: "weak", text: "Weak" };
+      if (score < 3) return { level: "fair", text: "Fair" };
+      if (score < 4) return { level: "good", text: "Good" };
+      return { level: "strong", text: "Strong" };
+    }
+  });
 </script>
 {% endblock %}
