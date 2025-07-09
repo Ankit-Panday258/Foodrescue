@@ -1,855 +1,814 @@
-{% extends "base.html" %} {% block title %}{{ listing.foodname }} - Food
-Rescue{% endblock %} {% block content %}
+{% extends "components/base.html" %} {% block title %}{{ listing.foodname }} -
+Food Rescue{% endblock %} {% block content %}
 
 <!-- Breadcrumb -->
 <div class="container mt-3">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{{ url_for('home.index') }}">Home</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{{ url_for('food.allListing') }}">Browse Food</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                {{ listing.foodname }}
-            </li>
-        </ol>
-    </nav>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('home.index') }}">Home</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('food.allListing') }}">Browse Food</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        {{ listing.foodname }}
+      </li>
+    </ol>
+  </nav>
 </div>
 
 <!-- Main Content -->
 <div class="container mt-4">
-    <div class="row">
-        <!-- Left Column - Food Details -->
-        <div class="col-lg-8">
-            <!-- Food Image and Gallery -->
-            <div class="food-image-section">
-                <div class="main-image">
-                    <img
-                        src="{{ listing.image_url or url_for('static', filename='image/placeholder.jpg') }}"
-                        alt="{{ listing.foodname }}"
-                        class="img-fluid rounded-lg"
-                        id="mainImage"
-                    />
+  <div class="row">
+    <!-- Left Column - Food Details -->
+    <div class="col-lg-8">
+      <!-- Food Image and Gallery -->
+      <div class="food-image-section">
+        <div class="main-image">
+          <img
+            src="{{ listing.image_url or url_for('static', filename='image/placeholder.jpg') }}"
+            alt="{{ listing.foodname }}"
+            class="img-fluid rounded-lg"
+            id="mainImage" />
 
-                    <!-- Status Overlay -->
-                    <div class="status-overlay">
-                        <span class="status-badge {{ listing.status }}">
-                            {% if listing.status == 'available' %}
-                            <i class="fas fa-check-circle"></i>
-                            {% elif listing.status == 'claimed' %}
-                            <i class="fas fa-hand-holding"></i>
-                            {% elif listing.status == 'completed' %}
-                            <i class="fas fa-check-double"></i>
-                            {% elif listing.status == 'expired' %}
-                            <i class="fas fa-exclamation-triangle"></i>
-                            {% endif %} {{ listing.status.title() }}
-                        </span>
-                    </div>
+          <!-- Status Overlay -->
+          <div class="status-overlay">
+            <span class="status-badge {{ listing.status }}">
+              {% if listing.status == 'available' %}
+              <i class="fas fa-check-circle"></i>
+              {% elif listing.status == 'claimed' %}
+              <i class="fas fa-hand-holding"></i>
+              {% elif listing.status == 'completed' %}
+              <i class="fas fa-check-double"></i>
+              {% elif listing.status == 'expired' %}
+              <i class="fas fa-exclamation-triangle"></i>
+              {% endif %} {{ listing.status.title() }}
+            </span>
+          </div>
 
-                    <!-- Category Badge -->
-                    <div class="category-overlay">
-                        <span class="category-badge {{ listing.category }}">
-                            {% if listing.category == 'veg' %}
-                            <i class="fas fa-leaf"></i>
-                            {% else %}
-                            <i class="fas fa-drumstick-bite"></i>
-                            {% endif %} {{ listing.category.title() }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Food Information -->
-            <div class="food-info-section mt-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div
-                            class="d-flex justify-content-between align-items-start mb-3"
-                        >
-                            <h1 class="food-title">{{ listing.foodname }}</h1>
-                            <div class="food-actions">
-                                <button
-                                    class="btn btn-outline-secondary btn-sm btn-share"
-                                    data-bs-toggle="tooltip"
-                                    title="Share"
-                                >
-                                    <i class="fas fa-share"></i>
-                                </button>
-                                {% if session.user_id %}
-                                <button
-                                    class="btn btn-outline-secondary btn-sm btn-favorite"
-                                    data-bs-toggle="tooltip"
-                                    title="Add to favorites"
-                                >
-                                    <i class="far fa-heart"></i>
-                                </button>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <!-- Food Meta Information -->
-                        <div class="food-meta">
-                            <div class="meta-grid">
-                                <div class="meta-item">
-                                    <i
-                                        class="fas fa-calendar-alt text-primary"
-                                    ></i>
-                                    <div>
-                                        <strong>Posted:</strong>
-                                        <span
-                                            >{{ listing.created_at.strftime('%B
-                                            %d, %Y at %I:%M %p') }}</span
-                                        >
-                                    </div>
-                                </div>
-
-                                <div class="meta-item">
-                                    <i class="fas fa-clock text-warning"></i>
-                                    <div>
-                                        <strong>Expires:</strong>
-                                        <span class="expiry-date"
-                                            >{{ listing.expiry_date.strftime('%B
-                                            %d, %Y') }}</span
-                                        >
-                                    </div>
-                                </div>
-
-                                <div class="meta-item">
-                                    <i
-                                        class="fas fa-sort-amount-up text-info"
-                                    ></i>
-                                    <div>
-                                        <strong>Quantity:</strong>
-                                        <span
-                                            >{{ listing.quantity }} item{{ 's'
-                                            if listing.quantity > 1 else ''
-                                            }}</span
-                                        >
-                                    </div>
-                                </div>
-
-                                <div class="meta-item">
-                                    <i
-                                        class="fas fa-map-marker-alt text-success"
-                                    ></i>
-                                    <div>
-                                        <strong>Pickup Location:</strong>
-                                        <span
-                                            >{{ listing.pickup_location }}</span
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Food Description -->
-                        <div class="food-description mt-4">
-                            <h5>Description</h5>
-                            <p class="lead">
-                                {{ listing.description or 'No description
-                                provided.' }}
-                            </p>
-                        </div>
-
-                        <!-- Pickup Instructions -->
-                        <div class="pickup-info mt-4">
-                            <h5>Pickup Information</h5>
-                            <div class="pickup-details">
-                                <div class="pickup-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>{{ listing.pickup_location }}</span>
-                                </div>
-                                <div class="pickup-item">
-                                    <i class="fas fa-info-circle"></i>
-                                    <span
-                                        >Please contact the donor to arrange
-                                        pickup time</span
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <!-- Category Badge -->
+          <div class="category-overlay">
+            <span class="category-badge {{ listing.category }}">
+              {% if listing.category == 'veg' %}
+              <i class="fas fa-leaf"></i>
+              {% else %}
+              <i class="fas fa-drumstick-bite"></i>
+              {% endif %} {{ listing.category.title() }}
+            </span>
+          </div>
         </div>
+      </div>
 
-        <!-- Right Column - Donor Info and Actions -->
-        <div class="col-lg-4">
-            <!-- Donor Information -->
-            <div class="donor-card">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <i class="fas fa-user-circle"></i>
-                            Food Donor
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="donor-profile">
-                            <div class="donor-avatar">
-                                {{ donor.username[0].upper() }}
-                            </div>
-                            <div class="donor-info">
-                                <h6 class="donor-name">{{ donor.username }}</h6>
-                                <span class="user-type-badge {{ donor.type }}">
-                                    {{ donor.type.title() }}
-                                </span>
-                                <div class="donor-meta">
-                                    <small class="text-muted">
-                                        <i class="fas fa-calendar"></i>
-                                        Member since {{
-                                        donor.created_at.strftime('%B %Y') }}
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Contact Information -->
-                        <div class="contact-info mt-3">
-                            <div class="contact-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>{{ donor.email }}</span>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fas fa-phone"></i>
-                                <span>{{ donor.phone }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="action-section mt-4">
-                {% if session.user_id %} {% if listing.status == 'available' and
-                listing.donor_id != session.user_id %}
-                <!-- Claim Button -->
-                {% if not user_claim %}
-                <div class="claim-section">
-                    <a
-                        href="{{ url_for('food.renderClaimPage', id=listing.listing_id) }}"
-                        class="btn btn-success btn-lg w-100 mb-3"
-                    >
-                        <i class="fas fa-hand-holding-heart"></i>
-                        Claim This Food
-                    </a>
-                    <small class="text-muted d-block text-center">
-                        By claiming, you agree to pick up the food from the
-                        specified location
-                    </small>
-                </div>
-                {% else %}
-                <div class="claimed-section">
-                    <div class="alert alert-info">
-                        <i class="fas fa-check-circle"></i>
-                        <strong>You have claimed this item!</strong>
-                        <p class="mb-0">
-                            Claimed on {{ user_claim.claim_datetime.strftime('%B
-                            %d, %Y at %I:%M %p') }}
-                        </p>
-                    </div>
-                </div>
-                {% endif %} {% elif listing.donor_id == session.user_id %}
-                <!-- Owner Actions -->
-                <div class="owner-actions">
-                    <a
-                        href="{{ url_for('food.renderEditForm', id=listing.listing_id) }}"
-                        class="btn btn-warning btn-lg w-100 mb-2"
-                    >
-                        <i class="fas fa-edit"></i>
-                        Edit Listing
-                    </a>
-                    <form
-                        method="POST"
-                        action="{{ url_for('food.destroyListing', id=listing.listing_id) }}"
-                        onsubmit="return confirm('Are you sure you want to delete this listing?');"
-                    >
-                        <button
-                            type="submit"
-                            class="btn btn-danger btn-lg w-100"
-                        >
-                            <i class="fas fa-trash"></i>
-                            Delete Listing
-                        </button>
-                    </form>
-                </div>
-                {% elif listing.status == 'claimed' %}
-                <div class="claimed-alert">
-                    <div class="alert alert-warning">
-                        <i class="fas fa-hand-holding"></i>
-                        <strong>This item has been claimed</strong>
-                        <p class="mb-0">
-                            This food item is no longer available
-                        </p>
-                    </div>
-                </div>
-                {% elif listing.status == 'expired' %}
-                <div class="expired-alert">
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <strong>This item has expired</strong>
-                        <p class="mb-0">
-                            This food item is no longer available
-                        </p>
-                    </div>
-                </div>
-                {% endif %} {% else %}
-                <!-- Guest User Actions -->
-                <div class="guest-actions">
-                    <a
-                        href="{{ url_for('auth.login') }}"
-                        class="btn btn-primary btn-lg w-100 mb-2"
-                    >
-                        <i class="fas fa-sign-in-alt"></i>
-                        Login to Claim
-                    </a>
-                    <a
-                        href="{{ url_for('auth.register') }}"
-                        class="btn btn-outline-primary btn-lg w-100"
-                    >
-                        <i class="fas fa-user-plus"></i>
-                        Join Food Rescue
-                    </a>
-                </div>
+      <!-- Food Information -->
+      <div class="food-info-section mt-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <h1 class="food-title">{{ listing.foodname }}</h1>
+              <div class="food-actions">
+                <button
+                  class="btn btn-outline-secondary btn-sm btn-share"
+                  data-bs-toggle="tooltip"
+                  title="Share">
+                  <i class="fas fa-share"></i>
+                </button>
+                {% if session.user_id %}
+                <button
+                  class="btn btn-outline-secondary btn-sm btn-favorite"
+                  data-bs-toggle="tooltip"
+                  title="Add to favorites">
+                  <i class="far fa-heart"></i>
+                </button>
                 {% endif %}
+              </div>
             </div>
 
-            <!-- Safety Guidelines -->
-            <div class="safety-section mt-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="mb-0">
-                            <i class="fas fa-shield-alt text-success"></i>
-                            Safety Guidelines
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <ul class="safety-list">
-                            <li>Check expiry dates before consumption</li>
-                            <li>Inspect food condition upon pickup</li>
-                            <li>Meet in safe, public locations</li>
-                            <li>Report any issues to our team</li>
-                        </ul>
-                    </div>
+            <!-- Food Meta Information -->
+            <div class="food-meta">
+              <div class="meta-grid">
+                <div class="meta-item">
+                  <i class="fas fa-calendar-alt text-primary"></i>
+                  <div>
+                    <strong>Posted:</strong>
+                    <span
+                      >{{ listing.created_at.strftime('%B %d, %Y at %I:%M %p')
+                      }}</span
+                    >
+                  </div>
                 </div>
+
+                <div class="meta-item">
+                  <i class="fas fa-clock text-warning"></i>
+                  <div>
+                    <strong>Expires:</strong>
+                    <span class="expiry-date"
+                      >{{ listing.expiry_date.strftime('%B %d, %Y') }}</span
+                    >
+                  </div>
+                </div>
+
+                <div class="meta-item">
+                  <i class="fas fa-sort-amount-up text-info"></i>
+                  <div>
+                    <strong>Quantity:</strong>
+                    <span
+                      >{{ listing.quantity }} item{{ 's' if listing.quantity > 1
+                      else '' }}</span
+                    >
+                  </div>
+                </div>
+
+                <div class="meta-item">
+                  <i class="fas fa-map-marker-alt text-success"></i>
+                  <div>
+                    <strong>Pickup Location:</strong>
+                    <span>{{ listing.pickup_location }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <!-- Related Items -->
-            <div class="related-section mt-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="mb-0">
-                            <i class="fas fa-utensils"></i>
-                            Similar Items
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="related-items">
-                            <div class="related-item">
-                                <img
-                                    src="{{ url_for('static', filename='image/image_01.jpg') }}"
-                                    alt="Related item"
-                                />
-                                <div class="related-info">
-                                    <h6>Fresh Vegetables</h6>
-                                    <small class="text-muted">Downtown</small>
-                                </div>
-                            </div>
-                            <div class="related-item">
-                                <img
-                                    src="{{ url_for('static', filename='image/image_03.jpg') }}"
-                                    alt="Related item"
-                                />
-                                <div class="related-info">
-                                    <h6>Seasonal Fruits</h6>
-                                    <small class="text-muted">Midtown</small>
-                                </div>
-                            </div>
-                        </div>
-                        <a
-                            href="{{ url_for('food.allListing') }}"
-                            class="btn btn-outline-primary btn-sm w-100 mt-2"
-                        >
-                            Browse All Items
-                        </a>
-                    </div>
-                </div>
+            <!-- Food Description -->
+            <div class="food-description mt-4">
+              <h5>Description</h5>
+              <p class="lead">
+                {{ listing.description or 'No description provided.' }}
+              </p>
             </div>
+
+            <!-- Pickup Instructions -->
+            <div class="pickup-info mt-4">
+              <h5>Pickup Information</h5>
+              <div class="pickup-details">
+                <div class="pickup-item">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>{{ listing.pickup_location }}</span>
+                </div>
+                <div class="pickup-item">
+                  <i class="fas fa-info-circle"></i>
+                  <span>Please contact the donor to arrange pickup time</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+
+    <!-- Right Column - Donor Info and Actions -->
+    <div class="col-lg-4">
+      <!-- Donor Information -->
+      <div class="donor-card">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-user-circle"></i>
+              Food Donor
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="donor-profile">
+              <div class="donor-avatar">{{ donor.username[0].upper() }}</div>
+              <div class="donor-info">
+                <h6 class="donor-name">{{ donor.username }}</h6>
+                <span class="user-type-badge {{ donor.type }}">
+                  {{ donor.type.title() }}
+                </span>
+                <div class="donor-meta">
+                  <small class="text-muted">
+                    <i class="fas fa-calendar"></i>
+                    Member since {{ donor.created_at.strftime('%B %Y') }}
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="contact-info mt-3">
+              <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>{{ donor.email }}</span>
+              </div>
+              <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>{{ donor.phone }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-section mt-4">
+        {% if session.user_id %} {% if listing.status == 'available' and
+        listing.donor_id != session.user_id %}
+        <!-- Claim Button -->
+        {% if not user_claim %}
+        <div class="claim-section">
+          <a
+            href="{{ url_for('food.renderClaimPage', id=listing.listing_id) }}"
+            class="btn btn-success btn-lg w-100 mb-3">
+            <i class="fas fa-hand-holding-heart"></i>
+            Claim This Food
+          </a>
+          <small class="text-muted d-block text-center">
+            By claiming, you agree to pick up the food from the specified
+            location
+          </small>
+        </div>
+        {% else %}
+        <div class="claimed-section">
+          <div class="alert alert-info">
+            <i class="fas fa-check-circle"></i>
+            <strong>You have claimed this item!</strong>
+            <p class="mb-0">
+              Claimed on {{ user_claim.claim_datetime.strftime('%B %d, %Y at
+              %I:%M %p') }}
+            </p>
+          </div>
+        </div>
+        {% endif %} {% elif listing.donor_id == session.user_id %}
+        <!-- Owner Actions -->
+        <div class="owner-actions">
+          <a
+            href="{{ url_for('food.renderEditForm', id=listing.listing_id) }}"
+            class="btn btn-warning btn-lg w-100 mb-2">
+            <i class="fas fa-edit"></i>
+            Edit Listing
+          </a>
+          <form
+            method="POST"
+            action="{{ url_for('food.destroyListing', id=listing.listing_id) }}"
+            onsubmit="return confirm('Are you sure you want to delete this listing?');">
+            <button type="submit" class="btn btn-danger btn-lg w-100">
+              <i class="fas fa-trash"></i>
+              Delete Listing
+            </button>
+          </form>
+        </div>
+        {% elif listing.status == 'claimed' %}
+        <div class="claimed-alert">
+          <div class="alert alert-warning">
+            <i class="fas fa-hand-holding"></i>
+            <strong>This item has been claimed</strong>
+            <p class="mb-0">This food item is no longer available</p>
+          </div>
+        </div>
+        {% elif listing.status == 'expired' %}
+        <div class="expired-alert">
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>This item has expired</strong>
+            <p class="mb-0">This food item is no longer available</p>
+          </div>
+        </div>
+        {% endif %} {% else %}
+        <!-- Guest User Actions -->
+        <div class="guest-actions">
+          <a
+            href="{{ url_for('auth.login') }}"
+            class="btn btn-primary btn-lg w-100 mb-2">
+            <i class="fas fa-sign-in-alt"></i>
+            Login to Claim
+          </a>
+          <a
+            href="{{ url_for('auth.register') }}"
+            class="btn btn-outline-primary btn-lg w-100">
+            <i class="fas fa-user-plus"></i>
+            Join Food Rescue
+          </a>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Safety Guidelines -->
+      <div class="safety-section mt-4">
+        <div class="card">
+          <div class="card-header">
+            <h6 class="mb-0">
+              <i class="fas fa-shield-alt text-success"></i>
+              Safety Guidelines
+            </h6>
+          </div>
+          <div class="card-body">
+            <ul class="safety-list">
+              <li>Check expiry dates before consumption</li>
+              <li>Inspect food condition upon pickup</li>
+              <li>Meet in safe, public locations</li>
+              <li>Report any issues to our team</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Items -->
+      <div class="related-section mt-4">
+        <div class="card">
+          <div class="card-header">
+            <h6 class="mb-0">
+              <i class="fas fa-utensils"></i>
+              Similar Items
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="related-items">
+              <div class="related-item">
+                <img
+                  src="{{ url_for('static', filename='image/image_01.jpg') }}"
+                  alt="Related item" />
+                <div class="related-info">
+                  <h6>Fresh Vegetables</h6>
+                  <small class="text-muted">Downtown</small>
+                </div>
+              </div>
+              <div class="related-item">
+                <img
+                  src="{{ url_for('static', filename='image/image_03.jpg') }}"
+                  alt="Related item" />
+                <div class="related-info">
+                  <h6>Seasonal Fruits</h6>
+                  <small class="text-muted">Midtown</small>
+                </div>
+              </div>
+            </div>
+            <a
+              href="{{ url_for('food.allListing') }}"
+              class="btn btn-outline-primary btn-sm w-100 mt-2">
+              Browse All Items
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %} {% block styles %}
 <style>
-    /* Food Image Section */
-    .food-image-section {
-        position: relative;
-        margin-bottom: 2rem;
+  /* Food Image Section */
+  .food-image-section {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  .main-image {
+    position: relative;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .main-image img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+
+  .status-overlay {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 2;
+  }
+
+  .category-overlay {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 2;
+  }
+
+  /* Food Information */
+  .food-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 0;
+  }
+
+  .food-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .food-meta {
+    background-color: var(--gray-100);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .meta-item i {
+    font-size: 1.125rem;
+    width: 20px;
+    flex-shrink: 0;
+  }
+
+  .expiry-date {
+    font-weight: 600;
+    color: var(--warning-color);
+  }
+
+  .food-description {
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .pickup-info {
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .pickup-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .pickup-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background-color: var(--gray-100);
+    border-radius: var(--border-radius);
+  }
+
+  .pickup-item i {
+    color: var(--primary-color);
+    width: 16px;
+  }
+
+  /* Donor Card */
+  .donor-card {
+    position: sticky;
+    top: 100px;
+  }
+
+  .donor-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .donor-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(
+      135deg,
+      var(--primary-color),
+      var(--primary-dark)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .donor-info {
+    flex: 1;
+  }
+
+  .donor-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 0.25rem;
+  }
+
+  .donor-meta {
+    margin-top: 0.5rem;
+  }
+
+  .contact-info {
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+  }
+
+  .contact-item i {
+    color: var(--primary-color);
+    width: 16px;
+  }
+
+  /* Action Buttons */
+  .action-section {
+    margin-bottom: 2rem;
+  }
+
+  .claim-section .btn {
+    font-size: 1.125rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .claimed-section .alert {
+    border-radius: var(--border-radius);
+  }
+
+  .owner-actions .btn {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .guest-actions .btn {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  /* Safety Guidelines */
+  .safety-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .safety-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--gray-200);
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .safety-list li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--success-color);
+    font-weight: 600;
+  }
+
+  .safety-list li:last-child {
+    border-bottom: none;
+  }
+
+  /* Related Items */
+  .related-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .related-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background-color: var(--gray-100);
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+  }
+
+  .related-item:hover {
+    background-color: var(--gray-200);
+  }
+
+  .related-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+  }
+
+  .related-info h6 {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .related-info small {
+    font-size: 0.75rem;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 991.98px) {
+    .donor-card {
+      position: static;
+      margin-top: 2rem;
     }
 
-    .main-image {
-        position: relative;
-        border-radius: var(--border-radius-lg);
-        overflow: hidden;
-        box-shadow: var(--shadow);
-    }
-
-    .main-image img {
-        width: 100%;
-        height: 400px;
-        object-fit: cover;
-    }
-
-    .status-overlay {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        z-index: 2;
-    }
-
-    .category-overlay {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        z-index: 2;
-    }
-
-    /* Food Information */
     .food-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: var(--gray-900);
-        margin-bottom: 0;
-    }
-
-    .food-actions {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .food-meta {
-        background-color: var(--gray-100);
-        padding: 1.5rem;
-        border-radius: var(--border-radius);
-        margin-bottom: 1.5rem;
+      font-size: 2rem;
     }
 
     .meta-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1rem;
+      grid-template-columns: 1fr;
     }
 
-    .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
+    .main-image img {
+      height: 300px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .food-title {
+      font-size: 1.75rem;
     }
 
-    .meta-item i {
-        font-size: 1.125rem;
-        width: 20px;
-        flex-shrink: 0;
-    }
-
-    .expiry-date {
-        font-weight: 600;
-        color: var(--warning-color);
-    }
-
-    .food-description {
-        padding: 1.5rem 0;
-        border-top: 1px solid var(--gray-200);
-    }
-
-    .pickup-info {
-        padding: 1.5rem 0;
-        border-top: 1px solid var(--gray-200);
-    }
-
-    .pickup-details {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .pickup-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem;
-        background-color: var(--gray-100);
-        border-radius: var(--border-radius);
-    }
-
-    .pickup-item i {
-        color: var(--primary-color);
-        width: 16px;
-    }
-
-    /* Donor Card */
-    .donor-card {
-        position: sticky;
-        top: 100px;
+    .food-actions {
+      flex-direction: column;
+      gap: 0.25rem;
     }
 
     .donor-profile {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .donor-avatar {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: linear-gradient(
-            135deg,
-            var(--primary-color),
-            var(--primary-dark)
-        );
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--white);
-        font-size: 1.5rem;
-        font-weight: 600;
-    }
-
-    .donor-info {
-        flex: 1;
-    }
-
-    .donor-name {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: var(--gray-900);
-        margin-bottom: 0.25rem;
-    }
-
-    .donor-meta {
-        margin-top: 0.5rem;
+      flex-direction: column;
+      text-align: center;
     }
 
     .contact-info {
-        padding-top: 1rem;
-        border-top: 1px solid var(--gray-200);
+      text-align: center;
     }
 
-    .contact-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.5rem 0;
-        font-size: 0.875rem;
+    .main-image img {
+      height: 250px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .food-title {
+      font-size: 1.5rem;
     }
 
-    .contact-item i {
-        color: var(--primary-color);
-        width: 16px;
+    .main-image img {
+      height: 200px;
     }
 
-    /* Action Buttons */
-    .action-section {
-        margin-bottom: 2rem;
+    .meta-item {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
     }
 
-    .claim-section .btn {
-        font-size: 1.125rem;
-        padding: 0.75rem 1.5rem;
+    .pickup-item {
+      flex-direction: column;
+      text-align: center;
     }
+  }
 
-    .claimed-section .alert {
-        border-radius: var(--border-radius);
+  /* Animations */
+  .food-image-section {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .food-info-section {
+    animation: slideInUp 0.6s ease-out 0.2s both;
+  }
+
+  .donor-card {
+    animation: slideInUp 0.6s ease-out 0.4s both;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
     }
-
-    .owner-actions .btn {
-        font-size: 1rem;
-        padding: 0.75rem 1.5rem;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
+  }
 
-    .guest-actions .btn {
-        font-size: 1rem;
-        padding: 0.75rem 1.5rem;
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
     }
-
-    /* Safety Guidelines */
-    .safety-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
-
-    .safety-list li {
-        padding: 0.5rem 0;
-        border-bottom: 1px solid var(--gray-200);
-        position: relative;
-        padding-left: 1.5rem;
-    }
-
-    .safety-list li:before {
-        content: "✓";
-        position: absolute;
-        left: 0;
-        color: var(--success-color);
-        font-weight: 600;
-    }
-
-    .safety-list li:last-child {
-        border-bottom: none;
-    }
-
-    /* Related Items */
-    .related-items {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .related-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem;
-        background-color: var(--gray-100);
-        border-radius: var(--border-radius);
-        transition: all 0.3s ease;
-    }
-
-    .related-item:hover {
-        background-color: var(--gray-200);
-    }
-
-    .related-item img {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: var(--border-radius);
-    }
-
-    .related-info h6 {
-        margin: 0;
-        font-size: 0.875rem;
-        font-weight: 600;
-    }
-
-    .related-info small {
-        font-size: 0.75rem;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 991.98px) {
-        .donor-card {
-            position: static;
-            margin-top: 2rem;
-        }
-
-        .food-title {
-            font-size: 2rem;
-        }
-
-        .meta-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .main-image img {
-            height: 300px;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .food-title {
-            font-size: 1.75rem;
-        }
-
-        .food-actions {
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .donor-profile {
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .contact-info {
-            text-align: center;
-        }
-
-        .main-image img {
-            height: 250px;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .food-title {
-            font-size: 1.5rem;
-        }
-
-        .main-image img {
-            height: 200px;
-        }
-
-        .meta-item {
-            flex-direction: column;
-            text-align: center;
-            gap: 0.5rem;
-        }
-
-        .pickup-item {
-            flex-direction: column;
-            text-align: center;
-        }
-    }
-
-    /* Animations */
-    .food-image-section {
-        animation: fadeIn 0.6s ease-out;
-    }
-
-    .food-info-section {
-        animation: slideInUp 0.6s ease-out 0.2s both;
-    }
-
-    .donor-card {
-        animation: slideInUp 0.6s ease-out 0.4s both;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+  }
 </style>
 {% endblock %} {% block scripts %}
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Initialize tooltips
-        const tooltips = document.querySelectorAll(
-            '[data-bs-toggle="tooltip"]',
-        );
-        tooltips.forEach((tooltip) => {
-            new bootstrap.Tooltip(tooltip);
-        });
-
-        // Share functionality
-        const shareBtn = document.querySelector(".btn-share");
-        if (shareBtn) {
-            shareBtn.addEventListener("click", function () {
-                const url = window.location.href;
-                const title = document.title;
-
-                if (navigator.share) {
-                    navigator.share({
-                        title: title,
-                        url: url,
-                    });
-                } else {
-                    // Fallback: copy to clipboard
-                    navigator.clipboard.writeText(url).then(() => {
-                        showToast("Link copied to clipboard!", "success");
-                    });
-                }
-            });
-        }
-
-        // Favorite functionality
-        const favoriteBtn = document.querySelector(".btn-favorite");
-        if (favoriteBtn) {
-            favoriteBtn.addEventListener("click", function () {
-                const isFavorited = this.classList.contains("favorited");
-
-                if (isFavorited) {
-                    this.classList.remove("favorited");
-                    this.innerHTML = '<i class="far fa-heart"></i>';
-                    showToast("Removed from favorites", "info");
-                } else {
-                    this.classList.add("favorited");
-                    this.innerHTML = '<i class="fas fa-heart"></i>';
-                    showToast("Added to favorites", "success");
-                }
-            });
-        }
-
-        // Expiry date warning
-        const expiryDate = document.querySelector(".expiry-date");
-        if (expiryDate) {
-            const expiry = new Date(expiryDate.textContent);
-            const now = new Date();
-            const timeDiff = expiry - now;
-            const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-            if (daysDiff < 0) {
-                expiryDate.style.color = "var(--error-color)";
-                expiryDate.textContent += " (Expired)";
-            } else if (daysDiff <= 1) {
-                expiryDate.style.color = "var(--error-color)";
-                expiryDate.textContent += " (Expires today!)";
-            } else if (daysDiff <= 2) {
-                expiryDate.style.color = "var(--warning-color)";
-                expiryDate.textContent += " (Expires soon)";
-            }
-        }
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-            anchor.addEventListener("click", function (e) {
-                e.preventDefault();
-                const target = document.querySelector(
-                    this.getAttribute("href"),
-                );
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                    });
-                }
-            });
-        });
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initialize tooltips
+    const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltips.forEach((tooltip) => {
+      new bootstrap.Tooltip(tooltip);
     });
 
-    // Toast notification function
-    function showToast(message, type = "info") {
-        const toast = document.createElement("div");
-        toast.className = `alert alert-${type} alert-dismissible fade show`;
-        toast.style.cssText = `
+    // Share functionality
+    const shareBtn = document.querySelector(".btn-share");
+    if (shareBtn) {
+      shareBtn.addEventListener("click", function () {
+        const url = window.location.href;
+        const title = document.title;
+
+        if (navigator.share) {
+          navigator.share({
+            title: title,
+            url: url,
+          });
+        } else {
+          // Fallback: copy to clipboard
+          navigator.clipboard.writeText(url).then(() => {
+            showToast("Link copied to clipboard!", "success");
+          });
+        }
+      });
+    }
+
+    // Favorite functionality
+    const favoriteBtn = document.querySelector(".btn-favorite");
+    if (favoriteBtn) {
+      favoriteBtn.addEventListener("click", function () {
+        const isFavorited = this.classList.contains("favorited");
+
+        if (isFavorited) {
+          this.classList.remove("favorited");
+          this.innerHTML = '<i class="far fa-heart"></i>';
+          showToast("Removed from favorites", "info");
+        } else {
+          this.classList.add("favorited");
+          this.innerHTML = '<i class="fas fa-heart"></i>';
+          showToast("Added to favorites", "success");
+        }
+      });
+    }
+
+    // Expiry date warning
+    const expiryDate = document.querySelector(".expiry-date");
+    if (expiryDate) {
+      const expiry = new Date(expiryDate.textContent);
+      const now = new Date();
+      const timeDiff = expiry - now;
+      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+      if (daysDiff < 0) {
+        expiryDate.style.color = "var(--error-color)";
+        expiryDate.textContent += " (Expired)";
+      } else if (daysDiff <= 1) {
+        expiryDate.style.color = "var(--error-color)";
+        expiryDate.textContent += " (Expires today!)";
+      } else if (daysDiff <= 2) {
+        expiryDate.style.color = "var(--warning-color)";
+        expiryDate.textContent += " (Expires soon)";
+      }
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute("href"));
+        if (target) {
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
+    });
+  });
+
+  // Toast notification function
+  function showToast(message, type = "info") {
+    const toast = document.createElement("div");
+    toast.className = `alert alert-${type} alert-dismissible fade show`;
+    toast.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
         z-index: 1050;
         min-width: 300px;
     `;
-        toast.innerHTML = `
+    toast.innerHTML = `
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
 
-        document.body.appendChild(toast);
+    document.body.appendChild(toast);
 
-        setTimeout(() => {
-            if (toast.parentElement) {
-                toast.remove();
-            }
-        }, 5000);
-    }
+    setTimeout(() => {
+      if (toast.parentElement) {
+        toast.remove();
+      }
+    }, 5000);
+  }
 </script>
 {% endblock %}

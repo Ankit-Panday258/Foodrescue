@@ -1,978 +1,866 @@
-{% extends "base.html" %} {% block title %}Profile - Food Rescue{% endblock %}
-{% block content %}
+{% extends "components/base.html" %} {% block title %}Profile - Food Rescue{%
+endblock %} {% block content %}
 
 <!-- Page Header -->
 <div class="page-header bg-light py-4">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="h3 mb-0">
-                    <i class="fas fa-user text-primary"></i>
-                    My Profile
-                </h1>
-                <p class="text-muted mb-0">
-                    Manage your account and view your activity
-                </p>
-            </div>
-            <div class="col-md-4 text-md-end">
-                <a
-                    href="{{ url_for('home.index') }}"
-                    class="btn btn-outline-primary"
-                >
-                    <i class="fas fa-home"></i>
-                    Back to Home
-                </a>
-            </div>
-        </div>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h1 class="h3 mb-0">
+          <i class="fas fa-user text-primary"></i>
+          My Profile
+        </h1>
+        <p class="text-muted mb-0">
+          Manage your account and view your activity
+        </p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <a href="{{ url_for('home.index') }}" class="btn btn-outline-primary">
+          <i class="fas fa-home"></i>
+          Back to Home
+        </a>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Main Content -->
 <div class="container mt-4">
-    <div class="row">
-        <!-- Left Column - Profile Info -->
-        <div class="col-lg-4">
-            <!-- Profile Card -->
-            <div class="card profile-card">
-                <div class="card-body text-center">
-                    <!-- Profile Avatar -->
-                    <div class="profile-avatar mx-auto mb-3">
-                        {{ session.username[0].upper() if session.username else
-                        'U' }}
-                    </div>
+  <div class="row">
+    <!-- Left Column - Profile Info -->
+    <div class="col-lg-4">
+      <!-- Profile Card -->
+      <div class="card profile-card">
+        <div class="card-body text-center">
+          <!-- Profile Avatar -->
+          <div class="profile-avatar mx-auto mb-3">
+            {{ session.username[0].upper() if session.username else 'U' }}
+          </div>
 
-                    <!-- Profile Info -->
-                    <h4 class="profile-name">
-                        {{ session.username or 'User' }}
-                    </h4>
-                    <span
-                        class="user-type-badge {{ session.user_type or 'both' }}"
-                    >
-                        <i
-                            class="fas fa-{{ 'hand-holding-heart' if session.user_type == 'donor' else 'search' if session.user_type == 'recipient' else 'exchange-alt' }}"
-                        ></i>
-                        {{ (session.user_type or 'member').title() }}
-                    </span>
+          <!-- Profile Info -->
+          <h4 class="profile-name">{{ session.username or 'User' }}</h4>
+          <span class="user-type-badge {{ session.user_type or 'both' }}">
+            <i
+              class="fas fa-{{ 'hand-holding-heart' if session.user_type == 'donor' else 'search' if session.user_type == 'recipient' else 'exchange-alt' }}"></i>
+            {{ (session.user_type or 'member').title() }}
+          </span>
 
-                    <!-- Member Since -->
-                    <div class="member-since mt-3">
-                        <i class="fas fa-calendar text-primary"></i>
-                        <span class="text-muted"
-                            >Member since January 2024</span
-                        >
-                    </div>
+          <!-- Member Since -->
+          <div class="member-since mt-3">
+            <i class="fas fa-calendar text-primary"></i>
+            <span class="text-muted">Member since January 2024</span>
+          </div>
 
-                    <!-- Contact Info -->
-                    <div class="contact-info mt-3">
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <span
-                                >{{ session.email or 'email@example.com'
-                                }}</span
-                            >
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-phone"></i>
-                            <span>+1 (555) 123-4567</span>
-                        </div>
-                    </div>
-
-                    <!-- Profile Actions -->
-                    <div class="profile-actions mt-4">
-                        <button class="btn btn-primary btn-sm">
-                            <i class="fas fa-edit"></i>
-                            Edit Profile
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm">
-                            <i class="fas fa-cog"></i>
-                            Settings
-                        </button>
-                    </div>
-                </div>
+          <!-- Contact Info -->
+          <div class="contact-info mt-3">
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>{{ session.email or 'email@example.com' }}</span>
             </div>
-
-            <!-- Quick Stats Card -->
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h6 class="mb-0">
-                        <i class="fas fa-chart-bar text-success"></i>
-                        Quick Stats
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-number text-primary">12</div>
-                            <div class="stat-label">Food Items Shared</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number text-success">8</div>
-                            <div class="stat-label">Items Claimed</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number text-info">5</div>
-                            <div class="stat-label">Active Listings</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number text-warning">25</div>
-                            <div class="stat-label">Community Points</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="contact-item">
+              <i class="fas fa-phone"></i>
+              <span>+1 (555) 123-4567</span>
             </div>
+          </div>
 
-            <!-- Achievement Badge -->
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h6 class="mb-0">
-                        <i class="fas fa-trophy text-warning"></i>
-                        Achievements
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="achievements">
-                        <div class="achievement-badge earned">
-                            <i class="fas fa-star"></i>
-                            <span>First Share</span>
-                        </div>
-                        <div class="achievement-badge earned">
-                            <i class="fas fa-heart"></i>
-                            <span>Community Helper</span>
-                        </div>
-                        <div class="achievement-badge">
-                            <i class="fas fa-crown"></i>
-                            <span>Super Saver</span>
-                        </div>
-                        <div class="achievement-badge">
-                            <i class="fas fa-medal"></i>
-                            <span>Hero Status</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <!-- Profile Actions -->
+          <div class="profile-actions mt-4">
+            <button class="btn btn-primary btn-sm">
+              <i class="fas fa-edit"></i>
+              Edit Profile
+            </button>
+            <button class="btn btn-outline-secondary btn-sm">
+              <i class="fas fa-cog"></i>
+              Settings
+            </button>
+          </div>
         </div>
+      </div>
 
-        <!-- Right Column - Activity -->
-        <div class="col-lg-8">
-            <!-- Navigation Tabs -->
-            <div class="card">
-                <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs" role="tablist">
-                        <li class="nav-item">
-                            <button
-                                class="nav-link active"
-                                data-bs-toggle="tab"
-                                data-bs-target="#activity"
-                                type="button"
-                            >
-                                <i class="fas fa-clock"></i>
-                                Recent Activity
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button
-                                class="nav-link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#listings"
-                                type="button"
-                            >
-                                <i class="fas fa-list"></i>
-                                My Listings
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button
-                                class="nav-link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#claims"
-                                type="button"
-                            >
-                                <i class="fas fa-hand-holding-heart"></i>
-                                My Claims
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <!-- Recent Activity Tab -->
-                        <div class="tab-pane fade show active" id="activity">
-                            <div class="activity-feed">
-                                <div class="activity-item">
-                                    <div class="activity-icon bg-success">
-                                        <i class="fas fa-plus"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h6>Shared Fresh Vegetables</h6>
-                                        <p class="text-muted mb-1">
-                                            Listed fresh garden vegetables for
-                                            pickup
-                                        </p>
-                                        <small class="text-muted"
-                                            >2 hours ago</small
-                                        >
-                                    </div>
-                                    <div class="activity-actions">
-                                        <span class="badge bg-success"
-                                            >Active</span
-                                        >
-                                    </div>
-                                </div>
-
-                                <div class="activity-item">
-                                    <div class="activity-icon bg-primary">
-                                        <i class="fas fa-hand-holding"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h6>Claimed Homemade Bread</h6>
-                                        <p class="text-muted mb-1">
-                                            Successfully claimed bread from
-                                            Baker's Kitchen
-                                        </p>
-                                        <small class="text-muted"
-                                            >1 day ago</small
-                                        >
-                                    </div>
-                                    <div class="activity-actions">
-                                        <span class="badge bg-info"
-                                            >Completed</span
-                                        >
-                                    </div>
-                                </div>
-
-                                <div class="activity-item">
-                                    <div class="activity-icon bg-warning">
-                                        <i class="fas fa-edit"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h6>Updated Profile Information</h6>
-                                        <p class="text-muted mb-1">
-                                            Added phone number and updated
-                                            pickup preferences
-                                        </p>
-                                        <small class="text-muted"
-                                            >3 days ago</small
-                                        >
-                                    </div>
-                                </div>
-
-                                <div class="activity-item">
-                                    <div class="activity-icon bg-success">
-                                        <i class="fas fa-share"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h6>Shared Pasta & Sauce</h6>
-                                        <p class="text-muted mb-1">
-                                            Extra pasta and homemade sauce -
-                                            claimed by 2 families
-                                        </p>
-                                        <small class="text-muted"
-                                            >1 week ago</small
-                                        >
-                                    </div>
-                                    <div class="activity-actions">
-                                        <span class="badge bg-success"
-                                            >Completed</span
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Load More Button -->
-                            <div class="text-center mt-4">
-                                <button class="btn btn-outline-primary">
-                                    <i class="fas fa-plus-circle"></i>
-                                    Load More Activities
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- My Listings Tab -->
-                        <div class="tab-pane fade" id="listings">
-                            <div class="listings-summary mb-4">
-                                <div class="row text-center">
-                                    <div class="col-md-3">
-                                        <div class="summary-item">
-                                            <div
-                                                class="summary-number text-primary"
-                                            >
-                                                5
-                                            </div>
-                                            <div class="summary-label">
-                                                Active
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="summary-item">
-                                            <div
-                                                class="summary-number text-warning"
-                                            >
-                                                3
-                                            </div>
-                                            <div class="summary-label">
-                                                Claimed
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="summary-item">
-                                            <div
-                                                class="summary-number text-success"
-                                            >
-                                                4
-                                            </div>
-                                            <div class="summary-label">
-                                                Completed
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="summary-item">
-                                            <div
-                                                class="summary-number text-muted"
-                                            >
-                                                12
-                                            </div>
-                                            <div class="summary-label">
-                                                Total
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div
-                                class="d-flex justify-content-between align-items-center mb-3"
-                            >
-                                <h6>Recent Listings</h6>
-                                <a
-                                    href="{{ url_for('user.myListings') }}"
-                                    class="btn btn-primary btn-sm"
-                                >
-                                    <i class="fas fa-external-link-alt"></i>
-                                    View All
-                                </a>
-                            </div>
-
-                            <div class="mini-listings">
-                                <div class="mini-listing-item">
-                                    <div class="mini-listing-image">
-                                        <img
-                                            src="{{ url_for('static', filename='image/image_01.jpg') }}"
-                                            alt="Food"
-                                        />
-                                    </div>
-                                    <div class="mini-listing-content">
-                                        <h6>Fresh Garden Vegetables</h6>
-                                        <p class="text-muted mb-1">
-                                            Expires in 2 days
-                                        </p>
-                                        <span class="badge bg-success"
-                                            >Available</span
-                                        >
-                                    </div>
-                                    <div class="mini-listing-actions">
-                                        <button
-                                            class="btn btn-sm btn-outline-primary"
-                                        >
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div class="mini-listing-item">
-                                    <div class="mini-listing-image">
-                                        <img
-                                            src="{{ url_for('static', filename='image/image_02.jpg') }}"
-                                            alt="Food"
-                                        />
-                                    </div>
-                                    <div class="mini-listing-content">
-                                        <h6>Homemade Bread</h6>
-                                        <p class="text-muted mb-1">
-                                            Claimed by John
-                                        </p>
-                                        <span class="badge bg-warning"
-                                            >Claimed</span
-                                        >
-                                    </div>
-                                    <div class="mini-listing-actions">
-                                        <button
-                                            class="btn btn-sm btn-outline-secondary"
-                                        >
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- My Claims Tab -->
-                        <div class="tab-pane fade" id="claims">
-                            <div class="claims-summary mb-4">
-                                <div class="row text-center">
-                                    <div class="col-md-4">
-                                        <div class="summary-item">
-                                            <div
-                                                class="summary-number text-warning"
-                                            >
-                                                2
-                                            </div>
-                                            <div class="summary-label">
-                                                Pending
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="summary-item">
-                                            <div
-                                                class="summary-number text-success"
-                                            >
-                                                6
-                                            </div>
-                                            <div class="summary-label">
-                                                Received
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="summary-item">
-                                            <div
-                                                class="summary-number text-muted"
-                                            >
-                                                8
-                                            </div>
-                                            <div class="summary-label">
-                                                Total
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div
-                                class="d-flex justify-content-between align-items-center mb-3"
-                            >
-                                <h6>Recent Claims</h6>
-                                <a
-                                    href="{{ url_for('user.myClaims') }}"
-                                    class="btn btn-primary btn-sm"
-                                >
-                                    <i class="fas fa-external-link-alt"></i>
-                                    View All
-                                </a>
-                            </div>
-
-                            <div class="mini-claims">
-                                <div class="mini-claim-item">
-                                    <div class="mini-claim-image">
-                                        <img
-                                            src="{{ url_for('static', filename='image/image_03.jpg') }}"
-                                            alt="Food"
-                                        />
-                                    </div>
-                                    <div class="mini-claim-content">
-                                        <h6>Fresh Fruits</h6>
-                                        <p class="text-muted mb-1">
-                                            From Sarah's Garden
-                                        </p>
-                                        <span class="badge bg-warning"
-                                            >Pending Pickup</span
-                                        >
-                                    </div>
-                                    <div class="mini-claim-actions">
-                                        <button class="btn btn-sm btn-success">
-                                            <i class="fas fa-check"></i>
-                                            Mark Received
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div class="mini-claim-item">
-                                    <div class="mini-claim-image">
-                                        <img
-                                            src="{{ url_for('static', filename='image/image_02.jpg') }}"
-                                            alt="Food"
-                                        />
-                                    </div>
-                                    <div class="mini-claim-content">
-                                        <h6>Bakery Items</h6>
-                                        <p class="text-muted mb-1">
-                                            From Downtown Bakery
-                                        </p>
-                                        <span class="badge bg-success"
-                                            >Received</span
-                                        >
-                                    </div>
-                                    <div class="mini-claim-actions">
-                                        <small class="text-muted"
-                                            >2 days ago</small
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- Quick Stats Card -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h6 class="mb-0">
+            <i class="fas fa-chart-bar text-success"></i>
+            Quick Stats
+          </h6>
         </div>
+        <div class="card-body">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-number text-primary">12</div>
+              <div class="stat-label">Food Items Shared</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number text-success">8</div>
+              <div class="stat-label">Items Claimed</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number text-info">5</div>
+              <div class="stat-label">Active Listings</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number text-warning">25</div>
+              <div class="stat-label">Community Points</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Achievement Badge -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h6 class="mb-0">
+            <i class="fas fa-trophy text-warning"></i>
+            Achievements
+          </h6>
+        </div>
+        <div class="card-body">
+          <div class="achievements">
+            <div class="achievement-badge earned">
+              <i class="fas fa-star"></i>
+              <span>First Share</span>
+            </div>
+            <div class="achievement-badge earned">
+              <i class="fas fa-heart"></i>
+              <span>Community Helper</span>
+            </div>
+            <div class="achievement-badge">
+              <i class="fas fa-crown"></i>
+              <span>Super Saver</span>
+            </div>
+            <div class="achievement-badge">
+              <i class="fas fa-medal"></i>
+              <span>Hero Status</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Right Column - Activity -->
+    <div class="col-lg-8">
+      <!-- Navigation Tabs -->
+      <div class="card">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs" role="tablist">
+            <li class="nav-item">
+              <button
+                class="nav-link active"
+                data-bs-toggle="tab"
+                data-bs-target="#activity"
+                type="button">
+                <i class="fas fa-clock"></i>
+                Recent Activity
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                data-bs-toggle="tab"
+                data-bs-target="#listings"
+                type="button">
+                <i class="fas fa-list"></i>
+                My Listings
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                data-bs-toggle="tab"
+                data-bs-target="#claims"
+                type="button">
+                <i class="fas fa-hand-holding-heart"></i>
+                My Claims
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <div class="tab-content">
+            <!-- Recent Activity Tab -->
+            <div class="tab-pane fade show active" id="activity">
+              <div class="activity-feed">
+                <div class="activity-item">
+                  <div class="activity-icon bg-success">
+                    <i class="fas fa-plus"></i>
+                  </div>
+                  <div class="activity-content">
+                    <h6>Shared Fresh Vegetables</h6>
+                    <p class="text-muted mb-1">
+                      Listed fresh garden vegetables for pickup
+                    </p>
+                    <small class="text-muted">2 hours ago</small>
+                  </div>
+                  <div class="activity-actions">
+                    <span class="badge bg-success">Active</span>
+                  </div>
+                </div>
+
+                <div class="activity-item">
+                  <div class="activity-icon bg-primary">
+                    <i class="fas fa-hand-holding"></i>
+                  </div>
+                  <div class="activity-content">
+                    <h6>Claimed Homemade Bread</h6>
+                    <p class="text-muted mb-1">
+                      Successfully claimed bread from Baker's Kitchen
+                    </p>
+                    <small class="text-muted">1 day ago</small>
+                  </div>
+                  <div class="activity-actions">
+                    <span class="badge bg-info">Completed</span>
+                  </div>
+                </div>
+
+                <div class="activity-item">
+                  <div class="activity-icon bg-warning">
+                    <i class="fas fa-edit"></i>
+                  </div>
+                  <div class="activity-content">
+                    <h6>Updated Profile Information</h6>
+                    <p class="text-muted mb-1">
+                      Added phone number and updated pickup preferences
+                    </p>
+                    <small class="text-muted">3 days ago</small>
+                  </div>
+                </div>
+
+                <div class="activity-item">
+                  <div class="activity-icon bg-success">
+                    <i class="fas fa-share"></i>
+                  </div>
+                  <div class="activity-content">
+                    <h6>Shared Pasta & Sauce</h6>
+                    <p class="text-muted mb-1">
+                      Extra pasta and homemade sauce - claimed by 2 families
+                    </p>
+                    <small class="text-muted">1 week ago</small>
+                  </div>
+                  <div class="activity-actions">
+                    <span class="badge bg-success">Completed</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Load More Button -->
+              <div class="text-center mt-4">
+                <button class="btn btn-outline-primary">
+                  <i class="fas fa-plus-circle"></i>
+                  Load More Activities
+                </button>
+              </div>
+            </div>
+
+            <!-- My Listings Tab -->
+            <div class="tab-pane fade" id="listings">
+              <div class="listings-summary mb-4">
+                <div class="row text-center">
+                  <div class="col-md-3">
+                    <div class="summary-item">
+                      <div class="summary-number text-primary">5</div>
+                      <div class="summary-label">Active</div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="summary-item">
+                      <div class="summary-number text-warning">3</div>
+                      <div class="summary-label">Claimed</div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="summary-item">
+                      <div class="summary-number text-success">4</div>
+                      <div class="summary-label">Completed</div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="summary-item">
+                      <div class="summary-number text-muted">12</div>
+                      <div class="summary-label">Total</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="d-flex justify-content-between align-items-center mb-3">
+                <h6>Recent Listings</h6>
+                <a
+                  href="{{ url_for('user.myListings') }}"
+                  class="btn btn-primary btn-sm">
+                  <i class="fas fa-external-link-alt"></i>
+                  View All
+                </a>
+              </div>
+
+              <div class="mini-listings">
+                <div class="mini-listing-item">
+                  <div class="mini-listing-image">
+                    <img
+                      src="{{ url_for('static', filename='image/image_01.jpg') }}"
+                      alt="Food" />
+                  </div>
+                  <div class="mini-listing-content">
+                    <h6>Fresh Garden Vegetables</h6>
+                    <p class="text-muted mb-1">Expires in 2 days</p>
+                    <span class="badge bg-success">Available</span>
+                  </div>
+                  <div class="mini-listing-actions">
+                    <button class="btn btn-sm btn-outline-primary">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="mini-listing-item">
+                  <div class="mini-listing-image">
+                    <img
+                      src="{{ url_for('static', filename='image/image_02.jpg') }}"
+                      alt="Food" />
+                  </div>
+                  <div class="mini-listing-content">
+                    <h6>Homemade Bread</h6>
+                    <p class="text-muted mb-1">Claimed by John</p>
+                    <span class="badge bg-warning">Claimed</span>
+                  </div>
+                  <div class="mini-listing-actions">
+                    <button class="btn btn-sm btn-outline-secondary">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- My Claims Tab -->
+            <div class="tab-pane fade" id="claims">
+              <div class="claims-summary mb-4">
+                <div class="row text-center">
+                  <div class="col-md-4">
+                    <div class="summary-item">
+                      <div class="summary-number text-warning">2</div>
+                      <div class="summary-label">Pending</div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="summary-item">
+                      <div class="summary-number text-success">6</div>
+                      <div class="summary-label">Received</div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="summary-item">
+                      <div class="summary-number text-muted">8</div>
+                      <div class="summary-label">Total</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="d-flex justify-content-between align-items-center mb-3">
+                <h6>Recent Claims</h6>
+                <a
+                  href="{{ url_for('user.myClaims') }}"
+                  class="btn btn-primary btn-sm">
+                  <i class="fas fa-external-link-alt"></i>
+                  View All
+                </a>
+              </div>
+
+              <div class="mini-claims">
+                <div class="mini-claim-item">
+                  <div class="mini-claim-image">
+                    <img
+                      src="{{ url_for('static', filename='image/image_03.jpg') }}"
+                      alt="Food" />
+                  </div>
+                  <div class="mini-claim-content">
+                    <h6>Fresh Fruits</h6>
+                    <p class="text-muted mb-1">From Sarah's Garden</p>
+                    <span class="badge bg-warning">Pending Pickup</span>
+                  </div>
+                  <div class="mini-claim-actions">
+                    <button class="btn btn-sm btn-success">
+                      <i class="fas fa-check"></i>
+                      Mark Received
+                    </button>
+                  </div>
+                </div>
+
+                <div class="mini-claim-item">
+                  <div class="mini-claim-image">
+                    <img
+                      src="{{ url_for('static', filename='image/image_02.jpg') }}"
+                      alt="Food" />
+                  </div>
+                  <div class="mini-claim-content">
+                    <h6>Bakery Items</h6>
+                    <p class="text-muted mb-1">From Downtown Bakery</p>
+                    <span class="badge bg-success">Received</span>
+                  </div>
+                  <div class="mini-claim-actions">
+                    <small class="text-muted">2 days ago</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %} {% block styles %}
 <style>
-    /* Profile Card */
+  /* Profile Card */
+  .profile-card {
+    border: none;
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: sticky;
+    top: 100px;
+  }
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(
+      135deg,
+      var(--primary-color),
+      var(--primary-dark)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 2.5rem;
+    font-weight: 700;
+    border: 4px solid var(--white);
+    box-shadow: var(--shadow);
+  }
+
+  .profile-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 0.5rem;
+  }
+
+  .member-since {
+    padding: 0.75rem;
+    background-color: var(--gray-100);
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+  }
+
+  .contact-info {
+    text-align: left;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .contact-item:last-child {
+    border-bottom: none;
+  }
+
+  .contact-item i {
+    color: var(--primary-color);
+    width: 16px;
+  }
+
+  .profile-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 1rem;
+    background-color: var(--gray-100);
+    border-radius: var(--border-radius);
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--gray-600);
+    font-weight: 500;
+  }
+
+  /* Achievements */
+  .achievements {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .achievement-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0.5rem;
+    border-radius: var(--border-radius);
+    background-color: var(--gray-200);
+    color: var(--gray-500);
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .achievement-badge.earned {
+    background: linear-gradient(
+      135deg,
+      var(--primary-color),
+      var(--primary-dark)
+    );
+    color: var(--white);
+    transform: scale(1.05);
+  }
+
+  .achievement-badge i {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .achievement-badge span {
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  /* Activity Feed */
+  .activity-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--gray-100);
+    border-radius: var(--border-radius);
+  }
+
+  .activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 0.875rem;
+    flex-shrink: 0;
+  }
+
+  .activity-content {
+    flex: 1;
+  }
+
+  .activity-content h6 {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .activity-content p {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.75rem;
+  }
+
+  .activity-actions {
+    flex-shrink: 0;
+  }
+
+  /* Summary Items */
+  .summary-item {
+    padding: 1rem;
+  }
+
+  .summary-number {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .summary-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    font-weight: 500;
+  }
+
+  /* Mini Listings/Claims */
+  .mini-listing-item,
+  .mini-claim-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--gray-100);
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+  }
+
+  .mini-listing-image,
+  .mini-claim-image {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .mini-listing-image img,
+  .mini-claim-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mini-listing-content,
+  .mini-claim-content {
+    flex: 1;
+  }
+
+  .mini-listing-content h6,
+  .mini-claim-content h6 {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .mini-listing-content p,
+  .mini-claim-content p {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.75rem;
+  }
+
+  .mini-listing-actions,
+  .mini-claim-actions {
+    flex-shrink: 0;
+  }
+
+  /* Navigation Tabs */
+  .nav-tabs .nav-link {
+    color: var(--gray-600);
+    border: none;
+    padding: 1rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .nav-tabs .nav-link:hover {
+    color: var(--primary-color);
+    background-color: var(--gray-100);
+  }
+
+  .nav-tabs .nav-link.active {
+    color: var(--primary-color);
+    background-color: var(--white);
+    border-bottom: 2px solid var(--primary-color);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 991.98px) {
     .profile-card {
-        border: none;
-        border-radius: var(--border-radius-xl);
-        box-shadow: var(--shadow);
-        overflow: hidden;
-        position: sticky;
-        top: 100px;
+      position: static;
+      margin-bottom: 2rem;
     }
 
-    .profile-avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        background: linear-gradient(
-            135deg,
-            var(--primary-color),
-            var(--primary-dark)
-        );
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--white);
-        font-size: 2.5rem;
-        font-weight: 700;
-        border: 4px solid var(--white);
-        box-shadow: var(--shadow);
-    }
-
-    .profile-name {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: var(--gray-900);
-        margin-bottom: 0.5rem;
-    }
-
-    .member-since {
-        padding: 0.75rem;
-        background-color: var(--gray-100);
-        border-radius: var(--border-radius);
-        font-size: 0.875rem;
-    }
-
-    .contact-info {
-        text-align: left;
-    }
-
-    .contact-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.5rem 0;
-        font-size: 0.875rem;
-        border-bottom: 1px solid var(--gray-200);
-    }
-
-    .contact-item:last-child {
-        border-bottom: none;
-    }
-
-    .contact-item i {
-        color: var(--primary-color);
-        width: 16px;
-    }
-
-    .profile-actions {
-        display: flex;
-        gap: 0.5rem;
-        justify-content: center;
-    }
-
-    /* Stats Grid */
     .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
     }
 
-    .stat-item {
-        text-align: center;
-        padding: 1rem;
-        background-color: var(--gray-100);
-        border-radius: var(--border-radius);
-    }
-
-    .stat-number {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 0.25rem;
-    }
-
-    .stat-label {
-        font-size: 0.75rem;
-        color: var(--gray-600);
-        font-weight: 500;
-    }
-
-    /* Achievements */
     .achievements {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
+      grid-template-columns: repeat(4, 1fr);
     }
+  }
 
-    .achievement-badge {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 1rem 0.5rem;
-        border-radius: var(--border-radius);
-        background-color: var(--gray-200);
-        color: var(--gray-500);
-        text-align: center;
-        transition: all 0.3s ease;
-    }
-
-    .achievement-badge.earned {
-        background: linear-gradient(
-            135deg,
-            var(--primary-color),
-            var(--primary-dark)
-        );
-        color: var(--white);
-        transform: scale(1.05);
-    }
-
-    .achievement-badge i {
-        font-size: 1.25rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .achievement-badge span {
-        font-size: 0.75rem;
-        font-weight: 500;
-    }
-
-    /* Activity Feed */
-    .activity-feed {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
+  @media (max-width: 768px) {
+    .profile-actions {
+      flex-direction: column;
     }
 
     .activity-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 1rem;
-        padding: 1rem;
-        background-color: var(--gray-100);
-        border-radius: var(--border-radius);
+      flex-direction: column;
+      text-align: center;
     }
 
     .activity-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--white);
-        font-size: 0.875rem;
-        flex-shrink: 0;
+      align-self: center;
     }
 
-    .activity-content {
-        flex: 1;
-    }
-
-    .activity-content h6 {
-        margin: 0 0 0.25rem 0;
-        font-size: 0.875rem;
-        font-weight: 600;
-    }
-
-    .activity-content p {
-        margin: 0 0 0.25rem 0;
-        font-size: 0.75rem;
-    }
-
-    .activity-actions {
-        flex-shrink: 0;
-    }
-
-    /* Summary Items */
-    .summary-item {
-        padding: 1rem;
-    }
-
-    .summary-number {
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 0.25rem;
-    }
-
-    .summary-label {
-        font-size: 0.875rem;
-        color: var(--gray-600);
-        font-weight: 500;
-    }
-
-    /* Mini Listings/Claims */
     .mini-listing-item,
     .mini-claim-item {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem;
-        background-color: var(--gray-100);
-        border-radius: var(--border-radius);
-        margin-bottom: 1rem;
+      flex-direction: column;
+      text-align: center;
     }
 
-    .mini-listing-image,
-    .mini-claim-image {
-        width: 60px;
-        height: 60px;
-        border-radius: var(--border-radius);
-        overflow: hidden;
-        flex-shrink: 0;
-    }
-
-    .mini-listing-image img,
-    .mini-claim-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .mini-listing-content,
-    .mini-claim-content {
-        flex: 1;
-    }
-
-    .mini-listing-content h6,
-    .mini-claim-content h6 {
-        margin: 0 0 0.25rem 0;
-        font-size: 0.875rem;
-        font-weight: 600;
-    }
-
-    .mini-listing-content p,
-    .mini-claim-content p {
-        margin: 0 0 0.5rem 0;
-        font-size: 0.75rem;
-    }
-
-    .mini-listing-actions,
-    .mini-claim-actions {
-        flex-shrink: 0;
-    }
-
-    /* Navigation Tabs */
     .nav-tabs .nav-link {
-        color: var(--gray-600);
-        border: none;
-        padding: 1rem 1.5rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    .nav-tabs .nav-link:hover {
-        color: var(--primary-color);
-        background-color: var(--gray-100);
+    .achievements {
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    .nav-tabs .nav-link.active {
-        color: var(--primary-color);
-        background-color: var(--white);
-        border-bottom: 2px solid var(--primary-color);
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      font-size: 2rem;
     }
 
-    /* Responsive Design */
-    @media (max-width: 991.98px) {
-        .profile-card {
-            position: static;
-            margin-bottom: 2rem;
-        }
-
-        .stats-grid {
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.5rem;
-        }
-
-        .achievements {
-            grid-template-columns: repeat(4, 1fr);
-        }
+    .nav-tabs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
     }
 
-    @media (max-width: 768px) {
-        .profile-actions {
-            flex-direction: column;
-        }
-
-        .activity-item {
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .activity-icon {
-            align-self: center;
-        }
-
-        .mini-listing-item,
-        .mini-claim-item {
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .nav-tabs .nav-link {
-            padding: 0.75rem 1rem;
-            font-size: 0.875rem;
-        }
+    .nav-tabs .nav-link {
+      white-space: nowrap;
+      min-width: fit-content;
     }
+  }
 
-    @media (max-width: 576px) {
-        .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
+  /* Animations */
+  .profile-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
 
-        .achievements {
-            grid-template-columns: repeat(2, 1fr);
-        }
+  .card:not(.profile-card) {
+    animation: slideInRight 0.6s ease-out;
+  }
 
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            font-size: 2rem;
-        }
-
-        .nav-tabs {
-            flex-wrap: nowrap;
-            overflow-x: auto;
-        }
-
-        .nav-tabs .nav-link {
-            white-space: nowrap;
-            min-width: fit-content;
-        }
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
     }
-
-    /* Animations */
-    .profile-card {
-        animation: slideInLeft 0.6s ease-out;
+    to {
+      opacity: 1;
+      transform: translateX(0);
     }
+  }
 
-    .card:not(.profile-card) {
-        animation: slideInRight 0.6s ease-out;
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
     }
-
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
+    to {
+      opacity: 1;
+      transform: translateX(0);
     }
-
-    @keyframes slideInRight {
-        from {
-            opacity: 0;
-            transform: translateX(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
+  }
 </style>
 {% endblock %} {% block scripts %}
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Initialize tooltips
-        const tooltips = document.querySelectorAll(
-            '[data-bs-toggle="tooltip"]',
-        );
-        tooltips.forEach((tooltip) => {
-            new bootstrap.Tooltip(tooltip);
-        });
-
-        // Handle mark as received buttons
-        const markReceivedBtns = document.querySelectorAll(".btn-success");
-        markReceivedBtns.forEach((btn) => {
-            if (btn.textContent.includes("Mark Received")) {
-                btn.addEventListener("click", function () {
-                    if (confirm("Mark this item as received?")) {
-                        this.innerHTML =
-                            '<i class="fas fa-check"></i> Received';
-                        this.classList.remove("btn-success");
-                        this.classList.add("btn-outline-success");
-                        this.disabled = true;
-
-                        // Update the badge
-                        const badge =
-                            this.closest(".mini-claim-item").querySelector(
-                                ".badge",
-                            );
-                        badge.textContent = "Received";
-                        badge.classList.remove("bg-warning");
-                        badge.classList.add("bg-success");
-
-                        showToast("Item marked as received!", "success");
-                    }
-                });
-            }
-        });
-
-        // Smooth tab transitions
-        const tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
-        tabs.forEach((tab) => {
-            tab.addEventListener("shown.bs.tab", function (e) {
-                const target = document.querySelector(
-                    e.target.getAttribute("data-bs-target"),
-                );
-                target.style.opacity = "0";
-                target.style.transform = "translateY(20px)";
-
-                setTimeout(() => {
-                    target.style.transition = "all 0.3s ease";
-                    target.style.opacity = "1";
-                    target.style.transform = "translateY(0)";
-                }, 50);
-            });
-        });
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initialize tooltips
+    const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltips.forEach((tooltip) => {
+      new bootstrap.Tooltip(tooltip);
     });
 
-    // Toast notification function
-    function showToast(message, type = "info") {
-        const toast = document.createElement("div");
-        toast.className = `alert alert-${type} alert-dismissible fade show`;
-        toast.style.cssText = `
+    // Handle mark as received buttons
+    const markReceivedBtns = document.querySelectorAll(".btn-success");
+    markReceivedBtns.forEach((btn) => {
+      if (btn.textContent.includes("Mark Received")) {
+        btn.addEventListener("click", function () {
+          if (confirm("Mark this item as received?")) {
+            this.innerHTML = '<i class="fas fa-check"></i> Received';
+            this.classList.remove("btn-success");
+            this.classList.add("btn-outline-success");
+            this.disabled = true;
+
+            // Update the badge
+            const badge =
+              this.closest(".mini-claim-item").querySelector(".badge");
+            badge.textContent = "Received";
+            badge.classList.remove("bg-warning");
+            badge.classList.add("bg-success");
+
+            showToast("Item marked as received!", "success");
+          }
+        });
+      }
+    });
+
+    // Smooth tab transitions
+    const tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
+    tabs.forEach((tab) => {
+      tab.addEventListener("shown.bs.tab", function (e) {
+        const target = document.querySelector(
+          e.target.getAttribute("data-bs-target")
+        );
+        target.style.opacity = "0";
+        target.style.transform = "translateY(20px)";
+
+        setTimeout(() => {
+          target.style.transition = "all 0.3s ease";
+          target.style.opacity = "1";
+          target.style.transform = "translateY(0)";
+        }, 50);
+      });
+    });
+  });
+
+  // Toast notification function
+  function showToast(message, type = "info") {
+    const toast = document.createElement("div");
+    toast.className = `alert alert-${type} alert-dismissible fade show`;
+    toast.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
         z-index: 1050;
         min-width: 300px;
     `;
-        toast.innerHTML = `
+    toast.innerHTML = `
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
 
-        document.body.appendChild(toast);
+    document.body.appendChild(toast);
 
-        setTimeout(() => {
-            if (toast.parentElement) {
-                toast.remove();
-            }
-        }, 5000);
-    }
+    setTimeout(() => {
+      if (toast.parentElement) {
+        toast.remove();
+      }
+    }, 5000);
+  }
 </script>
 {% endblock %}

@@ -10,8 +10,37 @@ food = Blueprint('food', __name__)
 @food.route('/')
 def allListing():
     """Public route - no authentication required"""
-    listings = Listing.query.filter_by(status='available').all()
-    return render_template("listing.html", listings=listings, now=datetime.now())
+    # Base query for available listings
+    query = Listing.query.filter_by(status='available')
+    
+    # Get filter parameters
+    category_filter = request.args.get('category')
+    location_filter = request.args.get('location')
+    expiry_date_filter = request.args.get('expiry_date')
+    
+    # Apply filters
+    if category_filter:
+        query = query.filter(Listing.category == category_filter)
+    
+    if location_filter:
+        query = query.filter(Listing.pickup_location.ilike(f'%{location_filter}%'))
+    
+    if expiry_date_filter:
+        try:
+            expiry_date = datetime.strptime(expiry_date_filter, '%Y-%m-%d')
+            query = query.filter(Listing.expiry_date <= expiry_date)
+        except ValueError:
+            flash("Invalid date format", 'error')
+    
+    # Order by creation date (newest first)
+    listings = query.order_by(Listing.created_at.desc()).all()
+    
+    return render_template("listing.html", 
+                         listings=listings, 
+                         now=datetime.now(),
+                         category_filter=category_filter,
+                         location_filter=location_filter,
+                         expiry_date_filter=expiry_date_filter)
 
 #New route
 @food.route("/new")

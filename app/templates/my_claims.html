@@ -1,450 +1,434 @@
-{% extends "base.html" %} {% block title %}My Claims - Food Rescue{% endblock %}
-{% block content %}
+{% extends "components/base.html" %} {% block title %}My Claims - Food Rescue{%
+endblock %} {% block content %}
 
 <!-- Page Header -->
 <div class="page-header bg-light py-4">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="h3 mb-0">
-                    <i class="fas fa-hand-holding-heart text-primary"></i>
-                    My Claims
-                </h1>
-                <p class="text-muted mb-0">
-                    Food items you've claimed from the community
-                </p>
-            </div>
-            <div class="col-md-4 text-md-end">
-                <a
-                    href="{{ url_for('food.allListing') }}"
-                    class="btn btn-outline-primary"
-                >
-                    <i class="fas fa-plus"></i>
-                    Browse More Food
-                </a>
-            </div>
-        </div>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h1 class="h3 mb-0">
+          <i class="fas fa-hand-holding-heart text-primary"></i>
+          My Claims
+        </h1>
+        <p class="text-muted mb-0">
+          Food items you've claimed from the community
+        </p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <a
+          href="{{ url_for('food.allListing') }}"
+          class="btn btn-outline-primary">
+          <i class="fas fa-plus"></i>
+          Browse More Food
+        </a>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Main Content -->
 <div class="container mt-4">
-    {% if claims %}
-    <div class="row">
-        <div class="col-12">
-            <div class="claims-stats mb-4">
-                <div class="row">
-                    <div class="col-md-3 col-6">
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-utensils"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h4>{{ claims|length }}</h4>
-                                <p>Total Claims</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6">
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h4>
-                                    {{ claims|selectattr('listing.status',
-                                    'equalto', 'claimed')|list|length }}
-                                </h4>
-                                <p>Active Claims</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6">
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-calendar-alt"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h4>{{ "Jan" }}</h4>
-                                <p>This Month</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6">
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-leaf"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h4>{{ claims|length * 0.5 }}kg</h4>
-                                <p>Food Saved</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  {% if claims %}
+  <div class="row">
+    <div class="col-12">
+      <div class="claims-stats mb-4">
+        <div class="row">
+          <div class="col-md-3 col-6">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <div class="stat-info">
+                <h4>{{ claims|length }}</h4>
+                <p>Total Claims</p>
+              </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row">
-        {% for claim in claims %}
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="claim-card">
-                <div class="claim-header">
-                    <div
-                        class="claim-status-badge {% if claim.listing.status == 'claimed' %}status-active{% elif claim.listing.status == 'completed' %}status-completed{% else %}status-expired{% endif %}"
-                    >
-                        {% if claim.listing.status == 'claimed' %}
-                        <i class="fas fa-clock"></i> Active {% elif
-                        claim.listing.status == 'completed' %}
-                        <i class="fas fa-check-circle"></i> Completed {% else %}
-                        <i class="fas fa-times-circle"></i> Expired {% endif %}
-                    </div>
-                    <div class="claim-date">
-                        <i class="fas fa-calendar-alt"></i>
-                        {{ claim.created_at.strftime('%b %d, %Y') if
-                        claim.created_at else 'N/A' }}
-                    </div>
-                </div>
-
-                <div class="claim-body">
-                    <div class="food-image">
-                        {% if claim.listing.image_url %}
-                        <img
-                            src="{{ claim.listing.image_url }}"
-                            alt="{{ claim.listing.food_name }}"
-                            onerror="this.src='{{ url_for('static', filename='image/default-food.jpg') }}'"
-                        />
-                        {% else %}
-                        <div class="default-image">
-                            <i class="fas fa-utensils"></i>
-                        </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="food-info">
-                        <h5 class="food-name">{{ claim.listing.food_name }}</h5>
-                        <p class="food-type">
-                            <i class="fas fa-tag"></i>
-                            {{ claim.listing.food_type.title() }}
-                        </p>
-                        <p class="food-description">
-                            {{ claim.listing.description[:100] }}{% if
-                            claim.listing.description|length > 100 %}...{% endif
-                            %}
-                        </p>
-
-                        <div class="location-info">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>{{ claim.listing.location }}</span>
-                        </div>
-
-                        <div class="expiry-info">
-                            <i class="fas fa-clock"></i>
-                            <span
-                                >Expires: {{
-                                claim.listing.expiry_date.strftime('%b %d, %Y')
-                                if claim.listing.expiry_date else 'N/A' }}</span
-                            >
-                        </div>
-
-                        <div class="donor-info">
-                            <i class="fas fa-user"></i>
-                            <span
-                                >Donated by: {{ claim.listing.donor.username
-                                }}</span
-                            >
-                        </div>
-                    </div>
-                </div>
-
-                <div class="claim-footer">
-                    <div class="claim-actions">
-                        <a
-                            href="{{ url_for('food.showListing', id=claim.listing.listing_id) }}"
-                            class="btn btn-primary btn-sm"
-                        >
-                            <i class="fas fa-eye"></i>
-                            View Details
-                        </a>
-                        {% if claim.listing.status == 'claimed' %}
-                        <a
-                            href="tel:{{ claim.listing.donor.phone }}"
-                            class="btn btn-success btn-sm"
-                        >
-                            <i class="fas fa-phone"></i>
-                            Contact Donor
-                        </a>
-                        {% endif %}
-                    </div>
-                </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="stat-info">
+                <h4>
+                  {{ claims|selectattr('listing.status', 'equalto',
+                  'claimed')|list|length }}
+                </h4>
+                <p>Active Claims</p>
+              </div>
             </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-calendar-alt"></i>
+              </div>
+              <div class="stat-info">
+                <h4>{{ "Jan" }}</h4>
+                <p>This Month</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <div class="stat-info">
+                <h4>{{ claims|length * 0.5 }}kg</h4>
+                <p>Food Saved</p>
+              </div>
+            </div>
+          </div>
         </div>
-        {% endfor %}
+      </div>
     </div>
-    {% else %}
-    <!-- Empty State -->
-    <div class="empty-state text-center py-5">
-        <div class="empty-icon">
-            <i class="fas fa-hand-holding-heart"></i>
+  </div>
+
+  <div class="row">
+    {% for claim in claims %}
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="claim-card">
+        <div class="claim-header">
+          <div
+            class="claim-status-badge {% if claim.listing.status == 'claimed' %}status-active{% elif claim.listing.status == 'completed' %}status-completed{% else %}status-expired{% endif %}">
+            {% if claim.listing.status == 'claimed' %}
+            <i class="fas fa-clock"></i> Active {% elif claim.listing.status ==
+            'completed' %} <i class="fas fa-check-circle"></i> Completed {% else
+            %} <i class="fas fa-times-circle"></i> Expired {% endif %}
+          </div>
+          <div class="claim-date">
+            <i class="fas fa-calendar-alt"></i>
+            {{ claim.created_at.strftime('%b %d, %Y') if claim.created_at else
+            'N/A' }}
+          </div>
         </div>
-        <h3>No Claims Yet</h3>
-        <p class="text-muted">
-            You haven't claimed any food items yet. Start browsing available
-            food in your community!
-        </p>
-        <a href="{{ url_for('food.allListing') }}" class="btn btn-primary">
-            <i class="fas fa-search"></i>
-            Browse Available Food
-        </a>
+
+        <div class="claim-body">
+          <div class="food-image">
+            {% if claim.listing.image_url %}
+            <img
+              src="{{ claim.listing.image_url }}"
+              alt="{{ claim.listing.food_name }}"
+              onerror="this.src='{{ url_for('static', filename='image/default-food.jpg') }}'" />
+            {% else %}
+            <div class="default-image">
+              <i class="fas fa-utensils"></i>
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="food-info">
+            <h5 class="food-name">{{ claim.listing.food_name }}</h5>
+            <p class="food-type">
+              <i class="fas fa-tag"></i>
+              {{ claim.listing.food_type.title() }}
+            </p>
+            <p class="food-description">
+              {{ claim.listing.description[:100] }}{% if
+              claim.listing.description|length > 100 %}...{% endif %}
+            </p>
+
+            <div class="location-info">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>{{ claim.listing.location }}</span>
+            </div>
+
+            <div class="expiry-info">
+              <i class="fas fa-clock"></i>
+              <span
+                >Expires: {{ claim.listing.expiry_date.strftime('%b %d, %Y') if
+                claim.listing.expiry_date else 'N/A' }}</span
+              >
+            </div>
+
+            <div class="donor-info">
+              <i class="fas fa-user"></i>
+              <span>Donated by: {{ claim.listing.donor.username }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim-footer">
+          <div class="claim-actions">
+            <a
+              href="{{ url_for('food.showListing', id=claim.listing.listing_id) }}"
+              class="btn btn-primary btn-sm">
+              <i class="fas fa-eye"></i>
+              View Details
+            </a>
+            {% if claim.listing.status == 'claimed' %}
+            <a
+              href="tel:{{ claim.listing.donor.phone }}"
+              class="btn btn-success btn-sm">
+              <i class="fas fa-phone"></i>
+              Contact Donor
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
     </div>
-    {% endif %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <!-- Empty State -->
+  <div class="empty-state text-center py-5">
+    <div class="empty-icon">
+      <i class="fas fa-hand-holding-heart"></i>
+    </div>
+    <h3>No Claims Yet</h3>
+    <p class="text-muted">
+      You haven't claimed any food items yet. Start browsing available food in
+      your community!
+    </p>
+    <a href="{{ url_for('food.allListing') }}" class="btn btn-primary">
+      <i class="fas fa-search"></i>
+      Browse Available Food
+    </a>
+  </div>
+  {% endif %}
 </div>
 
 <style>
-    .page-header {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        border-bottom: 1px solid #dee2e6;
-    }
+  .page-header {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-bottom: 1px solid #dee2e6;
+  }
 
-    .claims-stats {
-        margin-bottom: 2rem;
-    }
+  .claims-stats {
+    margin-bottom: 2rem;
+  }
 
+  .stat-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+    transition: transform 0.3s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+  }
+
+  .stat-info h4 {
+    margin: 0;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .stat-info p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+
+  .claim-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+  }
+
+  .claim-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .claim-header {
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .claim-status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  .status-active {
+    background: linear-gradient(135deg, #28a745, #20c997);
+  }
+
+  .status-completed {
+    background: linear-gradient(135deg, #17a2b8, #007bff);
+  }
+
+  .status-expired {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+  }
+
+  .claim-date {
+    color: #6c757d;
+    font-size: 0.85rem;
+  }
+
+  .claim-body {
+    padding: 1rem;
+  }
+
+  .food-image {
+    width: 100%;
+    height: 150px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .food-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .default-image {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 2rem;
+  }
+
+  .food-name {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .food-type {
+    margin: 0 0 0.5rem 0;
+    color: #28a745;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .food-description {
+    margin: 0 0 1rem 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .location-info,
+  .expiry-info,
+  .donor-info {
+    margin: 0.5rem 0;
+    color: #6c757d;
+    font-size: 0.85rem;
+  }
+
+  .location-info i,
+  .expiry-info i,
+  .donor-info i {
+    color: #28a745;
+    width: 16px;
+    margin-right: 0.5rem;
+  }
+
+  .claim-footer {
+    padding: 1rem;
+    border-top: 1px solid #f8f9fa;
+    background: #fafafa;
+  }
+
+  .claim-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+  }
+
+  .claim-actions .btn {
+    flex: 1;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .empty-state {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .empty-icon {
+    font-size: 4rem;
+    color: #dee2e6;
+    margin-bottom: 1rem;
+  }
+
+  .empty-state h3 {
+    color: #333;
+    margin-bottom: 1rem;
+  }
+
+  .empty-state p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 768px) {
     .stat-card {
-        background: white;
-        border-radius: 10px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        height: 100%;
-        transition: transform 0.3s ease;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-2px);
-    }
-
-    .stat-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #28a745, #20c997);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.2rem;
-    }
-
-    .stat-info h4 {
-        margin: 0;
-        color: #333;
-        font-weight: 600;
-    }
-
-    .stat-info p {
-        margin: 0;
-        color: #6c757d;
-        font-size: 0.9rem;
-    }
-
-    .claim-card {
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        transition:
-            transform 0.3s ease,
-            box-shadow 0.3s ease;
-        height: 100%;
-    }
-
-    .claim-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
-    }
-
-    .claim-header {
-        padding: 1rem;
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        border-bottom: 1px solid #dee2e6;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .claim-status-badge {
-        padding: 0.25rem 0.75rem;
-        border-radius: 15px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: white;
-    }
-
-    .status-active {
-        background: linear-gradient(135deg, #28a745, #20c997);
-    }
-
-    .status-completed {
-        background: linear-gradient(135deg, #17a2b8, #007bff);
-    }
-
-    .status-expired {
-        background: linear-gradient(135deg, #dc3545, #c82333);
-    }
-
-    .claim-date {
-        color: #6c757d;
-        font-size: 0.85rem;
-    }
-
-    .claim-body {
-        padding: 1rem;
-    }
-
-    .food-image {
-        width: 100%;
-        height: 150px;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 1rem;
-    }
-
-    .food-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .default-image {
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #6c757d;
-        font-size: 2rem;
-    }
-
-    .food-name {
-        margin: 0 0 0.5rem 0;
-        color: #333;
-        font-size: 1.1rem;
-        font-weight: 600;
-    }
-
-    .food-type {
-        margin: 0 0 0.5rem 0;
-        color: #28a745;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-
-    .food-description {
-        margin: 0 0 1rem 0;
-        color: #6c757d;
-        font-size: 0.9rem;
-        line-height: 1.4;
-    }
-
-    .location-info,
-    .expiry-info,
-    .donor-info {
-        margin: 0.5rem 0;
-        color: #6c757d;
-        font-size: 0.85rem;
-    }
-
-    .location-info i,
-    .expiry-info i,
-    .donor-info i {
-        color: #28a745;
-        width: 16px;
-        margin-right: 0.5rem;
-    }
-
-    .claim-footer {
-        padding: 1rem;
-        border-top: 1px solid #f8f9fa;
-        background: #fafafa;
+      margin-bottom: 1rem;
     }
 
     .claim-actions {
-        display: flex;
-        gap: 0.5rem;
-        justify-content: space-between;
+      flex-direction: column;
     }
 
     .claim-actions .btn {
-        flex: 1;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        padding: 0.5rem 1rem;
+      margin-bottom: 0.5rem;
     }
-
-    .empty-state {
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    .empty-icon {
-        font-size: 4rem;
-        color: #dee2e6;
-        margin-bottom: 1rem;
-    }
-
-    .empty-state h3 {
-        color: #333;
-        margin-bottom: 1rem;
-    }
-
-    .empty-state p {
-        font-size: 1.1rem;
-        margin-bottom: 2rem;
-    }
-
-    @media (max-width: 768px) {
-        .stat-card {
-            margin-bottom: 1rem;
-        }
-
-        .claim-actions {
-            flex-direction: column;
-        }
-
-        .claim-actions .btn {
-            margin-bottom: 0.5rem;
-        }
-    }
+  }
 </style>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Add animation to stat cards
-        const statCards = document.querySelectorAll(".stat-card");
-        statCards.forEach((card, index) => {
-            setTimeout(() => {
-                card.style.opacity = "1";
-                card.style.transform = "translateY(0)";
-            }, index * 100);
-        });
-
-        // Add animation to claim cards
-        const claimCards = document.querySelectorAll(".claim-card");
-        claimCards.forEach((card, index) => {
-            setTimeout(
-                () => {
-                    card.style.opacity = "1";
-                    card.style.transform = "translateY(0)";
-                },
-                index * 100 + 300,
-            );
-        });
+  document.addEventListener("DOMContentLoaded", function () {
+    // Add animation to stat cards
+    const statCards = document.querySelectorAll(".stat-card");
+    statCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.style.opacity = "1";
+        card.style.transform = "translateY(0)";
+      }, index * 100);
     });
+
+    // Add animation to claim cards
+    const claimCards = document.querySelectorAll(".claim-card");
+    claimCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.style.opacity = "1";
+        card.style.transform = "translateY(0)";
+      }, index * 100 + 300);
+    });
+  });
 </script>
 
 {% endblock %}
