@@ -1,0 +1,667 @@
+{% extends "base.html" %}
+{% block title %}Browse Food - Food Rescue{% endblock %}
+{% block content %}
+
+<!-- Page Header -->
+<div class="page-header bg-light py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="h3 mb-0">
+                    <i class="fas fa-utensils text-primary"></i>
+                    Browse Available Food
+                </h1>
+                <p class="text-muted mb-0">Find fresh food items shared by your community</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                {% if session.user_id %}
+                <a href="{{ url_for('food.renderNewForm') }}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i>
+                    Share Food
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search and Filter Section -->
+<div class="container mt-4">
+    <div class="filter-section">
+        <div class="filter-header">
+            <h5 class="filter-title">
+                <i class="fas fa-filter"></i>
+                Search & Filter
+            </h5>
+            <button class="filter-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+                <i class="fas fa-chevron-down"></i>
+                Toggle Filters
+            </button>
+        </div>
+
+        <div class="collapse show" id="filterCollapse">
+            <form method="GET" action="{{ url_for('food.allListing') }}" class="filter-form">
+                <div class="row g-3">
+                    <!-- Search Input -->
+                    <div class="col-md-6">
+                        <div class="search-container">
+                            <input
+                                type="text"
+                                name="search"
+                                class="form-control search-input"
+                                placeholder="Search food items..."
+                                value="{{ request.args.get('search', '') }}"
+                            >
+                            <button type="submit" class="search-button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="col-md-3">
+                        <select name="category" class="form-select filter-control">
+                            <option value="">All Categories</option>
+                            <option value="veg" {{ 'selected' if request.args.get('category') == 'veg' }}>
+                                Vegetarian
+                            </option>
+                            <option value="nonveg" {{ 'selected' if request.args.get('category') == 'nonveg' }}>
+                                Non-Vegetarian
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="col-md-3">
+                        <select name="status" class="form-select filter-control">
+                            <option value="">All Status</option>
+                            <option value="available" {{ 'selected' if request.args.get('status') == 'available' }}>
+                                Available
+                            </option>
+                            <option value="claimed" {{ 'selected' if request.args.get('status') == 'claimed' }}>
+                                Claimed
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-2">
+                    <!-- Location Filter -->
+                    <div class="col-md-4">
+                        <input
+                            type="text"
+                            name="location"
+                            class="form-control filter-control"
+                            placeholder="Enter location..."
+                            value="{{ request.args.get('location', '') }}"
+                        >
+                    </div>
+
+                    <!-- Sort Options -->
+                    <div class="col-md-4">
+                        <select name="sort" class="form-select filter-control">
+                            <option value="newest" {{ 'selected' if request.args.get('sort') == 'newest' }}>
+                                Newest First
+                            </option>
+                            <option value="oldest" {{ 'selected' if request.args.get('sort') == 'oldest' }}>
+                                Oldest First
+                            </option>
+                            <option value="expiry" {{ 'selected' if request.args.get('sort') == 'expiry' }}>
+                                Expiry Date
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Actions -->
+                    <div class="col-md-4">
+                        <div class="filter-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i>
+                                Apply Filters
+                            </button>
+                            <a href="{{ url_for('food.allListing') }}" class="btn btn-outline-secondary filter-clear">
+                                <i class="fas fa-times"></i>
+                                Clear
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Results Section -->
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="results-info">
+            <span class="results-count">
+                {% if listings %}
+                    {{ listings|length }} items found
+                {% else %}
+                    No items found
+                {% endif %}
+            </span>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="view-toggle">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary active" data-view="grid">
+                    <i class="fas fa-th"></i>
+                </button>
+                <button type="button" class="btn btn-outline-primary" data-view="list">
+                    <i class="fas fa-list"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Food Listings Grid -->
+    {% if listings %}
+    <div class="food-listing-grid" id="foodGrid">
+        {% for listing in listings %}
+        <div class="card food-listing-card animate-on-scroll"
+             data-category="{{ listing.category }}"
+             data-status="{{ listing.status }}"
+             data-location="{{ listing.pickup_location }}">
+
+            <!-- Food Image -->
+            <div class="food-listing-image">
+                <img
+                    src="{{ listing.image_url or url_for('static', filename='image/placeholder.jpg') }}"
+                    alt="{{ listing.foodname }}"
+                    class="card-img-top"
+                    loading="lazy"
+                >
+
+                <!-- Status Badge -->
+                <div class="food-listing-status">
+                    <span class="status-badge {{ listing.status }}">
+                        {% if listing.status == 'available' %}
+                            <i class="fas fa-check-circle"></i>
+                        {% elif listing.status == 'claimed' %}
+                            <i class="fas fa-hand-holding"></i>
+                        {% endif %}
+                        {{ listing.status.title() }}
+                    </span>
+                </div>
+
+                <!-- Category Badge -->
+                <div class="food-listing-category">
+                    <span class="category-badge {{ listing.category }}">
+                        {% if listing.category == 'veg' %}
+                            <i class="fas fa-leaf"></i>
+                        {% else %}
+                            <i class="fas fa-drumstick-bite"></i>
+                        {% endif %}
+                        {{ listing.category.title() }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Food Details -->
+            <div class="food-listing-content">
+                <h5 class="food-listing-title">{{ listing.foodname }}</h5>
+
+                <p class="food-listing-description">
+                    {{ listing.description or 'No description available' }}
+                </p>
+
+                <div class="food-listing-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{ listing.pickup_location }}
+                    </span>
+                    <span class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        {{ listing.created_at.strftime('%b %d, %Y') }}
+                    </span>
+                    <span class="meta-item expiry-{{ 'danger' if listing.expiry_date < now else 'warning' if (listing.expiry_date - now).days < 2 else 'normal' }}">
+                        <i class="fas fa-calendar-alt"></i>
+                        Expires: {{ listing.expiry_date.strftime('%b %d') }}
+                    </span>
+                </div>
+
+                <!-- Donor Info -->
+                <div class="donor-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>By {{ listing.donor.username }}</span>
+                    <span class="user-type-badge {{ listing.donor.type }}">
+                        {{ listing.donor.type.title() }}
+                    </span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="food-listing-actions">
+                    <a href="{{ url_for('food.showListing', id=listing.listing_id) }}"
+                       class="btn btn-primary btn-sm">
+                        <i class="fas fa-eye"></i>
+                        View Details
+                    </a>
+
+                    {% if session.user_id %}
+                        {% if listing.status == 'available' and listing.donor_id != session.user_id %}
+                            <a href="{{ url_for('food.renderClaimPage', id=listing.listing_id) }}"
+                               class="btn btn-success btn-sm btn-claim"
+                               data-listing-id="{{ listing.listing_id }}">
+                                <i class="fas fa-hand-holding-heart"></i>
+                                Claim
+                            </a>
+                        {% elif listing.donor_id == session.user_id %}
+                            <a href="{{ url_for('food.renderEditForm', id=listing.listing_id) }}"
+                               class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i>
+                                Edit
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login to Claim
+                        </a>
+                    {% endif %}
+
+                    <button class="btn btn-outline-secondary btn-sm btn-share"
+                            data-listing-id="{{ listing.listing_id }}">
+                        <i class="fas fa-share"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="fas fa-search"></i>
+        </div>
+        <h3 class="empty-state-title">No Food Items Found</h3>
+        <p class="empty-state-description">
+            {% if request.args.get('search') or request.args.get('category') or request.args.get('location') %}
+                Try adjusting your search criteria or clearing filters to see more results.
+            {% else %}
+                Be the first to share food in your community!
+            {% endif %}
+        </p>
+        <div class="empty-state-action">
+            {% if session.user_id %}
+                <a href="{{ url_for('food.renderNewForm') }}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i>
+                    Share Food
+                </a>
+            {% else %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i>
+                    Join Community
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Loading Spinner -->
+<div id="loadingSpinner" class="loading-container" style="display: none;">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading more items...</div>
+</div>
+
+{% endblock %}
+
+{% block styles %}
+<style>
+/* Page Header */
+.page-header {
+    border-bottom: 1px solid var(--gray-200);
+}
+
+/* Filter Section */
+.filter-section {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 2rem;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.filter-toggle {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 0.875rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.3s ease;
+}
+
+.filter-toggle:hover {
+    background-color: var(--primary-light);
+}
+
+.filter-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Results Info */
+.results-info {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+.results-count {
+    font-weight: 500;
+}
+
+/* View Toggle */
+.view-toggle .btn {
+    padding: 0.5rem 0.75rem;
+}
+
+.view-toggle .btn.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--white);
+}
+
+/* Food Listing Grid */
+.food-listing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.food-listing-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.food-listing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+}
+
+.food-listing-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.food-listing-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.food-listing-card:hover .food-listing-image img {
+    transform: scale(1.05);
+}
+
+.food-listing-status {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+}
+
+.food-listing-category {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+}
+
+.food-listing-content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.food-listing-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+
+.food-listing-description {
+    color: var(--gray-700);
+    margin-bottom: 1rem;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.food-listing-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray-600);
+}
+
+.meta-item i {
+    width: 14px;
+    color: var(--primary-color);
+}
+
+.expiry-danger {
+    color: var(--error-color) !important;
+}
+
+.expiry-warning {
+    color: var(--warning-color) !important;
+}
+
+.donor-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+.donor-info i {
+    color: var(--primary-color);
+}
+
+.food-listing-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+    flex-wrap: wrap;
+}
+
+.food-listing-actions .btn {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.food-listing-actions .btn-share {
+    flex: 0 0 auto;
+    width: 40px;
+    padding: 0.5rem;
+}
+
+/* List View */
+.food-listing-grid.list-view {
+    grid-template-columns: 1fr;
+}
+
+.list-view .food-listing-card {
+    flex-direction: row;
+    height: auto;
+}
+
+.list-view .food-listing-image {
+    width: 200px;
+    height: 150px;
+    flex-shrink: 0;
+}
+
+.list-view .food-listing-content {
+    flex: 1;
+}
+
+.list-view .food-listing-meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.list-view .food-listing-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 0;
+}
+
+.list-view .food-listing-actions .btn {
+    flex: 0 0 auto;
+    min-width: 80px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .food-listing-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .filter-actions {
+        flex-direction: column;
+    }
+
+    .filter-actions .btn {
+        width: 100%;
+    }
+
+    .results-info {
+        margin-bottom: 1rem;
+    }
+
+    .list-view .food-listing-card {
+        flex-direction: column;
+    }
+
+    .list-view .food-listing-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .food-listing-content {
+        padding: 1rem;
+    }
+
+    .food-listing-actions {
+        flex-direction: column;
+    }
+
+    .food-listing-actions .btn {
+        width: 100%;
+    }
+
+    .page-header .row {
+        text-align: center;
+    }
+
+    .page-header .col-md-4 {
+        margin-top: 1rem;
+    }
+}
+
+/* Animation for filtering */
+.food-listing-card.fade-out {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.3s ease;
+}
+
+.food-listing-card.fade-in {
+    opacity: 1;
+    transform: scale(1);
+    transition: all 0.3s ease;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// View Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const viewToggle = document.querySelector('.view-toggle');
+    const foodGrid = document.getElementById('foodGrid');
+
+    if (viewToggle && foodGrid) {
+        viewToggle.addEventListener('click', function(e) {
+            if (e.target.closest('[data-view]')) {
+                const viewType = e.target.closest('[data-view]').dataset.view;
+                const buttons = viewToggle.querySelectorAll('.btn');
+
+                // Update button states
+                buttons.forEach(btn => btn.classList.remove('active'));
+                e.target.closest('[data-view]').classList.add('active');
+
+                // Update grid view
+                foodGrid.classList.toggle('list-view', viewType === 'list');
+
+                // Save preference
+                localStorage.setItem('foodListingView', viewType);
+            }
+        });
+
+        // Load saved preference
+        const savedView = localStorage.getItem('foodListingView');
+        if (savedView === 'list') {
+            foodGrid.classList.add('list-view');
+            viewToggle.querySelector('[data-view="list"]').classList.add('active');
+            viewToggle.querySelector('[data-view="grid"]').classList.remove('active');
+        }
+    }
+});
+
+// Auto-submit filter form on change
+document.querySelectorAll('.filter-control').forEach(control => {
+    control.addEventListener('change', function() {
+        // Add a small delay to prevent too many requests
+        setTimeout(() => {
+            this.form.submit();
+        }, 300);
+    });
+});
+</script>
+{% endblock %}

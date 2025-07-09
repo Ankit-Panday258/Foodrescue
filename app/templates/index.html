@@ -1,18 +1,506 @@
-{% extends "base.html" %}
-{% block title %}Home{% endblock %}
-{% block content %}
-<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-inner">
-    <div class="carousel-item ">
-      <img src="../static/image/image_01.jpg" class="d-block w-100" alt="...">
+{% extends "base.html" %} {% block title %}Food Rescue - Reducing Food Waste
+Together{% endblock %} {% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="hero-title">
+                    Rescue Food,
+                    <span class="text-warning">Save the Planet</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Join our community of food heroes fighting waste and hunger.
+                    Connect with neighbors to share surplus food and make a
+                    positive impact.
+                </p>
+                <div class="hero-actions">
+                    {% if session.user_id %}
+                    <a
+                        href="{{ url_for('food.allListing') }}"
+                        class="btn btn-light btn-lg"
+                    >
+                        <i class="fas fa-search"></i>
+                        Browse Food
+                    </a>
+                    <a
+                        href="{{ url_for('food.renderNewForm') }}"
+                        class="btn btn-outline-light btn-lg"
+                    >
+                        <i class="fas fa-plus-circle"></i>
+                        Donate Food
+                    </a>
+                    {% else %}
+                    <a
+                        href="{{ url_for('auth.register') }}"
+                        class="btn btn-light btn-lg"
+                    >
+                        <i class="fas fa-user-plus"></i>
+                        Get Started
+                    </a>
+                    <a
+                        href="{{ url_for('food.allListing') }}"
+                        class="btn btn-outline-light btn-lg"
+                    >
+                        <i class="fas fa-search"></i>
+                        Browse Food
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image">
+                    <img
+                        src="{{ url_for('static', filename='image/image_02.jpg') }}"
+                        alt="Fresh food sharing"
+                        class="img-fluid rounded-lg shadow"
+                    />
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="carousel-item active">
-      <img src="../static/image/image_02.jpg" class="d-block w-100" alt="...">
+</section>
+
+<!-- Statistics Section -->
+<section class="stats">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-item animate-on-scroll">
+                    <div class="stat-number">1,247</div>
+                    <div class="stat-label">Food Items Rescued</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-item animate-on-scroll">
+                    <div class="stat-number">892</div>
+                    <div class="stat-label">Active Members</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-item animate-on-scroll">
+                    <div class="stat-number">456</div>
+                    <div class="stat-label">Successful Claims</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-item animate-on-scroll">
+                    <div class="stat-number">2.3k</div>
+                    <div class="stat-label">Kg Food Saved</div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="carousel-item">
-      <img src="../static/image/image_03.jpg" class="d-block w-100" alt="...">
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2>How Food Rescue Works</h2>
+                <p class="lead">
+                    Simple steps to make a big difference in your community
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-item animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h3 class="feature-title">Share Your Surplus</h3>
+                    <p class="feature-description">
+                        Got extra food? List it on our platform with details
+                        like quantity, expiry date, and pickup location.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-item animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="feature-title">Find Available Food</h3>
+                    <p class="feature-description">
+                        Browse through available food items in your area and
+                        claim what you need instantly.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-item animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="feature-title">Connect & Collect</h3>
+                    <p class="feature-description">
+                        Coordinate with food donors for easy pickup and make
+                        meaningful connections in your community.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-<h1>Hello welcome to food rescue</h1>
+</section>
+
+<!-- Latest Listings Section -->
+<section class="latest-listings py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div
+                    class="d-flex justify-content-between align-items-center mb-4"
+                >
+                    <h2>Latest Food Listings</h2>
+                    <a
+                        href="{{ url_for('food.allListing') }}"
+                        class="btn btn-outline-primary"
+                    >
+                        View All
+                        <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card food-card">
+                    <div class="food-card-image">
+                        <img
+                            src="{{ url_for('static', filename='image/image_01.jpg') }}"
+                            alt="Fresh vegetables"
+                            class="card-img-top"
+                        />
+                        <div class="food-card-badge">Fresh</div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Fresh Vegetables</h5>
+                        <p class="card-text">
+                            Assorted fresh vegetables including carrots,
+                            broccoli, and bell peppers.
+                        </p>
+                        <div class="food-card-meta">
+                            <span
+                                ><i class="fas fa-map-marker-alt"></i>
+                                Downtown</span
+                            >
+                            <span
+                                ><i class="fas fa-clock"></i> 2 hours ago</span
+                            >
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a
+                            href="{{ url_for('food.allListing') }}"
+                            class="btn btn-primary btn-sm"
+                            >View Details</a
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card food-card">
+                    <div class="food-card-image">
+                        <img
+                            src="{{ url_for('static', filename='image/image_02.jpg') }}"
+                            alt="Bread and pastries"
+                            class="card-img-top"
+                        />
+                        <div class="food-card-badge">Bakery</div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Bread & Pastries</h5>
+                        <p class="card-text">
+                            Fresh bread, croissants, and pastries from local
+                            bakery.
+                        </p>
+                        <div class="food-card-meta">
+                            <span
+                                ><i class="fas fa-map-marker-alt"></i>
+                                Midtown</span
+                            >
+                            <span><i class="fas fa-clock"></i> 1 hour ago</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a
+                            href="{{ url_for('food.allListing') }}"
+                            class="btn btn-primary btn-sm"
+                            >View Details</a
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card food-card">
+                    <div class="food-card-image">
+                        <img
+                            src="{{ url_for('static', filename='image/image_03.jpg') }}"
+                            alt="Fruits"
+                            class="card-img-top"
+                        />
+                        <div class="food-card-badge">Healthy</div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Mixed Fruits</h5>
+                        <p class="card-text">
+                            Fresh seasonal fruits including apples, bananas, and
+                            oranges.
+                        </p>
+                        <div class="food-card-meta">
+                            <span
+                                ><i class="fas fa-map-marker-alt"></i>
+                                Uptown</span
+                            >
+                            <span
+                                ><i class="fas fa-clock"></i> 3 hours ago</span
+                            >
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a
+                            href="{{ url_for('food.allListing') }}"
+                            class="btn btn-primary btn-sm"
+                            >View Details</a
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="mb-3">Ready to Make a Difference?</h2>
+                <p class="lead mb-0">
+                    Join thousands of food heroes in reducing waste and helping
+                    your community.
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                {% if not session.user_id %}
+                <a
+                    href="{{ url_for('auth.register') }}"
+                    class="btn btn-light btn-lg"
+                >
+                    <i class="fas fa-user-plus"></i>
+                    Join Now
+                </a>
+                {% else %}
+                <a
+                    href="{{ url_for('food.renderNewForm') }}"
+                    class="btn btn-light btn-lg"
+                >
+                    <i class="fas fa-plus-circle"></i>
+                    Share Food
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Impact Section -->
+<section class="impact-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2>Our Impact</h2>
+                <p class="lead">
+                    Together, we're making a real difference in our communities
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-leaf text-success"></i>
+                    </div>
+                    <h4>Environmental Impact</h4>
+                    <p>
+                        By rescuing food, we're reducing landfill waste and
+                        greenhouse gas emissions. Every item saved helps protect
+                        our planet.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-heart text-danger"></i>
+                    </div>
+                    <h4>Community Building</h4>
+                    <p>
+                        Food sharing brings people together, creating stronger
+                        communities and meaningful connections between
+                        neighbors.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} {% block styles %}
+<style>
+    /* Hero Section */
+    .hero {
+        background: linear-gradient(
+            135deg,
+            var(--primary-color),
+            var(--primary-dark)
+        );
+        color: var(--white);
+        padding: 6rem 0;
+        min-height: 600px;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+        line-height: 1.6;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .hero-image {
+        text-align: center;
+        position: relative;
+    }
+
+    .hero-image::before {
+        content: "";
+        position: absolute;
+        top: -20px;
+        left: -20px;
+        right: -20px;
+        bottom: -20px;
+        background: linear-gradient(
+            45deg,
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0.05)
+        );
+        border-radius: 20px;
+        z-index: 1;
+    }
+
+    .hero-image img {
+        position: relative;
+        z-index: 2;
+        border-radius: 15px;
+    }
+
+    /* Latest Listings */
+    .latest-listings {
+        background-color: var(--gray-100);
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(
+            135deg,
+            var(--primary-color),
+            var(--primary-dark)
+        );
+    }
+
+    /* Impact Section */
+    .impact-card {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-sm);
+        text-align: center;
+        margin-bottom: 2rem;
+        transition: var(--transition);
+    }
+
+    .impact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow);
+    }
+
+    .impact-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .impact-card h4 {
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+    }
+
+    .impact-card p {
+        color: var(--gray-700);
+        margin-bottom: 0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+        }
+
+        .hero-actions {
+            justify-content: center;
+        }
+
+        .hero-image {
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            margin-bottom: 2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .hero-actions {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-actions .btn {
+            width: 100%;
+            max-width: 250px;
+        }
+    }
+</style>
 {% endblock %}
