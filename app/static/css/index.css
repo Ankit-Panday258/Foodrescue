@@ -1,3 +1,24 @@
+/* ===== RESET STYLES FOR INDEX PAGE ===== */
+/* Remove default padding from main-content for index page */
+.main-content {
+  padding: 0 !important;
+}
+
+/* Reset any default browser margins */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 /* ===== INDEX PAGE SPECIFIC STYLES ===== */
 /* Using theme colors: #386641, #6A994E, #A7C957, #F2E8CF, #BC4749 */
 
@@ -321,26 +342,6 @@
   text-decoration: none;
   position: relative;
   overflow: hidden;
-}
-
-.hero-actions .btn::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  transition: left 0.5s ease;
-}
-
-.hero-actions .btn:hover::before {
-  left: 100%;
 }
 
 /* ===== STATS SECTION ===== */

@@ -1,0 +1,785 @@
+/* Food Rescue - Show Page Styles */
+/* Clean, simple design with crystal clear images */
+
+:root {
+  --primary-green: #2d5a27;
+  --secondary-green: #34d399;
+  --accent-orange: #f59e0b;
+  --danger-red: #dc2626;
+  --primary-yellow: #fbbf24;
+  --success-green: #10b981;
+  --text-gray: #374151;
+  --light-gray: #6b7280;
+  --border-gray: #d1d5db;
+  --background-light: #f8fafc;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Breadcrumb Styling */
+.breadcrumb {
+  background: transparent;
+  padding: 0.75rem 0;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: ">";
+  color: var(--light-gray);
+  font-weight: 500;
+}
+
+.breadcrumb-item a {
+  color: var(--primary-green);
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  color: var(--secondary-green);
+  text-decoration: underline;
+}
+
+/* Food Image Section - Crystal Clear Display */
+.food-image-section {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.main-image {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  background: #f5f5f5;
+}
+
+.main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  /* Ensure crystal clear image rendering */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* High DPI/Retina display optimization */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .main-image img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+  }
+}
+
+/* Status and Category Overlays */
+.status-overlay,
+.category-overlay {
+  position: absolute;
+  top: 16px;
+  z-index: 10;
+}
+
+.status-overlay {
+  left: 16px;
+}
+
+.category-overlay {
+  right: 16px;
+}
+
+.status-badge,
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Status Colors */
+.status-badge.available {
+  background: var(--success-green);
+}
+
+.status-badge.claimed {
+  background: var(--primary-yellow);
+}
+
+.status-badge.completed {
+  background: var(--primary-green);
+}
+
+.status-badge.expired {
+  background: var(--danger-red);
+}
+
+/* Category Colors */
+.category-badge.veg {
+  background: var(--secondary-green);
+}
+
+.category-badge.non-veg {
+  background: var(--accent-orange);
+}
+
+/* Card Styling */
+.card {
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  background: white;
+}
+
+.card-header {
+  background: var(--primary-green);
+  color: white;
+  border-bottom: none;
+  padding: 1.25rem;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Food Title and Actions */
+.food-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-gray);
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+.food-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Share and Favorite Buttons */
+.btn-share,
+.btn-favorite {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-gray);
+  background: white;
+  color: var(--text-gray);
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-share:hover,
+.btn-favorite:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: var(--text-gray);
+}
+
+.btn-favorite.active {
+  background: #fef2f2;
+  color: var(--danger-red);
+  border-color: #fca5a5;
+}
+
+/* Meta Information Grid */
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1rem;
+  background: var(--background-light);
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.meta-item i {
+  font-size: 1.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+.meta-item strong {
+  color: var(--text-gray);
+  font-weight: 600;
+}
+
+/* Expiry Date Styling */
+.expiry-date.urgent {
+  color: var(--danger-red);
+  font-weight: 600;
+}
+
+.expiry-date.primary {
+  color: var(--primary-yellow);
+  font-weight: 600;
+}
+
+/* Description and Pickup Info */
+.food-description h5,
+.pickup-info h5 {
+  color: var(--text-gray);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.food-description p {
+  color: var(--light-gray);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.pickup-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pickup-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--background-light);
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.pickup-item i {
+  color: var(--primary-green);
+  font-size: 1.125rem;
+}
+
+/* Donor Card */
+.donor-card {
+  margin-bottom: 2rem;
+}
+
+.donor-profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.donor-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--primary-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  box-shadow: var(--card-shadow);
+}
+
+.donor-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-gray);
+  margin-bottom: 0.25rem;
+}
+
+.user-type-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.user-type-badge.individual {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.user-type-badge.restaurant {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.user-type-badge.organization {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.donor-meta {
+  margin-top: 0.5rem;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--background-light);
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.contact-item i {
+  color: var(--primary-green);
+  width: 16px;
+  text-align: center;
+}
+
+/* Simple Button Styles */
+.action-section {
+  margin-bottom: 2rem;
+}
+
+/* Base Button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-family: inherit;
+  min-height: 40px;
+}
+
+/* Button Sizes */
+.btn-sm {
+  padding: 8px 12px;
+  font-size: 13px;
+  min-height: 32px;
+}
+
+.btn-lg {
+  padding: 14px 20px;
+  font-size: 16px;
+  min-height: 48px;
+}
+
+/* Primary Button */
+.btn-primary {
+  background-color: var(--primary-green);
+  color: white;
+  border-color: var(--primary-green);
+}
+
+.btn-primary:hover {
+  background-color: #1f4f1a;
+  border-color: #1f4f1a;
+  color: white;
+}
+
+/* Success Button */
+.btn-success {
+  background-color: var(--success-green);
+  color: white;
+  border-color: var(--success-green);
+}
+
+.btn-success:hover {
+  background-color: #059669;
+  border-color: #059669;
+  color: white;
+}
+
+/* Warning Button */
+.btn-warning {
+  background-color: var(--primary-yellow);
+  color: #92400e;
+  border-color: var(--primary-yellow);
+}
+
+.btn-warning:hover {
+  background-color: #f59e0b;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+/* Danger Button */
+.btn-danger {
+  background-color: var(--danger-red);
+  color: white;
+  border-color: var(--danger-red);
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+  border-color: #b91c1c;
+  color: white;
+}
+
+/* Outline Buttons */
+.btn-outline-primary {
+  background-color: transparent;
+  color: var(--primary-green);
+  border-color: var(--primary-green);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-green);
+  color: white;
+  border-color: var(--primary-green);
+}
+
+.btn-outline-warning {
+  background-color: transparent;
+  color: #d97706;
+  border-color: #d97706;
+}
+
+.btn-outline-warning:hover {
+  background-color: #d97706;
+  color: white;
+  border-color: #d97706;
+}
+
+.btn-outline-danger {
+  background-color: transparent;
+  color: var(--danger-red);
+  border-color: var(--danger-red);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--danger-red);
+  color: white;
+  border-color: var(--danger-red);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background-color: #f3f4f6;
+  color: var(--text-gray);
+  border-color: #e5e7eb;
+}
+
+.btn-secondary:hover {
+  background-color: #e5e7eb;
+  color: var(--text-gray);
+  border-color: #d1d5db;
+}
+
+/* Button States */
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(45, 90, 39, 0.2);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Owner Actions */
+.owner-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.owner-actions .btn {
+  width: 100%;
+}
+
+/* Alert Styling */
+.alert {
+  border-radius: 6px;
+  border: none;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--card-shadow);
+}
+
+.alert i {
+  font-size: 1.25rem;
+}
+
+.alert-info {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.alert-primary {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.alert-danger {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+/* Safety Guidelines */
+.safety-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.safety-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.safety-list li:last-child {
+  border-bottom: none;
+}
+
+.safety-list li::before {
+  content: "✓";
+  color: var(--success-green);
+  font-weight: 700;
+  font-size: 1.125rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* Related Items */
+.related-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.related-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--background-light);
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.related-item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  object-fit: cover;
+  /* Ensure related images are also crystal clear */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.related-info h6 {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-gray);
+}
+
+.related-info small {
+  color: var(--light-gray);
+  font-size: 0.75rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+
+  .main-image {
+    height: 300px;
+  }
+
+  .food-title {
+    font-size: 1.875rem;
+  }
+
+  .meta-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .donor-profile {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .btn-lg {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .food-title {
+    font-size: 1.625rem;
+  }
+
+  .main-image {
+    height: 250px;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .meta-item {
+    padding: 12px;
+  }
+
+  .status-overlay,
+  .category-overlay {
+    top: 12px;
+  }
+
+  .status-overlay {
+    left: 12px;
+  }
+
+  .category-overlay {
+    right: 12px;
+  }
+}
+
+/* Remove any default image filters or effects */
+img {
+  max-width: 100%;
+  height: auto;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Button focus styles */
+button:focus,
+.btn:focus {
+  outline: none;
+}
+
+/* Clean, simple hover states */
+.btn:hover {
+  text-decoration: none;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Utility classes for clarity */
+.text-center {
+  text-align: center;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-3 {
+  margin-top: 1rem;
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+.d-block {
+  display: block;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-items-start {
+  align-items: flex-start;
+}
+
+.text-muted {
+  color: var(--light-gray);
+}
+
+.text-primary {
+  color: var(--primary-green);
+}
+
+.text-success {
+  color: var(--success-green);
+}
+
+.text-primary {
+  color: var(--primary-yellow);
+}
+
+.text-info {
+  color: #0ea5e9;
+}
+
+.lead {
+  font-size: 1.125rem;
+  font-weight: 400;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.875rem;
+}

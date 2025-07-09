@@ -1,11 +1,5 @@
 /* Food Rescue Listing Page Styles */
 
-/* Main Content Container */
-.main-content {
-  padding-top: 2rem !important;
-  min-height: calc(100vh - 100px);
-}
-
 /* Page Header */
 .section-header {
   text-align: center;
